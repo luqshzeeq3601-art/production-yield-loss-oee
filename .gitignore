@@ -1,0 +1,25 @@
+# Raw and interim data stay local.
+data/raw/
+data/interim/
+
+# Environment files and common secret material.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.secret
+*.secrets
+secrets/
+
+# Temporary Power BI backup files.
+~$*.pbix
+*.pbix~
+*.pbix.bak
+*.pbix.backup
+*.pbix.tmp
+*.pbit.bak
+*.pbit.backup
+*.pbit.tmp
