@@ -28,3 +28,19 @@ secom:
     cleaned_data: data/processed/secom_cleaned.csv
     missingness_profile: reports/secom_missingness_profile.csv
     cleaning_summary: reports/secom_cleaning_summary.json
+bosch:
+  raw_filenames:
+    numeric: train_numeric.csv
+    date: train_date.csv
+  sample_fraction: 0.10
+  chunk_size: 10000
+  features_per_station: 5
+  time_conversion:
+    enabled: true
+    minutes_per_0_01_unit: 6.0
+    note: Project/community assumption; Bosch anonymized time units have no observed calendar-time mapping in this project.
+  outputs:
+    sampled_ids: data/interim/bosch_sampled_ids.csv
+    sampled_numeric: data/processed/bosch_sampled_numeric.csv
+    station_timings: data/processed/bosch_station_timings.csv
+    ingestion_summary: reports/bosch_ingestion_summary.json
