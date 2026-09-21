@@ -23,3 +23,21 @@ secrets/
 *.pbit.bak
 *.pbit.backup
 *.pbit.tmp
+
+# Python build artifacts.
+build/
+dist/
+*.egg-info/
+
+# Python bytecode and caches.
+__pycache__/
+*.py[cod]
+
+# Test and coverage artifacts.
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Local Python environment.
+.venv/

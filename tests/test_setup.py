@@ -1,0 +1,73 @@
+import matplotlib
+from matplotlib import colors as matplotlib_colors
+import numpy as np
+import pandas as pd
+import psycopg2
+from psycopg2 import extensions as psycopg2_extensions
+import pytest
+import scipy
+from scipy import stats
+import sqlalchemy
+import yaml
+
+from src.config_loader import load_config
+
+
+EXPECTED_TOP_LEVEL_SECTIONS = {
+    "paths",
+    "database",
+    "cost_assumptions",
+    "spc",
+    "random_seed",
+}
+
+
+def test_required_dependencies_support_basic_operations():
+    assert np.array([1, 2, 3]).sum() == 6
+    assert pd.DataFrame({"value": [1, 2, 3]})["value"].sum() == 6
+    assert scipy.__version__
+    assert stats.norm.cdf(0.0) == pytest.approx(0.5)
+    assert sqlalchemy.create_engine("sqlite:///:memory:").dialect.name == "sqlite"
+    assert psycopg2.__version__
+    assert psycopg2_extensions.adapt(42).getquoted() == b"42"
+    assert yaml.safe_load("value: 1") == {"value": 1}
+    assert matplotlib.__version__
+    assert matplotlib_colors.to_hex("red") == "#ff0000"
+
+
+def test_default_configuration_loads_with_required_sections_and_values():
+    config = load_config()
+
+    assert set(config) == EXPECTED_TOP_LEVEL_SECTIONS
+    assert set(config["paths"]) == {"raw", "interim", "processed", "reports"}
+    assert config["paths"]["raw"] == "data/raw"
+    assert config["paths"]["interim"] == "data/interim"
+    assert config["paths"]["processed"] == "data/processed"
+    assert config["paths"]["reports"] == "reports"
+    assert config["database"]["host"] == "localhost"
+    assert config["database"]["port"] == 5432
+    assert config["database"]["name"] == "production_yield_oee"
+    assert config["database"]["user_env"] == "POSTGRES_USER"
+    assert config["database"]["password_env"] == "POSTGRES_PASSWORD"
+    assert config["cost_assumptions"]["status"] == "placeholder"
+    assert config["cost_assumptions"]["unit_scrap_cost"] is None
+    assert config["cost_assumptions"]["analyst_hourly_rate"] is None
+    assert config["spc"]["phase_i_fraction"] == pytest.approx(0.30)
+    assert config["spc"]["ewma_lambda"] == pytest.approx(0.20)
+    assert config["random_seed"] == 42
+
+
+def test_loader_rejects_a_non_mapping_document(tmp_path):
+    config_path = tmp_path / "invalid.yaml"
+    config_path.write_text("- item\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="mapping"):
+        load_config(config_path)
+
+
+def test_loader_reports_missing_required_sections(tmp_path):
+    config_path = tmp_path / "incomplete.yaml"
+    config_path.write_text("paths: {}\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="database"):
+        load_config(config_path)
