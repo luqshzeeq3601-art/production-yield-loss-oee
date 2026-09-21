@@ -38,7 +38,8 @@ def test_required_dependencies_support_basic_operations():
 def test_default_configuration_loads_with_required_sections_and_values():
     config = load_config()
 
-    assert set(config) == EXPECTED_TOP_LEVEL_SECTIONS
+    assert EXPECTED_TOP_LEVEL_SECTIONS.issubset(config)
+    assert "secom" in config
     assert set(config["paths"]) == {"raw", "interim", "processed", "reports"}
     assert config["paths"]["raw"] == "data/raw"
     assert config["paths"]["interim"] == "data/interim"

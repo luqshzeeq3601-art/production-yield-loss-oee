@@ -18,3 +18,13 @@ spc:
   phase_i_fraction: 0.30
   ewma_lambda: 0.20
 random_seed: 42
+secom:
+  source_url: https://archive.ics.uci.edu/static/public/179/secom.zip
+  raw_filenames:
+    sensor: secom.data
+    labels: secom_labels.data
+  high_null_threshold: 0.50
+  outputs:
+    cleaned_data: data/processed/secom_cleaned.csv
+    missingness_profile: reports/secom_missingness_profile.csv
+    cleaning_summary: reports/secom_cleaning_summary.json
