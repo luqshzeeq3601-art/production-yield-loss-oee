@@ -28,19 +28,40 @@ secom:
     cleaned_data: data/processed/secom_cleaned.csv
     missingness_profile: reports/secom_missingness_profile.csv
     cleaning_summary: reports/secom_cleaning_summary.json
-bosch:
+metropt3:
+  source_url: https://archive.ics.uci.edu/static/public/791/metropt+3+dataset.zip
+  source_doi: 10.24432/C5VW3R
+  license: CC-BY-4.0
   raw_filenames:
-    numeric: train_numeric.csv
-    date: train_date.csv
-  sample_fraction: 0.10
-  chunk_size: 10000
-  features_per_station: 5
-  time_conversion:
-    enabled: true
-    minutes_per_0_01_unit: 6.0
-    note: Project/community assumption; Bosch anonymized time units have no observed calendar-time mapping in this project.
+    readings: metropt3/MetroPT3(AirCompressor).csv
+  chunk_size: 100000
+  expected_rows: 1516948
+  failure_events:
+    - id: 1
+      start: "2020-04-18 00:00:00"
+      end: "2020-04-18 23:59:59"
+      kind: Air leak
+    - id: 2
+      start: "2020-05-29 23:30:00"
+      end: "2020-05-30 06:00:00"
+      kind: Air leak
+    - id: 3
+      start: "2020-06-05 10:00:00"
+      end: "2020-06-07 14:30:00"
+      kind: Air leak
+    - id: 4
+      start: "2020-07-15 14:30:00"
+      end: "2020-07-15 19:00:00"
+      kind: Air leak
+  failure_events_note: Documented failure windows transcribed from the UCI MetroPT-3 dataset description; the CSV itself is unlabeled.
+  prefailure_hours: 24.0
+  operating_state:
+    note: Project assumption mapping Motor_current bands from UCI docs (~0A off, ~4A offloaded, ~7A under load, ~9A starting); not an observed label.
+    off_amps_below: 2.0
+    offloaded_amps_below: 5.5
+    load_amps_below: 8.0
   outputs:
-    sampled_ids: data/interim/bosch_sampled_ids.csv
-    sampled_numeric: data/processed/bosch_sampled_numeric.csv
-    station_timings: data/processed/bosch_station_timings.csv
-    ingestion_summary: reports/bosch_ingestion_summary.json
+    processed_readings: data/processed/metropt3_readings.csv
+    failure_intervals: data/processed/metropt3_failure_intervals.csv
+    state_periods: data/processed/metropt3_state_periods.csv
+    ingestion_summary: reports/metropt3_ingestion_summary.json

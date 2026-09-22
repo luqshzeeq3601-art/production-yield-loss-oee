@@ -40,7 +40,7 @@ def test_default_configuration_loads_with_required_sections_and_values():
 
     assert EXPECTED_TOP_LEVEL_SECTIONS.issubset(config)
     assert "secom" in config
-    assert "bosch" in config
+    assert "metropt3" in config
     assert set(config["paths"]) == {"raw", "interim", "processed", "reports"}
     assert config["paths"]["raw"] == "data/raw"
     assert config["paths"]["interim"] == "data/interim"
@@ -57,12 +57,12 @@ def test_default_configuration_loads_with_required_sections_and_values():
     assert config["spc"]["phase_i_fraction"] == pytest.approx(0.30)
     assert config["spc"]["ewma_lambda"] == pytest.approx(0.20)
     assert config["random_seed"] == 42
-    assert config["bosch"]["raw_filenames"] == {
-        "numeric": "train_numeric.csv",
-        "date": "train_date.csv",
+    assert config["metropt3"]["raw_filenames"] == {
+        "readings": "metropt3/MetroPT3(AirCompressor).csv",
     }
-    assert config["bosch"]["sample_fraction"] == pytest.approx(0.10)
-    assert config["bosch"]["features_per_station"] > 0
+    assert config["metropt3"]["expected_rows"] == 1516948
+    assert len(config["metropt3"]["failure_events"]) == 4
+    assert config["metropt3"]["chunk_size"] > 0
 
 
 def test_loader_rejects_a_non_mapping_document(tmp_path):

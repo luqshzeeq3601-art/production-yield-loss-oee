@@ -3,7 +3,7 @@ Item	Detail
 Problem	Yield drops and line bottlenecks are found days late in manual Excel reports, so scrap and missed deliveries pile up
 Target users	Production supervisors, process and quality engineers, planning
 Industries	Semiconductor, E&E, medical devices, manufacturing, food processing
-Data	UCI SECOM (semiconductor sensor and pass/fail data); Kaggle Bosch Production Line Performance; simulated MES work orders, downtime, and shift logs
+Data	UCI SECOM (semiconductor sensor and pass/fail data); UCI MetroPT-3 (industrial compressor time series with documented failure windows); simulated MES work orders, downtime, and shift logs
 Stack	PostgreSQL, Python (pandas, scipy), Power BI with DAX, Excel
 
 Core features
