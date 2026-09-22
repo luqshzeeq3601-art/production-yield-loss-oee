@@ -1,0 +1,56 @@
+{
+  "invalid_charts": {},
+  "limitations": "P3-001 found no sensor significant at FDR < 0.05, so the 10 selected sensors are exploratory candidates, not confirmed root causes. Limits and rules were not tuned against Phase II fail labels; Phase II stays out-of-sample. MR-based sigma assumes short-term stability of Phase I.",
+  "methodology": "Phase I/II split reuses the exact P3-001 chronological 30% boundary (asserted against the screening summary). Sensor I-MR limits use Phase I pass-lot valid values only: center = Phase I mean, sigma = MRbar/d2 with d2 = 1.128 for n = 2, MR UCL = D4*MRbar, MR LCL = D3*MRbar. Western Electric Rules 1-4 evaluate Phase II valid observations in order; windows form over consecutive valid observations per sensor (missing values break no window explicitly but are skipped, preserving lot identity; no imputation). The p-chart baseline uses ALL Phase I lots with variable daily limits clipped to [0, 1]; low-volume days are flagged, never removed.",
+  "mr_constants": {
+    "d2": 1.128,
+    "d3": 0.0,
+    "d4": 3.267
+  },
+  "paths": {
+    "limits": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_limits.csv",
+    "p_chart": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\p_chart_daily.csv",
+    "summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_univariate_summary.json",
+    "violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_rule_violations.csv"
+  },
+  "pbar": 0.12340425531914893,
+  "pchart_low_volume_days": 25,
+  "pchart_violation_days": 1,
+  "phase1_boundary_timestamp": "2008-08-28 06:56:00",
+  "phase1_fail_lots": 58,
+  "phase1_lots": 470,
+  "phase1_pass_lots": 412,
+  "phase2_lots": 1097,
+  "selected_sensors": [
+    "sensor_021",
+    "sensor_000",
+    "sensor_064",
+    "sensor_122",
+    "sensor_022",
+    "sensor_090",
+    "sensor_076",
+    "sensor_562",
+    "sensor_033",
+    "sensor_125"
+  ],
+  "total_violations": 5109,
+  "valid_charts": 10,
+  "violations_by_rule": {
+    "WE1": 691,
+    "WE2": 1067,
+    "WE3": 1305,
+    "WE4": 2046
+  },
+  "violations_by_sensor": {
+    "sensor_000": 69,
+    "sensor_021": 237,
+    "sensor_022": 347,
+    "sensor_033": 325,
+    "sensor_064": 97,
+    "sensor_076": 282,
+    "sensor_090": 34,
+    "sensor_122": 1979,
+    "sensor_125": 1557,
+    "sensor_562": 182
+  }
+}

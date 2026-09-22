@@ -16,7 +16,19 @@ cost_assumptions:
   note: Populate from validated inputs before any impact calculation.
 spc:
   phase_i_fraction: 0.30
+  phase1_fraction: 0.30
+  mr_d2: 1.128
+  mr_d3: 0.0
+  mr_d4: 3.267
+  sigma_levels: [1, 2, 3]
+  min_phase1_observations: 20
+  p_chart_min_daily_n: 10
   ewma_lambda: 0.20
+  outputs:
+    limits: reports/spc_limits.csv
+    violations: reports/spc_rule_violations.csv
+    p_chart: reports/p_chart_daily.csv
+    summary: reports/spc_univariate_summary.json
 screening:
   window_fraction: 0.30
   fdr_alpha: 0.05
