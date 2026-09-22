@@ -63,6 +63,11 @@ def test_default_configuration_loads_with_required_sections_and_values():
     assert config["metropt3"]["expected_rows"] == 1516948
     assert len(config["metropt3"]["failure_events"]) == 4
     assert config["metropt3"]["chunk_size"] > 0
+    assert config["screening"]["window_fraction"] == pytest.approx(0.30)
+    assert config["screening"]["fdr_alpha"] == pytest.approx(0.05)
+    assert config["screening"]["correlation_threshold"] == pytest.approx(0.90)
+    assert config["screening"]["min_selected"] == 10
+    assert config["screening"]["max_selected"] == 15
 
 
 def test_loader_rejects_a_non_mapping_document(tmp_path):

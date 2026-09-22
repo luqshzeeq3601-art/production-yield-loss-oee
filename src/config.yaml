@@ -17,6 +17,17 @@ cost_assumptions:
 spc:
   phase_i_fraction: 0.30
   ewma_lambda: 0.20
+screening:
+  window_fraction: 0.30
+  fdr_alpha: 0.05
+  correlation_threshold: 0.90
+  min_selected: 10
+  max_selected: 15
+  min_fail_n: 5
+  effect_floor: 0.20
+  outputs:
+    ranking: reports/feature_screening.csv
+    summary: reports/feature_screening_summary.json
 random_seed: 42
 secom:
   source_url: https://archive.ics.uci.edu/static/public/179/secom.zip
