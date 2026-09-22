@@ -1,0 +1,60 @@
+{
+  "assumptions": {
+    "failure_windows_documented_not_observed": "Documented failure windows transcribed from the UCI MetroPT-3 dataset description; the CSV itself is unlabeled.",
+    "observed_cadence_note": "Source timestamps advance ~10s (0.1 Hz observed); UCI page states both 1 Hz and 0.1 Hz in different sections.",
+    "operating_state_rule": "Project assumption mapping Motor_current bands from UCI docs (~0A off, ~4A offloaded, ~7A under load, ~9A starting); not an observed label."
+  },
+  "chunk_size": 100000,
+  "expected_rows": 1516948,
+  "failure_events": [
+    {
+      "end": "2020-04-18 23:59:59",
+      "id": 1,
+      "kind": "Air leak",
+      "start": "2020-04-18 00:00:00"
+    },
+    {
+      "end": "2020-05-30 06:00:00",
+      "id": 2,
+      "kind": "Air leak",
+      "start": "2020-05-29 23:30:00"
+    },
+    {
+      "end": "2020-06-07 14:30:00",
+      "id": 3,
+      "kind": "Air leak",
+      "start": "2020-06-05 10:00:00"
+    },
+    {
+      "end": "2020-07-15 19:00:00",
+      "id": 4,
+      "kind": "Air leak",
+      "start": "2020-07-15 14:30:00"
+    }
+  ],
+  "failure_window_rows": 29960,
+  "null_counts": {},
+  "operating_state_thresholds": {
+    "load_amps_below": 8.0,
+    "off_amps_below": 2.0,
+    "offloaded_amps_below": 5.5
+  },
+  "paths": {
+    "failure_intervals": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\metropt3_failure_intervals.csv",
+    "ingestion_summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\metropt3_ingestion_summary.json",
+    "processed_readings": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\metropt3_readings.csv",
+    "source": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\raw\\metropt3\\MetroPT3(AirCompressor).csv",
+    "state_periods": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\metropt3_state_periods.csv"
+  },
+  "prefailure_hours": 24.0,
+  "prefailure_window_rows": 28668,
+  "state_counts": {
+    "load": 201579,
+    "off": 829124,
+    "offloaded": 486201,
+    "starting": 44
+  },
+  "timestamp_max": "2020-09-01 03:59:50",
+  "timestamp_min": "2020-02-01 00:00:00",
+  "total_rows": 1516948
+}

@@ -3,14 +3,14 @@
 ## Context
 The project brief (`Production Yield Loss and OEE Early.md`) describes a problem common in semiconductor, E&E, and medical-device plants. Yield drops and line bottlenecks show up days late in manual Excel reports, so scrap and missed deliveries build up before anyone acts. The folder is misnamed ("Procure-to-Pay…"). The user confirmed this project is the OEE / Yield system.
 
-The goal is a portfolio-grade, end-to-end analytics product: PostgreSQL star schema → Python SPC/RCA engine → Power BI dashboard. It must show measured, defensible impact numbers for a resume. Constraints: a laptop and 4–6 weeks, so the full SECOM dataset is used, Bosch is sampled, and MES data is simulated.
+The goal is a portfolio-grade, end-to-end analytics product: PostgreSQL star schema → Python SPC/RCA engine → Power BI dashboard. It must show measured, defensible impact numbers for a resume. Constraints: a laptop and 4–6 weeks, so the full SECOM dataset is used, MetroPT-3 is ingested in full via chunks, and MES data is simulated.
 
 ---
 
 ## Step 0 — Housekeeping (first action after approval)
 - Rename the folder to `Production Yield Loss and OEE Early-Warning System`. Close this session first, because the working directory itself is being renamed. Do it from Explorer or with:
   `Rename-Item "...\Procure-to-Pay Three-Way Match Reconciliation and Data Quality Control Tower" "Production Yield Loss and OEE Early-Warning System"`
-- Tip: OneDrive syncing large CSVs (the Bosch files are about 14 GB) is slow. Keep `data/raw/` out of OneDrive, or mark it "free up space".
+- Tip: OneDrive syncing large CSVs is slow (MetroPT-3 zip ~218 MB, processed readings ~235 MB). Keep `data/raw/` out of OneDrive, or mark it "free up space".
 - Run `git init` and add a `.gitignore` for `data/raw`, `data/interim`, `*.pbix` backups, and `.env`.
 
 ---
@@ -39,10 +39,10 @@ Every number is computed by the project and logged to `reports/impact_metrics.cs
 | **Detection latency** (O1) | Replay SECOM in timestamp order. *Baseline* = a manual review at 08:00 the next day, so each failing lot is "detected" at the next 08:00 after it occurs. *New* = the timestamp of the first SPC/T² alert in the excursion window. Report median and P90 hours saved, plus lots caught early. |
 | **Alert quality** (O1) | Confusion matrix of alerts against the SECOM pass/fail label: precision, recall, and false-alarm rate per 100 lots. Western Electric rules alone are compared with rules + T² + EWMA. |
 | **Scrap avoided $** (O1→O2) | (Failing units produced between the new alert and the baseline detection) × unit scrap cost (an assumption table: e.g. wafer $1,200, PCBA $45, parametrised in `config.yaml`). |
-| **Pareto concentration** (O2) | Cumulative % of scrap cost and downtime minutes from the top 3 causes (simulated MES and Bosch station failure rates). |
+| **Pareto concentration** (O2) | Cumulative % of scrap cost and downtime minutes from the top 3 causes (simulated MES; MetroPT-3 failure-window analysis). |
 | **OEE gain potential** (O2) | What-if: remove X % of the top 3 losses, recompute OEE, then convert to extra units per year and $ contribution margin. |
 | **Reporting time** (O3) | Time a scripted replica of the manual Excel workflow (documented step list × realistic minutes) against the logged pipeline runtime plus refresh. Annualise hours saved × analyst rate. |
-| **Scale** | Lots, units, sensor readings, and events processed (e.g. "1,567 lots / 590 sensors, ~118k Bosch parts, 180 days of MES"). |
+| **Scale** | Lots, units, sensor readings, and events processed (e.g. "1,567 lots / 590 sensors, 1.52M MetroPT-3 readings, 180 days of MES"). |
 
 ---
 
@@ -50,8 +50,8 @@ Every number is computed by the project and logged to `reports/impact_metrics.cs
 | Source | Use | Handling |
 |---|---|---|
 | **UCI SECOM** (1,567 lots × 591 sensors, pass/fail, timestamps Jul–Oct 2008) | SPC, early warning, yield trend, feature RCA | Load fully. Drop sensors with > 50 % nulls or zero variance. Median-impute for T² only. |
-| **Kaggle Bosch Production Line** (`train_numeric`, `train_date`, about 1.18M parts, 4 lines / 52 stations) | Line and station flow, station failure rate, throughput, bottleneck dwell time | Read the `Id` and `Response` columns fully (cheap). Take a **uniform 10 % random sample of Ids**, then read in chunks with `usecols`, never stratified, to keep rates unbiased. Map anonymised time units to calendar time (0.01 unit ≈ 6 min, the community estimate; document it as an assumption). |
-| **Simulated MES** (Python, fixed seed) | Work orders, plan vs actual, downtime events, shift logs, manpower, scrap cost | 4 lines (aligned to Bosch L0–L3) × 3 shifts × 180 days. Ideal cycle time per product. Downtime by exponential/Weibull with reasons (breakdown, changeover, material shortage, minor stop, quality hold). **Injected scenarios** (e.g. Line 2 night-shift minor stops, tool-wear drift on Line 3, one supplier-lot quality hold) are documented openly in the README so the RCA "discovery" is transparent. |
+| **UCI MetroPT-3** (1,516,948 timestamped readings, Feb–Sep 2020, 7 analog + 8 digital signals, 4 documented air-leak failure windows) | Real industrial sensor/failure-window analysis at scale | Direct ZIP download (CC BY 4.0, DOI 10.24432/C5VW3R). Read in chunks, validate ranges (analog numeric, digital binary, no nulls), enforce non-decreasing timestamps, map documented failure intervals + 24 h pre-failure windows. Dataset itself is unlabeled; windows are transcribed documentation, not observed labels. |
+| **Simulated MES** (Python, fixed seed) | Work orders, plan vs actual, downtime events, shift logs, manpower, scrap cost | 4 lines × 3 shifts × 180 days. Ideal cycle time per product. Downtime by exponential/Weibull with reasons (breakdown, changeover, material shortage, minor stop, quality hold). **Injected scenarios** (e.g. Line 2 night-shift minor stops, tool-wear drift on Line 3, one supplier-lot quality hold) are documented openly in the README so the RCA "discovery" is transparent. |
 
 ---
 
@@ -62,7 +62,7 @@ sql/  01_schema.sql  02_staging.sql  03_dims.sql  04_facts.sql  05_views_kpi.sql
 src/
   config.yaml            # paths, DB conn, cost assumptions, SPC params
   ingest_secom.py        # download + clean + load
-  ingest_bosch.py        # chunked sampling + station/time mapping
+  ingest_metropt3.py     # chunked time-series ingestion + failure/state windows
   simulate_mes.py        # work orders, downtime, shifts, manpower, scrap
   load_db.py             # COPY into Postgres staging → dims/facts
   spc_engine.py          # I-MR / p-chart limits, WE rules 1–4, EWMA, Hotelling T²
@@ -70,7 +70,7 @@ src/
   rca_pareto.py          # Pareto, correlation, shift/line contrasts (chi-square)
   impact_metrics.py      # latency back-test, $ avoided, hours saved
   run_pipeline.py        # orchestrates everything, logs runtime → pipeline_log
-notebooks/ 01_eda_secom  02_eda_bosch  03_spc_backtest  04_rca
+notebooks/ 01_eda_secom  02_eda_metropt3  03_spc_backtest  04_rca
 powerbi/ OEE_EarlyWarning.pbix  theme.json  measures.dax (exported)
 excel/ manual_report_baseline.xlsx (the "before" state)  alert_export_template.xlsx
 reports/ impact_metrics.csv  case_study.md  screenshots/
@@ -83,7 +83,7 @@ README.md
 - **Facts:**
   - `fact_production_hourly` (line × shift × hour: planned time, run time, ideal CT, total count, good count) → OEE grain.
   - `fact_downtime_event` (start, end, minutes, reason).
-  - `fact_quality_lot` (SECOM lot / Bosch part: pass/fail, scrap cost).
+  - `fact_quality_lot` (SECOM lot: pass/fail, scrap cost).
   - `fact_sensor_reading` (long format, screened sensors only).
   - `fact_spc_alert` (sensor, rule violated, timestamp, severity, ack status).
   - `fact_manpower_shift` (headcount planned vs actual).
@@ -95,8 +95,8 @@ README.md
 
 **Week 1 – Setup & ingestion**
 - Install PostgreSQL 16, Python 3.11 (pandas, numpy, scipy, sqlalchemy, psycopg2, pyyaml, pytest, matplotlib), and Power BI Desktop.
-- Download SECOM and Bosch (the Kaggle API needs a Kaggle account and competition-rules acceptance; you do that yourself).
-- Write `ingest_secom.py` and `ingest_bosch.py` with chunked sampling. Profile the data (nulls, distributions, class imbalance) in notebooks 01–02.
+- Download SECOM and MetroPT-3 (both are direct UCI downloads; no API credentials needed).
+- Write `ingest_secom.py` and `ingest_metropt3.py` with chunked processing. Profile the data (nulls, distributions, class imbalance, timestamps, failure windows) in notebooks 01–02.
 - Build the Excel **manual baseline report** (pivot of daily yield, downtime, scrap). Time each step: this is the "before" state for O3.
 
 **Week 2 – Simulation & modeling**
@@ -119,7 +119,7 @@ README.md
 - `rca_pareto.py`:
   - Pareto of scrap $ and downtime minutes.
   - Chi-square test of shift × line against defect rate.
-  - Bosch station failure-rate ranking and dwell-time bottleneck detection.
+  - MES station failure-rate ranking and dwell-time bottleneck detection, plus MetroPT-3 failure-window contrasts.
   - SECOM top-sensor correlation with fail.
 - What-if OEE uplift and $ recoverable.
 - Work order plan vs actual (on-time %, backlog). Capacity view: required hours against available hours, and headcount against plan.
@@ -147,7 +147,7 @@ README.md
 ---
 
 ## Resume Bullets (fill with measured values from `impact_metrics.csv`)
-- "Built an end-to-end OEE and yield early-warning system (PostgreSQL star schema, Python/SciPy, Power BI/DAX) over **1,567 wafer lots × 590 sensors, ~118K Bosch parts, and 180 days of MES data**."
+- "Built an end-to-end OEE and yield early-warning system (PostgreSQL star schema, Python/SciPy, Power BI/DAX) over **1,567 wafer lots × 590 sensors, 1.52M MetroPT-3 readings, and 180 days of MES data**."
 - "Designed SPC (Western Electric + EWMA + Hotelling T²) alerts that flagged yield excursions a **median Y hours earlier** (−Z % detection latency) than daily manual reports, with **P % precision**, avoiding an estimated **$S scrap**."
 - "Pareto and statistical RCA isolated **3 causes driving Z % of scrap cost**, sizing a **+N pt OEE / $M annual** recovery opportunity."
 - "Automated weekly Excel reporting into a scheduled pipeline, cutting reporting time **from ~6 h to <10 min (−97 %)** and saving **~300 analyst-hours per year**."

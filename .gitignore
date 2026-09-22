@@ -2,6 +2,9 @@
 data/raw/
 data/interim/
 
+# Large generated artifacts stay local (reproducible via src/ingest_metropt3.py).
+data/processed/metropt3_readings.csv
+
 # Environment files and common secret material.
 .env
 .env.*

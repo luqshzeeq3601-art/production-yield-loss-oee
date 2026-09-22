@@ -263,8 +263,8 @@ If `rethink`:
 | Task | Work | Route | Implementer | Why |
 |---|---|---|---|---|
 | **P1-001** | SECOM ingestion + cleaning | `delegate` | Luna / Max | Rules are explicit and localized |
-| **P1-002** | Bosch uniform sampling + chunked ingestion | `delegate` | Terra / High | Large data, sampling correctness, memory risk |
-| **P1-003** | SECOM/Bosch EDA notebooks | `delegate` | Luna / Max | Bounded exploratory outputs |
+| **P1-002** | MetroPT-3 time-series ingestion + chunked processing | `delegate` | Terra / High | Large data, timestamp/window correctness, memory risk |
+| **P1-003** | SECOM/MetroPT-3 EDA notebooks | `delegate` | Luna / Max | Bounded exploratory outputs |
 
 ### P1-001 Gate
 
@@ -275,11 +275,12 @@ If `rethink`:
 
 ### P1-002 Gate
 
-- full `Id` + `Response` scanned;
-- uniform fixed-seed 10% ID sample;
-- no stratified sampling;
-- chunked processing verified;
-- response-rate distortion checked.
+- all 1,516,948 MetroPT-3 rows accounted for (`expected_rows` enforced);
+- timestamps parsed and non-decreasing in source order;
+- analog signals numeric with zero nulls; digital signals binary 0/1;
+- 4 documented failure intervals mapped to rows (dataset itself is unlabeled);
+- 24 h pre-failure windows mapped; operating-state periods run-length encoded;
+- chunked processing verified; outputs deterministic.
 
 ### P1-003 Gate
 
@@ -426,8 +427,9 @@ SQL totals reconcile with fact data.
 
 - shift x line comparisons;
 - chi-square;
-- Bosch station failure ranking;
+- MES station failure ranking;
 - bottleneck dwell-time analysis;
+- MetroPT-3 failure-window contrasts;
 - SECOM sensor/failure contrasts;
 - assumptions recorded.
 
