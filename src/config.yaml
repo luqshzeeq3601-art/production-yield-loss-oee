@@ -38,6 +38,14 @@ spc:
     hotelling_t2_series: reports/hotelling_t2_series.csv
     hotelling_t2_violations: reports/hotelling_t2_violations.csv
     hotelling_t2_summary: reports/hotelling_t2_summary.json
+backtest:
+  excursion_max_gap_lots: 2
+  outputs:
+    lots: reports/spc_backtest_lots.csv
+    failures: reports/spc_backtest_failures.csv
+    methods: reports/spc_backtest_methods.csv
+    excursions: reports/spc_backtest_excursions.csv
+    summary: reports/spc_backtest_summary.json
 screening:
   window_fraction: 0.30
   fdr_alpha: 0.05
