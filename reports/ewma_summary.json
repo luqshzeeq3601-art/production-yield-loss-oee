@@ -1,0 +1,144 @@
+{
+  "L": 3.0,
+  "direction_counts": {
+    "down": 518,
+    "up": 1344
+  },
+  "first_violation_timestamp_per_sensor": {
+    "sensor_000": "2008-09-18T23:44:00.000000000",
+    "sensor_021": "2008-09-02T06:03:00.000000000",
+    "sensor_022": "2008-09-02T07:32:00.000000000",
+    "sensor_033": "2008-08-29T08:45:00.000000000",
+    "sensor_064": "2008-08-29T07:22:00.000000000",
+    "sensor_076": "2008-08-29T04:56:00.000000000",
+    "sensor_090": "2008-08-29T07:22:00.000000000",
+    "sensor_122": "2008-08-28T09:46:00.000000000",
+    "sensor_125": "2008-08-29T00:49:00.000000000",
+    "sensor_562": "2008-08-29T13:49:00.000000000"
+  },
+  "initialization": "z_0 = Phase I pass-only sensor mean",
+  "lambda": 0.2,
+  "limitations": "P3-001 found no sensor significant at FDR < 0.05, so the 10 selected sensors are exploratory candidates, not confirmed root causes. Limits and rules were not tuned against Phase II fail labels; Phase II stays out-of-sample. MR-based sigma assumes short-term stability of Phase I.",
+  "methodology": "EWMA z_t = lambda*x_t + (1-lambda)*z_{t-1} with z_0 = Phase I pass-only mean; mu/sigma are Phase I only. Limits use the time-varying startup variance sigma*sqrt(lambda/(2-lambda)*(1-(1-lambda)^(2t))) with width L. State advances per valid Phase II observation only (missing values skipped, identities preserved, no imputation). Overlap counts are descriptive lot-level coincidences with WE violations, not quality metrics.",
+  "paths": {
+    "ewma_series": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_series.csv",
+    "ewma_summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_summary.json",
+    "ewma_violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_violations.csv",
+    "limits": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_limits.csv",
+    "p_chart": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\p_chart_daily.csv",
+    "summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_univariate_summary.json",
+    "violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_rule_violations.csv"
+  },
+  "phase1_boundary_timestamp": "2008-08-28 06:56:00",
+  "selected_sensors": [
+    "sensor_021",
+    "sensor_000",
+    "sensor_064",
+    "sensor_122",
+    "sensor_022",
+    "sensor_090",
+    "sensor_076",
+    "sensor_562",
+    "sensor_033",
+    "sensor_125"
+  ],
+  "sigma_source": "Phase I MRbar/d2 sigma estimate from spc_limits",
+  "time_varying_limits": true,
+  "total_violations": 1862,
+  "valid_observations_per_sensor": {
+    "sensor_000": 1094,
+    "sensor_021": 1096,
+    "sensor_022": 1096,
+    "sensor_033": 1097,
+    "sensor_064": 1090,
+    "sensor_076": 1073,
+    "sensor_090": 1046,
+    "sensor_122": 1094,
+    "sensor_125": 1094,
+    "sensor_562": 976
+  },
+  "violations_per_sensor": {
+    "sensor_000": 25,
+    "sensor_021": 6,
+    "sensor_022": 20,
+    "sensor_033": 125,
+    "sensor_064": 1,
+    "sensor_076": 117,
+    "sensor_090": 22,
+    "sensor_122": 741,
+    "sensor_125": 681,
+    "sensor_562": 124
+  },
+  "we_ewma_overlap_lots": {
+    "sensor_000": {
+      "both_lots": 16,
+      "ewma_lots": 25,
+      "ewma_only_lots": 9,
+      "we_lots": 62,
+      "we_only_lots": 46
+    },
+    "sensor_021": {
+      "both_lots": 3,
+      "ewma_lots": 6,
+      "ewma_only_lots": 3,
+      "we_lots": 237,
+      "we_only_lots": 234
+    },
+    "sensor_022": {
+      "both_lots": 17,
+      "ewma_lots": 20,
+      "ewma_only_lots": 3,
+      "we_lots": 345,
+      "we_only_lots": 328
+    },
+    "sensor_033": {
+      "both_lots": 72,
+      "ewma_lots": 125,
+      "ewma_only_lots": 53,
+      "we_lots": 302,
+      "we_only_lots": 230
+    },
+    "sensor_064": {
+      "both_lots": 1,
+      "ewma_lots": 1,
+      "ewma_only_lots": 0,
+      "we_lots": 95,
+      "we_only_lots": 94
+    },
+    "sensor_076": {
+      "both_lots": 99,
+      "ewma_lots": 117,
+      "ewma_only_lots": 18,
+      "we_lots": 241,
+      "we_only_lots": 142
+    },
+    "sensor_090": {
+      "both_lots": 15,
+      "ewma_lots": 22,
+      "ewma_only_lots": 7,
+      "we_lots": 33,
+      "we_only_lots": 18
+    },
+    "sensor_122": {
+      "both_lots": 685,
+      "ewma_lots": 741,
+      "ewma_only_lots": 56,
+      "we_lots": 877,
+      "we_only_lots": 192
+    },
+    "sensor_125": {
+      "both_lots": 593,
+      "ewma_lots": 681,
+      "ewma_only_lots": 88,
+      "we_lots": 786,
+      "we_only_lots": 193
+    },
+    "sensor_562": {
+      "both_lots": 80,
+      "ewma_lots": 124,
+      "ewma_only_lots": 44,
+      "we_lots": 155,
+      "we_only_lots": 75
+    }
+  }
+}

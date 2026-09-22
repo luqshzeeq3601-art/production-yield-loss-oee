@@ -21,7 +21,7 @@ import pandas as pd
 from src.config_loader import load_config
 
 
-_OUTPUT_KEYS = ("limits", "violations", "p_chart", "summary")
+_OUTPUT_KEYS = ("limits", "violations", "p_chart", "summary", "ewma_violations", "ewma_series", "ewma_summary")
 _LIMIT_COLUMNS = (
     "sensor",
     "phase1_valid_n",
@@ -56,6 +56,32 @@ _PCHART_COLUMNS = (
     "lcl",
     "ucl",
     "low_volume",
+    "violation",
+)
+_EWMA_VIOLATION_COLUMNS = (
+    "sensor",
+    "source_row",
+    "timestamp",
+    "raw_value",
+    "ewma_value",
+    "centerline",
+    "sigma_reference",
+    "lambda",
+    "L",
+    "ewma_lcl",
+    "ewma_ucl",
+    "direction",
+    "phase",
+    "valid_observation_index",
+)
+_EWMA_SERIES_COLUMNS = (
+    "sensor",
+    "source_row",
+    "timestamp",
+    "raw_value",
+    "ewma_value",
+    "ewma_lcl",
+    "ewma_ucl",
     "violation",
 )
 
@@ -117,8 +143,53 @@ def compute_imr_limits(
     }
 
 
-def evaluate_we_rules(
+def compute_ewma(
     values: np.ndarray,
+    mean: float,
+    sigma: float,
+    lam: float,
+    limit_width: float,
+    time_varying: bool = True,
+) -> dict[str, np.ndarray]:
+    """Run the EWMA recursion over ordered valid observations.
+
+    z_t = lam * x_t + (1 - lam) * z_{t-1} with z_0 = mean. Control limits use
+    the time-varying startup variance sigma_z(t); with time_varying=False the
+    steady-state width applies from t = 1. Returns ewma, lcl, ucl arrays plus
+    a boolean violation mask (z outside [lcl, ucl]).
+    """
+
+    if not 0 < lam <= 1:
+        raise ValueError("EWMA lambda must be in (0, 1].")
+    if not np.isfinite(limit_width) or limit_width <= 0:
+        raise ValueError("EWMA limit width L must be positive.")
+    values = np.asarray(values, dtype=float)
+    count = values.size
+    empty = {
+        "ewma": np.empty(0), "lcl": np.empty(0), "ucl": np.empty(0),
+        "violation": np.empty(0, dtype=bool),
+    }
+    if count == 0 or not np.isfinite(sigma) or sigma <= 0:
+        return empty
+    steps = np.arange(1, count + 1)
+    if time_varying:
+        width = np.sqrt(lam / (2.0 - lam) * (1.0 - (1.0 - lam) ** (2 * steps)))
+    else:
+        width = np.full(count, np.sqrt(lam / (2.0 - lam)))
+    ewma = np.empty(count)
+    running = float(mean)
+    for position in range(count):
+        running = lam * float(values[position]) + (1.0 - lam) * running
+        ewma[position] = running
+    lcl = mean - limit_width * sigma * width
+    ucl = mean + limit_width * sigma * width
+    return {
+        "ewma": ewma, "lcl": lcl, "ucl": ucl,
+        "violation": (ewma > ucl) | (ewma < lcl),
+    }
+
+
+def evaluate_we_rules(    values: np.ndarray,
     rows: np.ndarray,
     timestamps: np.ndarray,
     mean: float,
@@ -179,7 +250,7 @@ def evaluate_we_rules(
 
 
 def run(config_path: str | Path | None = None) -> dict[str, Path]:
-    """Compute I-MR limits, WE violations, and the p-chart; write evidence."""
+    """Compute I-MR limits, WE violations, EWMA monitoring, and the p-chart."""
 
     config = load_config(config_path)
     spc = _spc_config(config)
@@ -213,8 +284,17 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
 
     d2, d3, d4 = float(spc["mr_d2"]), float(spc["mr_d3"]), float(spc["mr_d4"])
     min_n = int(spc["min_phase1_observations"])
+    lam = float(spc["ewma_lambda"])
+    limit_width = float(spc["ewma_L"])
+    time_varying = bool(spc["ewma_use_time_varying_limits"])
+    if not 0 < lam <= 1:
+        raise ValueError("Configuration spc.ewma_lambda must be in (0, 1].")
+    if not np.isfinite(limit_width) or limit_width <= 0:
+        raise ValueError("Configuration spc.ewma_L must be positive.")
     limit_rows: list[dict[str, Any]] = []
     violation_rows: list[dict[str, Any]] = []
+    ewma_violation_rows: list[dict[str, Any]] = []
+    ewma_series_rows: list[dict[str, Any]] = []
     invalid: dict[str, str] = {}
     for sensor in selected:
         valid = pd.to_numeric(phase1_pass[sensor], errors="coerce").dropna().to_numpy(dtype=float)
@@ -238,16 +318,58 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
             continue
         series = pd.to_numeric(phase2[sensor], errors="coerce")
         mask = series.notna().to_numpy()
+        valid_values = series[mask].to_numpy(dtype=float)
+        valid_rows = phase2.index[mask].to_numpy()
+        valid_ts = phase2["timestamp"][mask].to_numpy()
         violation_rows.extend(
             evaluate_we_rules(
-                series[mask].to_numpy(dtype=float),
-                phase2.index[mask].to_numpy(),
-                phase2["timestamp"][mask].to_numpy(),
+                valid_values,
+                valid_rows,
+                valid_ts,
                 limits["mean"],
                 limits["sigma"],
                 sensor,
             )
         )
+        ewma = compute_ewma(
+            valid_values, limits["mean"], limits["sigma"], lam, limit_width,
+            time_varying=time_varying,
+        )
+        for position in range(valid_values.size):
+            violated = bool(ewma["violation"][position])
+            ewma_series_rows.append(
+                {
+                    "sensor": sensor,
+                    "source_row": int(valid_rows[position]),
+                    "timestamp": str(valid_ts[position]),
+                    "raw_value": float(valid_values[position]),
+                    "ewma_value": float(ewma["ewma"][position]),
+                    "ewma_lcl": float(ewma["lcl"][position]),
+                    "ewma_ucl": float(ewma["ucl"][position]),
+                    "violation": violated,
+                }
+            )
+            if violated:
+                ewma_violation_rows.append(
+                    {
+                        "sensor": sensor,
+                        "source_row": int(valid_rows[position]),
+                        "timestamp": str(valid_ts[position]),
+                        "raw_value": float(valid_values[position]),
+                        "ewma_value": float(ewma["ewma"][position]),
+                        "centerline": float(limits["mean"]),
+                        "sigma_reference": float(limits["sigma"]),
+                        "lambda": lam,
+                        "L": limit_width,
+                        "ewma_lcl": float(ewma["lcl"][position]),
+                        "ewma_ucl": float(ewma["ucl"][position]),
+                        "direction": "up"
+                        if ewma["ewma"][position] > ewma["ucl"][position]
+                        else "down",
+                        "phase": "Phase II",
+                        "valid_observation_index": int(position + 1),
+                    }
+                )
     limits_frame = pd.DataFrame(limit_rows, columns=_LIMIT_COLUMNS)
     violations = pd.DataFrame(violation_rows, columns=_VIOLATION_COLUMNS)
     if not violations.empty:
@@ -259,12 +381,30 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
 
     pchart = _p_chart(frame, boundary_rows, int(spc["p_chart_min_daily_n"]))
 
+    ewma_violations = pd.DataFrame(ewma_violation_rows, columns=_EWMA_VIOLATION_COLUMNS)
+    ewma_series = pd.DataFrame(ewma_series_rows, columns=_EWMA_SERIES_COLUMNS)
+    if not ewma_violations.empty:
+        order = {sensor: position for position, sensor in enumerate(selected)}
+        ewma_violations["sensor_order"] = ewma_violations["sensor"].map(order)
+        ewma_violations = ewma_violations.sort_values(
+            ["sensor_order", "timestamp"]
+        ).drop(columns=["sensor_order"]).reset_index(drop=True)
+    if not ewma_series.empty:
+        order = {sensor: position for position, sensor in enumerate(selected)}
+        ewma_series["sensor_order"] = ewma_series["sensor"].map(order)
+        ewma_series = ewma_series.sort_values(
+            ["sensor_order", "timestamp"]
+        ).drop(columns=["sensor_order"]).reset_index(drop=True)
+    overlap = _we_ewma_overlap(violations, ewma_violations, selected)
+
     output_paths = _configured_output_paths(spc)
     for output_path in output_paths.values():
         output_path.parent.mkdir(parents=True, exist_ok=True)
     limits_frame.to_csv(output_paths["limits"], index=False, lineterminator="\n")
     violations.to_csv(output_paths["violations"], index=False, lineterminator="\n")
     pchart.to_csv(output_paths["p_chart"], index=False, lineterminator="\n")
+    ewma_violations.to_csv(output_paths["ewma_violations"], index=False, lineterminator="\n")
+    ewma_series.to_csv(output_paths["ewma_series"], index=False, lineterminator="\n")
     summary = _build_summary(
         boundary_ts=boundary_ts,
         phase1=phase1,
@@ -277,6 +417,18 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
         output_paths=output_paths,
     )
     _write_json(output_paths["summary"], summary)
+    ewma_summary = _build_ewma_summary(
+        boundary_ts=boundary_ts,
+        selected=selected,
+        ewma_violations=ewma_violations,
+        ewma_series=ewma_series,
+        lam=lam,
+        limit_width=limit_width,
+        time_varying=time_varying,
+        overlap=overlap,
+        output_paths=output_paths,
+    )
+    _write_json(output_paths["ewma_summary"], ewma_summary)
     return output_paths
 
 
@@ -333,10 +485,18 @@ def _spc_config(config: Mapping[str, Any]) -> Mapping[str, Any]:
         "min_phase1_observations",
         "p_chart_min_daily_n",
         "ewma_lambda",
+        "ewma_L",
+        "ewma_use_time_varying_limits",
     }
     missing = sorted(required.difference(section))
     if missing:
         raise ValueError(f"Configuration spc section is missing: {missing}.")
+    if not 0 < float(section["ewma_lambda"]) <= 1:
+        raise ValueError("Configuration spc.ewma_lambda must be in (0, 1].")
+    if not np.isfinite(float(section["ewma_L"])) or float(section["ewma_L"]) <= 0:
+        raise ValueError("Configuration spc.ewma_L must be positive.")
+    if not isinstance(section["ewma_use_time_varying_limits"], bool):
+        raise ValueError("Configuration spc.ewma_use_time_varying_limits must be boolean.")
     if not 0 < float(section["phase1_fraction"]) < 1:
         raise ValueError("Configuration spc.phase1_fraction must be in (0, 1).")
     if abs(float(section["phase1_fraction"]) - 0.30) > 1e-9:
@@ -352,6 +512,102 @@ def _spc_config(config: Mapping[str, Any]) -> Mapping[str, Any]:
     if not isinstance(outputs, Mapping) or not set(_OUTPUT_KEYS).issubset(outputs):
         raise ValueError(f"Configuration spc.outputs must define: {', '.join(_OUTPUT_KEYS)}.")
     return section
+
+
+def _we_ewma_overlap(
+    violations: pd.DataFrame,
+    ewma_violations: pd.DataFrame,
+    selected: Sequence[str],
+) -> dict[str, dict[str, int]]:
+    """Descriptive WE/EWMA overlap per sensor on (sensor, source_row) pairs.
+
+    Counts only; no precision, recall, latency, or quality judgment (P3-005).
+    """
+
+    overlap: dict[str, dict[str, int]] = {}
+    we_lots = (
+        set(zip(violations["sensor"], violations["source_row"]))
+        if not violations.empty
+        else set()
+    )
+    ewma_lots = (
+        set(zip(ewma_violations["sensor"], ewma_violations["source_row"]))
+        if not ewma_violations.empty
+        else set()
+    )
+    for sensor in selected:
+        sensor_we = {row for (s, row) in we_lots if s == sensor}
+        sensor_ewma = {row for (s, row) in ewma_lots if s == sensor}
+        overlap[sensor] = {
+            "we_lots": len(sensor_we),
+            "ewma_lots": len(sensor_ewma),
+            "both_lots": len(sensor_we & sensor_ewma),
+            "ewma_only_lots": len(sensor_ewma - sensor_we),
+            "we_only_lots": len(sensor_we - sensor_ewma),
+        }
+    return overlap
+
+
+def _build_ewma_summary(
+    *,
+    boundary_ts: Any,
+    selected: Sequence[str],
+    ewma_violations: pd.DataFrame,
+    ewma_series: pd.DataFrame,
+    lam: float,
+    limit_width: float,
+    time_varying: bool,
+    overlap: Mapping[str, Mapping[str, int]],
+    output_paths: Mapping[str, Path],
+) -> dict[str, Any]:
+    by_sensor = (
+        ewma_violations["sensor"].value_counts().to_dict()
+        if not ewma_violations.empty
+        else {}
+    )
+    directions = (
+        ewma_violations["direction"].value_counts().to_dict()
+        if not ewma_violations.empty
+        else {}
+    )
+    first_violation = (
+        ewma_violations.groupby("sensor")["timestamp"].min().to_dict()
+        if not ewma_violations.empty
+        else {}
+    )
+    valid_obs = (
+        ewma_series.groupby("sensor").size().to_dict() if not ewma_series.empty else {}
+    )
+    return {
+        "phase1_boundary_timestamp": str(boundary_ts),
+        "selected_sensors": list(selected),
+        "lambda": lam,
+        "L": limit_width,
+        "time_varying_limits": time_varying,
+        "initialization": "z_0 = Phase I pass-only sensor mean",
+        "sigma_source": "Phase I MRbar/d2 sigma estimate from spc_limits",
+        "valid_observations_per_sensor": {key: int(value) for key, value in valid_obs.items()},
+        "violations_per_sensor": {key: int(value) for key, value in by_sensor.items()},
+        "total_violations": int(len(ewma_violations)),
+        "first_violation_timestamp_per_sensor": {
+            key: str(value) for key, value in first_violation.items()
+        },
+        "direction_counts": {key: int(value) for key, value in directions.items()},
+        "we_ewma_overlap_lots": {
+            key: dict(value) for key, value in overlap.items()
+        },
+        "methodology": (
+            "EWMA z_t = lambda*x_t + (1-lambda)*z_{t-1} with z_0 = Phase I"
+            " pass-only mean; mu/sigma are Phase I only. Limits use the"
+            " time-varying startup variance sigma*sqrt(lambda/(2-lambda)*"
+            "(1-(1-lambda)^(2t))) with width L. State advances per valid Phase II"
+            " observation only (missing values skipped, identities preserved, no"
+            " imputation). Overlap counts are descriptive lot-level coincidences"
+            " with WE violations, not quality metrics."
+        ),
+        "limitations": LIMITATIONS,
+        "paths": {key: str(path) for key, path in output_paths.items()},
+    }
 
 
 def _repository_root() -> Path:

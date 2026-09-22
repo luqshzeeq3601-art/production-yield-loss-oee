@@ -24,11 +24,16 @@ spc:
   min_phase1_observations: 20
   p_chart_min_daily_n: 10
   ewma_lambda: 0.20
+  ewma_L: 3.0
+  ewma_use_time_varying_limits: true
   outputs:
     limits: reports/spc_limits.csv
     violations: reports/spc_rule_violations.csv
     p_chart: reports/p_chart_daily.csv
     summary: reports/spc_univariate_summary.json
+    ewma_violations: reports/ewma_violations.csv
+    ewma_series: reports/ewma_series.csv
+    ewma_summary: reports/ewma_summary.json
 screening:
   window_fraction: 0.30
   fdr_alpha: 0.05
