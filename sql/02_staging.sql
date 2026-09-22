@@ -10,7 +10,11 @@
 -- SECOM cleaned lots (data/processed/secom_cleaned.csv).
 -- Row order is the lot identity: the source has no lot-id column, so the
 -- loader must preserve CSV order and record it as source_row downstream.
+-- Loader note: the source has no lot-id column, so stg_seq (filled by COPY in
+-- file order, reset by TRUNCATE ... RESTART IDENTITY each load) preserves CSV
+-- order as the downstream source_row lot identity. Heap table otherwise.
 CREATE TABLE IF NOT EXISTS staging.secom_cleaned (
+    stg_seq BIGINT GENERATED ALWAYS AS IDENTITY,
     timestamp TIMESTAMP,
     target_raw SMALLINT,
     target SMALLINT,
