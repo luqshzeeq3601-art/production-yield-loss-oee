@@ -1,0 +1,968 @@
+{
+  "candidate_sensor_count": 440,
+  "correlation_threshold": 0.9,
+  "fdr_alpha": 0.05,
+  "floor_filled": 10,
+  "methodology": "Screening uses the first window_fraction of lots in timestamp order (both classes); no Phase II lot informs any statistic, rank, or redundancy decision. Per sensor: point-biserial r, two-sample KS, two-sided Mann-Whitney U, and Cohen-style d (fail minus pass over pooled SD), all on pairwise-complete observations. Benjamini-Hochberg FDR is applied separately to the KS and Mann-Whitney p-value families. Sensors rank by mean rank across |r|, KS statistic, |d|, and min(q_ks, q_mw) (rankdata average ties, sensor code breaks order ties). Greedy redundancy: walking rank order, a sensor is marked redundant with the first already-retained sensor whose absolute window correlation exceeds the threshold. Selection walks retained sensors in rank order, taking significant (q < alpha) sensors with |d| >= effect_floor up to max_selected; if fewer than min_selected qualify, the top retained sensors fill to min_selected (counted as floor_filled) so downstream SPC has a usable input set.",
+  "paths": {
+    "ranking": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\feature_screening.csv",
+    "summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\feature_screening_summary.json"
+  },
+  "redundant_sensors": [
+    {
+      "redundant_with": "sensor_064",
+      "sensor": "sensor_065"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_298"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_434"
+    },
+    {
+      "redundant_with": "sensor_181",
+      "sensor": "sensor_453"
+    },
+    {
+      "redundant_with": "sensor_122",
+      "sensor": "sensor_127"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_299"
+    },
+    {
+      "redundant_with": "sensor_181",
+      "sensor": "sensor_317"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_164"
+    },
+    {
+      "redundant_with": "sensor_304",
+      "sensor": "sensor_440"
+    },
+    {
+      "redundant_with": "sensor_304",
+      "sensor": "sensor_169"
+    },
+    {
+      "redundant_with": "sensor_587",
+      "sensor": "sensor_588"
+    },
+    {
+      "redundant_with": "sensor_435",
+      "sensor": "sensor_430"
+    },
+    {
+      "redundant_with": "sensor_145",
+      "sensor": "sensor_280"
+    },
+    {
+      "redundant_with": "sensor_137",
+      "sensor": "sensor_410"
+    },
+    {
+      "redundant_with": "sensor_311",
+      "sensor": "sensor_176"
+    },
+    {
+      "redundant_with": "sensor_311",
+      "sensor": "sensor_447"
+    },
+    {
+      "redundant_with": "sensor_175",
+      "sensor": "sensor_446"
+    },
+    {
+      "redundant_with": "sensor_152",
+      "sensor": "sensor_425"
+    },
+    {
+      "redundant_with": "sensor_152",
+      "sensor": "sensor_287"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_294"
+    },
+    {
+      "redundant_with": "sensor_569",
+      "sensor": "sensor_565"
+    },
+    {
+      "redundant_with": "sensor_137",
+      "sensor": "sensor_272"
+    },
+    {
+      "redundant_with": "sensor_556",
+      "sensor": "sensor_550"
+    },
+    {
+      "redundant_with": "sensor_569",
+      "sensor": "sensor_567"
+    },
+    {
+      "redundant_with": "sensor_439",
+      "sensor": "sensor_168"
+    },
+    {
+      "redundant_with": "sensor_556",
+      "sensor": "sensor_553"
+    },
+    {
+      "redundant_with": "sensor_435",
+      "sensor": "sensor_431"
+    },
+    {
+      "redundant_with": "sensor_144",
+      "sensor": "sensor_417"
+    },
+    {
+      "redundant_with": "sensor_114",
+      "sensor": "sensor_249"
+    },
+    {
+      "redundant_with": "sensor_114",
+      "sensor": "sensor_387"
+    },
+    {
+      "redundant_with": "sensor_416",
+      "sensor": "sensor_143"
+    },
+    {
+      "redundant_with": "sensor_270",
+      "sensor": "sensor_135"
+    },
+    {
+      "redundant_with": "sensor_270",
+      "sensor": "sensor_408"
+    },
+    {
+      "redundant_with": "sensor_494",
+      "sensor": "sensor_360"
+    },
+    {
+      "redundant_with": "sensor_494",
+      "sensor": "sensor_222"
+    },
+    {
+      "redundant_with": "sensor_348",
+      "sensor": "sensor_210"
+    },
+    {
+      "redundant_with": "sensor_144",
+      "sensor": "sensor_279"
+    },
+    {
+      "redundant_with": "sensor_552",
+      "sensor": "sensor_549"
+    },
+    {
+      "redundant_with": "sensor_301",
+      "sensor": "sensor_437"
+    },
+    {
+      "redundant_with": "sensor_491",
+      "sensor": "sensor_219"
+    },
+    {
+      "redundant_with": "sensor_523",
+      "sensor": "sensor_251"
+    },
+    {
+      "redundant_with": "sensor_491",
+      "sensor": "sensor_357"
+    },
+    {
+      "redundant_with": "sensor_208",
+      "sensor": "sensor_344"
+    },
+    {
+      "redundant_with": "sensor_175",
+      "sensor": "sensor_310"
+    },
+    {
+      "redundant_with": "sensor_188",
+      "sensor": "sensor_324"
+    },
+    {
+      "redundant_with": "sensor_053",
+      "sensor": "sensor_054"
+    },
+    {
+      "redundant_with": "sensor_291",
+      "sensor": "sensor_429"
+    },
+    {
+      "redundant_with": "sensor_281",
+      "sensor": "sensor_146"
+    },
+    {
+      "redundant_with": "sensor_291",
+      "sensor": "sensor_156"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_165"
+    },
+    {
+      "redundant_with": "sensor_247",
+      "sensor": "sensor_519"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_300"
+    },
+    {
+      "redundant_with": "sensor_452",
+      "sensor": "sensor_180"
+    },
+    {
+      "redundant_with": "sensor_160",
+      "sensor": "sensor_295"
+    },
+    {
+      "redundant_with": "sensor_163",
+      "sensor": "sensor_026"
+    },
+    {
+      "redundant_with": "sensor_247",
+      "sensor": "sensor_385"
+    },
+    {
+      "redundant_with": "sensor_523",
+      "sensor": "sensor_389"
+    },
+    {
+      "redundant_with": "sensor_290",
+      "sensor": "sensor_155"
+    },
+    {
+      "redundant_with": "sensor_551",
+      "sensor": "sensor_557"
+    },
+    {
+      "redundant_with": "sensor_290",
+      "sensor": "sensor_428"
+    },
+    {
+      "redundant_with": "sensor_154",
+      "sensor": "sensor_421"
+    },
+    {
+      "redundant_with": "sensor_046",
+      "sensor": "sensor_050"
+    },
+    {
+      "redundant_with": "sensor_390",
+      "sensor": "sensor_252"
+    },
+    {
+      "redundant_with": "sensor_154",
+      "sensor": "sensor_427"
+    },
+    {
+      "redundant_with": "sensor_321",
+      "sensor": "sensor_185"
+    },
+    {
+      "redundant_with": "sensor_154",
+      "sensor": "sensor_289"
+    },
+    {
+      "redundant_with": "sensor_301",
+      "sensor": "sensor_166"
+    },
+    {
+      "redundant_with": "sensor_435",
+      "sensor": "sensor_436"
+    },
+    {
+      "redundant_with": "sensor_154",
+      "sensor": "sensor_148"
+    },
+    {
+      "redundant_with": "sensor_248",
+      "sensor": "sensor_386"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_336"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_341"
+    },
+    {
+      "redundant_with": "sensor_092",
+      "sensor": "sensor_105"
+    },
+    {
+      "redundant_with": "sensor_248",
+      "sensor": "sensor_520"
+    },
+    {
+      "redundant_with": "sensor_214",
+      "sensor": "sensor_352"
+    },
+    {
+      "redundant_with": "sensor_323",
+      "sensor": "sensor_187"
+    },
+    {
+      "redundant_with": "sensor_184",
+      "sensor": "sensor_320"
+    },
+    {
+      "redundant_with": "sensor_438",
+      "sensor": "sensor_167"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_477"
+    },
+    {
+      "redundant_with": "sensor_416",
+      "sensor": "sensor_278"
+    },
+    {
+      "redundant_with": "sensor_323",
+      "sensor": "sensor_459"
+    },
+    {
+      "redundant_with": "sensor_271",
+      "sensor": "sensor_409"
+    },
+    {
+      "redundant_with": "sensor_321",
+      "sensor": "sensor_457"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_197"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_469"
+    },
+    {
+      "redundant_with": "sensor_551",
+      "sensor": "sensor_554"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_333"
+    },
+    {
+      "redundant_with": "sensor_012",
+      "sensor": "sensor_018"
+    },
+    {
+      "redundant_with": "sensor_202",
+      "sensor": "sensor_338"
+    },
+    {
+      "redundant_with": "sensor_362",
+      "sensor": "sensor_224"
+    },
+    {
+      "redundant_with": "sensor_154",
+      "sensor": "sensor_283"
+    },
+    {
+      "redundant_with": "sensor_413",
+      "sensor": "sensor_140"
+    },
+    {
+      "redundant_with": "sensor_271",
+      "sensor": "sensor_136"
+    },
+    {
+      "redundant_with": "sensor_225",
+      "sensor": "sensor_497"
+    },
+    {
+      "redundant_with": "sensor_277",
+      "sensor": "sensor_415"
+    },
+    {
+      "redundant_with": "sensor_218",
+      "sensor": "sensor_490"
+    },
+    {
+      "redundant_with": "sensor_390",
+      "sensor": "sensor_524"
+    },
+    {
+      "redundant_with": "sensor_184",
+      "sensor": "sensor_456"
+    },
+    {
+      "redundant_with": "sensor_573",
+      "sensor": "sensor_577"
+    },
+    {
+      "redundant_with": "sensor_413",
+      "sensor": "sensor_275"
+    },
+    {
+      "redundant_with": "sensor_426",
+      "sensor": "sensor_153"
+    },
+    {
+      "redundant_with": "sensor_277",
+      "sensor": "sensor_142"
+    },
+    {
+      "redundant_with": "sensor_339",
+      "sensor": "sensor_475"
+    },
+    {
+      "redundant_with": "sensor_297",
+      "sensor": "sensor_162"
+    },
+    {
+      "redundant_with": "sensor_285",
+      "sensor": "sensor_150"
+    },
+    {
+      "redundant_with": "sensor_444",
+      "sensor": "sensor_173"
+    },
+    {
+      "redundant_with": "sensor_339",
+      "sensor": "sensor_203"
+    },
+    {
+      "redundant_with": "sensor_151",
+      "sensor": "sensor_424"
+    },
+    {
+      "redundant_with": "sensor_151",
+      "sensor": "sensor_286"
+    },
+    {
+      "redundant_with": "sensor_218",
+      "sensor": "sensor_356"
+    },
+    {
+      "redundant_with": "sensor_573",
+      "sensor": "sensor_575"
+    },
+    {
+      "redundant_with": "sensor_470",
+      "sensor": "sensor_198"
+    },
+    {
+      "redundant_with": "sensor_467",
+      "sensor": "sensor_195"
+    },
+    {
+      "redundant_with": "sensor_574",
+      "sensor": "sensor_572"
+    },
+    {
+      "redundant_with": "sensor_470",
+      "sensor": "sensor_334"
+    },
+    {
+      "redundant_with": "sensor_307",
+      "sensor": "sensor_309"
+    },
+    {
+      "redundant_with": "sensor_405",
+      "sensor": "sensor_267"
+    },
+    {
+      "redundant_with": "sensor_467",
+      "sensor": "sensor_331"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_067"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_343"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_207"
+    },
+    {
+      "redundant_with": "sensor_036",
+      "sensor": "sensor_034"
+    },
+    {
+      "redundant_with": "sensor_255",
+      "sensor": "sensor_527"
+    },
+    {
+      "redundant_with": "sensor_541",
+      "sensor": "sensor_269"
+    },
+    {
+      "redundant_with": "sensor_307",
+      "sensor": "sensor_174"
+    },
+    {
+      "redundant_with": "sensor_307",
+      "sensor": "sensor_172"
+    },
+    {
+      "redundant_with": "sensor_366",
+      "sensor": "sensor_228"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_479"
+    },
+    {
+      "redundant_with": "sensor_273",
+      "sensor": "sensor_411"
+    },
+    {
+      "redundant_with": "sensor_307",
+      "sensor": "sensor_445"
+    },
+    {
+      "redundant_with": "sensor_448",
+      "sensor": "sensor_177"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_196"
+    },
+    {
+      "redundant_with": "sensor_448",
+      "sensor": "sensor_312"
+    },
+    {
+      "redundant_with": "sensor_541",
+      "sensor": "sensor_407"
+    },
+    {
+      "redundant_with": "sensor_566",
+      "sensor": "sensor_564"
+    },
+    {
+      "redundant_with": "sensor_296",
+      "sensor": "sensor_161"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_332"
+    },
+    {
+      "redundant_with": "sensor_307",
+      "sensor": "sensor_443"
+    },
+    {
+      "redundant_with": "sensor_444",
+      "sensor": "sensor_308"
+    },
+    {
+      "redundant_with": "sensor_426",
+      "sensor": "sensor_288"
+    },
+    {
+      "redundant_with": "sensor_574",
+      "sensor": "sensor_576"
+    },
+    {
+      "redundant_with": "sensor_273",
+      "sensor": "sensor_138"
+    },
+    {
+      "redundant_with": "sensor_377",
+      "sensor": "sensor_239"
+    },
+    {
+      "redundant_with": "sensor_025",
+      "sensor": "sensor_027"
+    },
+    {
+      "redundant_with": "sensor_098",
+      "sensor": "sensor_101"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_204"
+    },
+    {
+      "redundant_with": "sensor_201",
+      "sensor": "sensor_337"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_335"
+    },
+    {
+      "redundant_with": "sensor_566",
+      "sensor": "sensor_568"
+    },
+    {
+      "redundant_with": "sensor_093",
+      "sensor": "sensor_106"
+    },
+    {
+      "redundant_with": "sensor_305",
+      "sensor": "sensor_170"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_199"
+    },
+    {
+      "redundant_with": "sensor_405",
+      "sensor": "sensor_539"
+    },
+    {
+      "redundant_with": "sensor_361",
+      "sensor": "sensor_223"
+    },
+    {
+      "redundant_with": "sensor_454",
+      "sensor": "sensor_318"
+    },
+    {
+      "redundant_with": "sensor_306",
+      "sensor": "sensor_171"
+    },
+    {
+      "redundant_with": "sensor_306",
+      "sensor": "sensor_442"
+    },
+    {
+      "redundant_with": "sensor_319",
+      "sensor": "sensor_455"
+    },
+    {
+      "redundant_with": "sensor_205",
+      "sensor": "sensor_471"
+    },
+    {
+      "redundant_with": "sensor_412",
+      "sensor": "sensor_139"
+    },
+    {
+      "redundant_with": "sensor_584",
+      "sensor": "sensor_585"
+    },
+    {
+      "redundant_with": "sensor_319",
+      "sensor": "sensor_183"
+    },
+    {
+      "redundant_with": "sensor_255",
+      "sensor": "sensor_393"
+    },
+    {
+      "redundant_with": "sensor_305",
+      "sensor": "sensor_441"
+    },
+    {
+      "redundant_with": "sensor_525",
+      "sensor": "sensor_253"
+    },
+    {
+      "redundant_with": "sensor_250",
+      "sensor": "sensor_522"
+    },
+    {
+      "redundant_with": "sensor_584",
+      "sensor": "sensor_583"
+    },
+    {
+      "redundant_with": "sensor_454",
+      "sensor": "sensor_182"
+    },
+    {
+      "redundant_with": "sensor_361",
+      "sensor": "sensor_495"
+    },
+    {
+      "redundant_with": "sensor_406",
+      "sensor": "sensor_268"
+    },
+    {
+      "redundant_with": "sensor_406",
+      "sensor": "sensor_540"
+    },
+    {
+      "redundant_with": "sensor_213",
+      "sensor": "sensor_351"
+    },
+    {
+      "redundant_with": "sensor_099",
+      "sensor": "sensor_104"
+    },
+    {
+      "redundant_with": "sensor_212",
+      "sensor": "sensor_350"
+    },
+    {
+      "redundant_with": "sensor_426",
+      "sensor": "sensor_420"
+    },
+    {
+      "redundant_with": "sensor_119",
+      "sensor": "sensor_392"
+    },
+    {
+      "redundant_with": "sensor_119",
+      "sensor": "sensor_526"
+    },
+    {
+      "redundant_with": "sensor_119",
+      "sensor": "sensor_254"
+    },
+    {
+      "redundant_with": "sensor_426",
+      "sensor": "sensor_147"
+    },
+    {
+      "redundant_with": "sensor_365",
+      "sensor": "sensor_227"
+    },
+    {
+      "redundant_with": "sensor_349",
+      "sensor": "sensor_211"
+    },
+    {
+      "redundant_with": "sensor_070",
+      "sensor": "sensor_066"
+    },
+    {
+      "redundant_with": "sensor_225",
+      "sensor": "sensor_363"
+    },
+    {
+      "redundant_with": "sensor_426",
+      "sensor": "sensor_282"
+    },
+    {
+      "redundant_with": "sensor_354",
+      "sensor": "sensor_216"
+    },
+    {
+      "redundant_with": "sensor_250",
+      "sensor": "sensor_388"
+    },
+    {
+      "redundant_with": "sensor_525",
+      "sensor": "sensor_391"
+    },
+    {
+      "redundant_with": "sensor_493",
+      "sensor": "sensor_221"
+    },
+    {
+      "redundant_with": "sensor_039",
+      "sensor": "sensor_035"
+    },
+    {
+      "redundant_with": "sensor_355",
+      "sensor": "sensor_217"
+    },
+    {
+      "redundant_with": "sensor_543",
+      "sensor": "sensor_545"
+    },
+    {
+      "redundant_with": "sensor_493",
+      "sensor": "sensor_359"
+    },
+    {
+      "redundant_with": "sensor_096",
+      "sensor": "sensor_094"
+    },
+    {
+      "redundant_with": "sensor_238",
+      "sensor": "sensor_376"
+    },
+    {
+      "redundant_with": "sensor_215",
+      "sensor": "sensor_353"
+    },
+    {
+      "redundant_with": "sensor_559",
+      "sensor": "sensor_561"
+    }
+  ],
+  "screening_rows": 470,
+  "selected_count": 10,
+  "selected_sensors": [
+    "sensor_021",
+    "sensor_000",
+    "sensor_064",
+    "sensor_122",
+    "sensor_022",
+    "sensor_090",
+    "sensor_076",
+    "sensor_562",
+    "sensor_033",
+    "sensor_125"
+  ],
+  "source_rows": 1567,
+  "top_ranked": [
+    {
+      "abs_point_biserial_r": 0.1537249679977634,
+      "aggregate_rank": 3.0,
+      "effect_size": 0.47511235864174656,
+      "ks_qvalue": 0.10760520389584971,
+      "ks_statistic": 0.264392778061659,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_021"
+    },
+    {
+      "abs_point_biserial_r": 0.1303340997864437,
+      "aggregate_rank": 3.75,
+      "effect_size": -0.39772939261710333,
+      "ks_qvalue": 0.06248510326203146,
+      "ks_statistic": 0.2891830368434365,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_000"
+    },
+    {
+      "abs_point_biserial_r": 0.1316376338016778,
+      "aggregate_rank": 9.5,
+      "effect_size": 0.40288874039830747,
+      "ks_qvalue": 0.20778198570681122,
+      "ks_statistic": 0.22991295614328758,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_064"
+    },
+    {
+      "abs_point_biserial_r": 0.10976449632199028,
+      "aggregate_rank": 10.5,
+      "effect_size": -0.3331938561758017,
+      "ks_qvalue": 0.11690494317133161,
+      "ks_statistic": 0.25862068965517243,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_122"
+    },
+    {
+      "abs_point_biserial_r": 0.11550473964799166,
+      "aggregate_rank": 11.75,
+      "effect_size": 0.352797574985339,
+      "ks_qvalue": 0.18114114692149205,
+      "ks_statistic": 0.23744559758955475,
+      "redundant_with": "sensor_064",
+      "selected": false,
+      "sensor": "sensor_065"
+    },
+    {
+      "abs_point_biserial_r": 0.14086974381106446,
+      "aggregate_rank": 14.75,
+      "effect_size": -0.43453925181340963,
+      "ks_qvalue": 0.32163607374821573,
+      "ks_statistic": 0.2098024186680293,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_022"
+    },
+    {
+      "abs_point_biserial_r": 0.10758502765976298,
+      "aggregate_rank": 15.125,
+      "effect_size": -0.32831378988562165,
+      "ks_qvalue": 0.20187663169612896,
+      "ks_statistic": 0.23292601272179445,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_090"
+    },
+    {
+      "abs_point_biserial_r": 0.09847830547226882,
+      "aggregate_rank": 17.5,
+      "effect_size": -0.30023822546277273,
+      "ks_qvalue": 0.16491248750855042,
+      "ks_statistic": 0.24824238366253767,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_076"
+    },
+    {
+      "abs_point_biserial_r": 0.1285878197638249,
+      "aggregate_rank": 20.875,
+      "effect_size": -0.39848009081283225,
+      "ks_qvalue": 0.6774589142411689,
+      "ks_statistic": 0.19548872180451127,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_562"
+    },
+    {
+      "abs_point_biserial_r": 0.11418567309458122,
+      "aggregate_rank": 23.125,
+      "effect_size": 0.34839461628433893,
+      "ks_qvalue": 0.42885389157714177,
+      "ks_statistic": 0.19913583354308248,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_033"
+    },
+    {
+      "abs_point_biserial_r": 0.09109693979677745,
+      "aggregate_rank": 24.0,
+      "effect_size": -0.27600458766819247,
+      "ks_qvalue": 0.18114114692149205,
+      "ks_statistic": 0.2413793103448276,
+      "redundant_with": "",
+      "selected": true,
+      "sensor": "sensor_125"
+    },
+    {
+      "abs_point_biserial_r": 0.0957764575190292,
+      "aggregate_rank": 24.5,
+      "effect_size": 0.29384527230285873,
+      "ks_qvalue": 0.22260265122978326,
+      "ks_statistic": 0.22479134730028955,
+      "redundant_with": "",
+      "selected": false,
+      "sensor": "sensor_163"
+    },
+    {
+      "abs_point_biserial_r": 0.12221211671317415,
+      "aggregate_rank": 26.75,
+      "effect_size": 0.3760458708691414,
+      "ks_qvalue": 0.49070053220874005,
+      "ks_statistic": 0.19225855901890648,
+      "redundant_with": "",
+      "selected": false,
+      "sensor": "sensor_435"
+    },
+    {
+      "abs_point_biserial_r": 0.08393069714110044,
+      "aggregate_rank": 27.0,
+      "effect_size": 0.25554368792128007,
+      "ks_qvalue": 0.10760520389584971,
+      "ks_statistic": 0.26155005021760963,
+      "redundant_with": "",
+      "selected": false,
+      "sensor": "sensor_059"
+    },
+    {
+      "abs_point_biserial_r": 0.10796026586168075,
+      "aggregate_rank": 28.0,
+      "effect_size": -0.32947237261171886,
+      "ks_qvalue": 0.5494030015167721,
+      "ks_statistic": 0.18337797120857047,
+      "redundant_with": "",
+      "selected": false,
+      "sensor": "sensor_181"
+    }
+  ],
+  "window_boundary_timestamp": "2008-08-28 06:56:00",
+  "window_fail_count": 58,
+  "window_fraction": 0.3,
+  "window_pass_count": 412
+}
