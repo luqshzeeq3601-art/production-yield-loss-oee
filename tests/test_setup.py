@@ -75,6 +75,7 @@ def test_default_configuration_loads_with_required_sections_and_values():
     assert config["spc"]["ewma_lambda"] == pytest.approx(0.20)
     assert config["spc"]["ewma_L"] == pytest.approx(3.0)
     assert config["spc"]["ewma_use_time_varying_limits"] is True
+    assert config["spc"]["hotelling_t2_alpha"] == pytest.approx(0.01)
 
 
 def test_loader_rejects_a_non_mapping_document(tmp_path):

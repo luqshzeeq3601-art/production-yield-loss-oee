@@ -75,6 +75,7 @@ def _write_run_config(tmp_path, **spc_overrides):
         "ewma_lambda": 0.20,
         "ewma_L": 3.0,
         "ewma_use_time_varying_limits": True,
+        "hotelling_t2_alpha": 0.01,
         "outputs": {
             "limits": str(tmp_path / "limits.csv"),
             "violations": str(tmp_path / "violations.csv"),
@@ -83,6 +84,9 @@ def _write_run_config(tmp_path, **spc_overrides):
             "ewma_violations": str(tmp_path / "ewma_violations.csv"),
             "ewma_series": str(tmp_path / "ewma_series.csv"),
             "ewma_summary": str(tmp_path / "ewma_summary.json"),
+            "hotelling_t2_series": str(tmp_path / "t2_series.csv"),
+            "hotelling_t2_violations": str(tmp_path / "t2_violations.csv"),
+            "hotelling_t2_summary": str(tmp_path / "t2_summary.json"),
         },
     }
     spc.update(spc_overrides)

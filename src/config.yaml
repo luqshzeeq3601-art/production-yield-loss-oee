@@ -26,6 +26,7 @@ spc:
   ewma_lambda: 0.20
   ewma_L: 3.0
   ewma_use_time_varying_limits: true
+  hotelling_t2_alpha: 0.01
   outputs:
     limits: reports/spc_limits.csv
     violations: reports/spc_rule_violations.csv
@@ -34,6 +35,9 @@ spc:
     ewma_violations: reports/ewma_violations.csv
     ewma_series: reports/ewma_series.csv
     ewma_summary: reports/ewma_summary.json
+    hotelling_t2_series: reports/hotelling_t2_series.csv
+    hotelling_t2_violations: reports/hotelling_t2_violations.csv
+    hotelling_t2_summary: reports/hotelling_t2_summary.json
 screening:
   window_fraction: 0.30
   fdr_alpha: 0.05
