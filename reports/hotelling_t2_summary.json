@@ -1,0 +1,57 @@
+{
+  "alpha": 0.01,
+  "contribution_diagnostics": "Omitted: per-variable attribution is ambiguous under correlated covariance, so no contribution column is invented.",
+  "covariance_condition_number": 15.598158187796326,
+  "covariance_rank": 10,
+  "f_degrees_of_freedom": [
+    10,
+    260
+  ],
+  "first_violation_timestamp": "2008-08-30 05:05:00",
+  "limitations": "The 10 sensors remain exploratory candidates (P3-001 found no q < 0.05 sensor); T² violations are multivariate anomalies, not confirmed defects. No causal interpretation; nothing tuned on Phase II labels; sensor selection unchanged.",
+  "max_t2": 1028.9675668921775,
+  "methodology": "T²(x) = (x - mu)' S^-1 (x - mu) with mu and the conventional sample covariance S estimated from Phase I pass complete cases after per-sensor Phase I standardization; the identical Phase I transform scores Phase II. Control limit is the finite-sample F-based UCL for one future observation. Incomplete lots are excluded without imputation and counted in coverage. Overlap counts are descriptive lot coincidences, not quality metrics.",
+  "overlap": {
+    "overlap_both": 108,
+    "overlap_ewma": 108,
+    "overlap_we": 110,
+    "t2_lots": 110,
+    "t2_only_lots": 0
+  },
+  "p": 10,
+  "paths": {
+    "ewma_series": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_series.csv",
+    "ewma_summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_summary.json",
+    "ewma_violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_violations.csv",
+    "hotelling_t2_series": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\hotelling_t2_series.csv",
+    "hotelling_t2_summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\hotelling_t2_summary.json",
+    "hotelling_t2_violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\hotelling_t2_violations.csv",
+    "limits": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_limits.csv",
+    "p_chart": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\p_chart_daily.csv",
+    "summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_univariate_summary.json",
+    "violations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_rule_violations.csv"
+  },
+  "phase1_boundary_timestamp": "2008-08-28 06:56:00",
+  "phase1_complete_n": 270,
+  "phase1_coverage": 0.6531914893617021,
+  "phase1_lots": 470,
+  "phase1_pass_lots": 412,
+  "phase2_complete_n": 901,
+  "phase2_coverage": 0.821330902461258,
+  "phase2_lots": 1097,
+  "reference_error": null,
+  "selected_sensors": [
+    "sensor_021",
+    "sensor_000",
+    "sensor_064",
+    "sensor_122",
+    "sensor_022",
+    "sensor_090",
+    "sensor_076",
+    "sensor_562",
+    "sensor_033",
+    "sensor_125"
+  ],
+  "ucl": 24.815413111657534,
+  "violation_count": 110
+}

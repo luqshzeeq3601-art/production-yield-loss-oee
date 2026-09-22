@@ -1,9 +1,9 @@
-"""Univariate SPC: I-MR limits, Western Electric Rules 1-4, daily p-chart.
+"""SPC engine: univariate I-MR/WE/EWMA plus Hotelling T² multivariate monitoring.
 
-Integration points for later phases: compute_imr_limits and
-evaluate_we_rules are pure functions over ordered arrays (P3-003 EWMA can
-reuse the Phase I/II split and z-score convention); the Phase II valid
-observation frames carry lot identity for P3-005 backtesting.
+Integration points for later phases: compute_imr_limits, evaluate_we_rules,
+compute_ewma, and estimate_t2_reference/t2_statistic/t2_ucl are pure functions
+over ordered arrays; the Phase II observation frames carry lot identity for
+P3-005 backtesting.
 """
 
 from __future__ import annotations
@@ -17,11 +17,13 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from scipy.stats import f as f_dist
 
 from src.config_loader import load_config
 
 
-_OUTPUT_KEYS = ("limits", "violations", "p_chart", "summary", "ewma_violations", "ewma_series", "ewma_summary")
+_OUTPUT_KEYS = ("limits", "violations", "p_chart", "summary", "ewma_violations", "ewma_series", "ewma_summary",
+                 "hotelling_t2_series", "hotelling_t2_violations", "hotelling_t2_summary")
 _LIMIT_COLUMNS = (
     "sensor",
     "phase1_valid_n",
@@ -84,6 +86,27 @@ _EWMA_SERIES_COLUMNS = (
     "ewma_ucl",
     "violation",
 )
+_T2_SERIES_COLUMNS = (
+    "source_row",
+    "timestamp",
+    "phase",
+    "complete_case",
+    "t2",
+    "ucl",
+    "violation",
+)
+_T2_VIOLATION_COLUMNS = (
+    "source_row",
+    "timestamp",
+    "t2",
+    "ucl",
+    "exceedance_ratio",
+    "phase",
+)
+
+
+class CovarianceError(ValueError):
+    """Singular or unsafe Phase I covariance: no silent fallback."""
 
 METHODOLOGY = (
     "Phase I/II split reuses the exact P3-001 chronological 30% boundary"
@@ -187,6 +210,71 @@ def compute_ewma(
         "ewma": ewma, "lcl": lcl, "ucl": ucl,
         "violation": (ewma > ucl) | (ewma < lcl),
     }
+
+
+def estimate_t2_reference(
+    values: np.ndarray, sensors: Sequence[str]
+) -> dict[str, Any]:
+    """Estimate the Hotelling T² reference from Phase I pass complete cases.
+
+    Standardizes with Phase I means/stds, uses the conventional sample
+    covariance (ddof = 1), and refuses singular covariance instead of
+    silently falling back to a pseudoinverse.
+    """
+
+    matrix = np.asarray(values, dtype=float)
+    count, dim = matrix.shape
+    if count <= dim:
+        raise CovarianceError(
+            f"T² reference needs n > p, got n = {count}, p = {dim}."
+        )
+    mean = np.mean(matrix, axis=0)
+    std = np.std(matrix, axis=0, ddof=1)
+    frozen = [name for name, value in zip(sensors, std, strict=True) if value == 0]
+    if frozen:
+        raise CovarianceError(f"Zero-variance Phase I dimensions: {frozen}.")
+    standardized = (matrix - mean) / std
+    covariance = np.atleast_2d(np.cov(standardized, rowvar=False))
+    rank = int(np.linalg.matrix_rank(covariance))
+    if rank < dim:
+        raise CovarianceError(
+            f"Singular Phase I covariance: rank {rank} < p {dim}; no pseudoinverse fallback."
+        )
+    return {
+        "mean": mean,
+        "std": std,
+        "ref_mean": np.mean(standardized, axis=0),
+        "covariance": covariance,
+        "rank": rank,
+        "condition_number": float(np.linalg.cond(covariance)),
+        "n": count,
+        "p": dim,
+    }
+
+
+def t2_statistic(
+    values: np.ndarray, reference: Mapping[str, Any]
+) -> np.ndarray:
+    """Compute Hotelling T² for rows standardized with the Phase I reference."""
+
+    matrix = np.asarray(values, dtype=float)
+    deviations = (matrix - reference["mean"]) / reference["std"]
+    centered = deviations - reference["ref_mean"]
+    solved = np.linalg.solve(reference["covariance"], centered.T).T
+    return np.einsum("ij,ij->i", centered, solved)
+
+
+def t2_ucl(dim: int, count: int, alpha: float) -> float:
+    """Finite-sample F-based UCL for one future T² observation."""
+
+    if dim <= 0 or count <= dim:
+        raise ValueError("T² UCL needs 0 < p < n.")
+    if not 0 < alpha < 1:
+        raise ValueError("T² alpha must be in (0, 1).")
+    return (
+        dim * (count + 1) * (count - 1) / (count * (count - dim))
+        * float(f_dist.ppf(1.0 - alpha, dim, count - dim))
+    )
 
 
 def evaluate_we_rules(    values: np.ndarray,
@@ -397,6 +485,27 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
         ).drop(columns=["sensor_order"]).reset_index(drop=True)
     overlap = _we_ewma_overlap(violations, ewma_violations, selected)
 
+    alpha = float(spc["hotelling_t2_alpha"])
+    try:
+        t2_reference: dict[str, Any] | None = _t2_reference(phase1_pass, selected)
+        ucl = t2_ucl(len(selected), int(t2_reference["n"]), alpha)
+        t2_series_rows, t2_violation_rows = _monitor_t2(
+            frame, boundary_rows, selected, t2_reference, ucl
+        )
+        t2_reference_error: str | None = None
+    except CovarianceError as exc:
+        # A frozen or rank-deficient Phase I reference (e.g. a flatlined
+        # sensor) must not abort univariate monitoring. T² is refused openly:
+        # no scores, no violations, identities retained for coverage.
+        t2_reference = None
+        ucl = float("nan")
+        t2_series_rows = _coverage_series(frame, boundary_rows, selected)
+        t2_violation_rows = []
+        t2_reference_error = str(exc)
+    t2_series = pd.DataFrame(t2_series_rows, columns=_T2_SERIES_COLUMNS)
+    t2_violations = pd.DataFrame(t2_violation_rows, columns=_T2_VIOLATION_COLUMNS)
+    three_way = _three_way_overlap(violations, ewma_violations, t2_violations)
+
     output_paths = _configured_output_paths(spc)
     for output_path in output_paths.values():
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -405,6 +514,8 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
     pchart.to_csv(output_paths["p_chart"], index=False, lineterminator="\n")
     ewma_violations.to_csv(output_paths["ewma_violations"], index=False, lineterminator="\n")
     ewma_series.to_csv(output_paths["ewma_series"], index=False, lineterminator="\n")
+    t2_series.to_csv(output_paths["hotelling_t2_series"], index=False, lineterminator="\n")
+    t2_violations.to_csv(output_paths["hotelling_t2_violations"], index=False, lineterminator="\n")
     summary = _build_summary(
         boundary_ts=boundary_ts,
         phase1=phase1,
@@ -429,7 +540,214 @@ def run(config_path: str | Path | None = None) -> dict[str, Path]:
         output_paths=output_paths,
     )
     _write_json(output_paths["ewma_summary"], ewma_summary)
+    t2_summary = _build_t2_summary(
+        boundary_ts=boundary_ts,
+        selected=selected,
+        phase1=phase1,
+        phase2=phase2,
+        reference=t2_reference,
+        reference_error=t2_reference_error,
+        alpha=alpha,
+        ucl=ucl,
+        t2_series=t2_series,
+        t2_violations=t2_violations,
+        three_way=three_way,
+        output_paths=output_paths,
+    )
+    _write_json(output_paths["hotelling_t2_summary"], t2_summary)
     return output_paths
+
+
+def _t2_reference(
+    phase1_pass: pd.DataFrame, selected: Sequence[str]
+) -> dict[str, Any]:
+    """Estimate the T² reference from Phase I pass complete cases only."""
+
+    complete = phase1_pass.dropna(subset=list(selected))
+    matrix = complete[list(selected)].apply(pd.to_numeric, errors="coerce")
+    matrix = matrix.dropna()
+    reference = estimate_t2_reference(matrix.to_numpy(dtype=float), list(selected))
+    reference["phase1_pass_lots"] = int(len(phase1_pass))
+    reference["phase1_complete_n"] = int(len(matrix))
+    return reference
+
+
+def _monitor_t2(
+    frame: pd.DataFrame,
+    boundary_rows: int,
+    selected: Sequence[str],
+    reference: Mapping[str, Any],
+    ucl: float,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Score every lot; violations come from Phase II complete cases only."""
+
+    series_rows: list[dict[str, Any]] = []
+    violation_rows: list[dict[str, Any]] = []
+    for position in range(len(frame)):
+        row = frame.iloc[position]
+        values = pd.to_numeric(row[list(selected)], errors="coerce").to_numpy(dtype=float)
+        complete = bool(np.all(np.isfinite(values)))
+        phase = "Phase I" if position < boundary_rows else "Phase II"
+        t2_value = float(t2_statistic(values.reshape(1, -1), reference)[0]) if complete else np.nan
+        violated = complete and phase == "Phase II" and t2_value > ucl
+        series_rows.append(
+            {
+                "source_row": int(position),
+                "timestamp": str(row["timestamp"]),
+                "phase": phase,
+                "complete_case": complete,
+                "t2": t2_value,
+                "ucl": float(ucl),
+                "violation": bool(violated),
+            }
+        )
+        if violated:
+            violation_rows.append(
+                {
+                    "source_row": int(position),
+                    "timestamp": str(row["timestamp"]),
+                    "t2": t2_value,
+                    "ucl": float(ucl),
+                    "exceedance_ratio": float(t2_value / ucl),
+                    "phase": phase,
+                }
+            )
+    return series_rows, violation_rows
+
+
+def _coverage_series(
+    frame: pd.DataFrame, boundary_rows: int, selected: Sequence[str]
+) -> list[dict[str, Any]]:
+    """Coverage-only T² series used when no reference could be estimated."""
+
+    rows = []
+    for position in range(len(frame)):
+        row = frame.iloc[position]
+        values = pd.to_numeric(row[list(selected)], errors="coerce").to_numpy(dtype=float)
+        rows.append(
+            {
+                "source_row": int(position),
+                "timestamp": str(row["timestamp"]),
+                "phase": "Phase I" if position < boundary_rows else "Phase II",
+                "complete_case": bool(np.all(np.isfinite(values))),
+                "t2": float("nan"),
+                "ucl": float("nan"),
+                "violation": False,
+            }
+        )
+    return rows
+
+
+def _three_way_overlap(
+    violations: pd.DataFrame,
+    ewma_violations: pd.DataFrame,
+    t2_violations: pd.DataFrame,
+) -> dict[str, int]:
+    """Descriptive lot-level overlap between T², WE, and EWMA alerts.
+
+    Counts only; no precision, recall, latency, or ranking (P3-005).
+    """
+
+    we_lots = (
+        set(zip(violations["sensor"], violations["source_row"]))
+        if not violations.empty
+        else set()
+    )
+    we_lots = {row for (_, row) in we_lots}
+    ewma_lots = (
+        set(zip(ewma_violations["sensor"], ewma_violations["source_row"]))
+        if not ewma_violations.empty
+        else set()
+    )
+    ewma_lots = {row for (_, row) in ewma_lots}
+    t2_lots = set(t2_violations["source_row"].tolist()) if not t2_violations.empty else set()
+    return {
+        "t2_lots": len(t2_lots),
+        "overlap_we": len(t2_lots & we_lots),
+        "overlap_ewma": len(t2_lots & ewma_lots),
+        "overlap_both": len(t2_lots & we_lots & ewma_lots),
+        "t2_only_lots": len(t2_lots - we_lots - ewma_lots),
+    }
+
+
+def _build_t2_summary(
+    *,
+    boundary_ts: Any,
+    selected: Sequence[str],
+    phase1: pd.DataFrame,
+    phase2: pd.DataFrame,
+    reference: Mapping[str, Any] | None,
+    reference_error: str | None,
+    alpha: float,
+    ucl: float,
+    t2_series: pd.DataFrame,
+    t2_violations: pd.DataFrame,
+    three_way: Mapping[str, int],
+    output_paths: Mapping[str, Path],
+) -> dict[str, Any]:
+    phase1_complete = int(
+        t2_series[(t2_series["phase"] == "Phase I") & (t2_series["complete_case"])].shape[0]
+    )
+    phase2_complete = int(
+        t2_series[(t2_series["phase"] == "Phase II") & (t2_series["complete_case"])].shape[0]
+    )
+    complete_t2 = t2_series.loc[t2_series["complete_case"], "t2"]
+    return {
+        "phase1_boundary_timestamp": str(boundary_ts),
+        "selected_sensors": list(selected),
+        "p": len(selected),
+        "phase1_lots": int(len(phase1)),
+        "phase1_pass_lots": (
+            int(reference["phase1_pass_lots"]) if reference is not None else None
+        ),
+        "phase1_complete_n": int(reference["n"]) if reference is not None else None,
+        "phase2_lots": int(len(phase2)),
+        "phase2_complete_n": phase2_complete,
+        "phase1_coverage": phase1_complete / max(len(phase1), 1),
+        "phase2_coverage": phase2_complete / max(len(phase2), 1),
+        "alpha": alpha,
+        "f_degrees_of_freedom": (
+            [len(selected), int(reference["n"]) - len(selected)]
+            if reference is not None
+            else None
+        ),
+        "ucl": float(ucl),
+        "covariance_rank": int(reference["rank"]) if reference is not None else None,
+        "covariance_condition_number": (
+            float(reference["condition_number"]) if reference is not None else None
+        ),
+        "reference_error": reference_error,
+        "violation_count": int(len(t2_violations)),
+        "first_violation_timestamp": (
+            str(t2_violations["timestamp"].min()) if not t2_violations.empty else None
+        ),
+        "max_t2": (
+            float(complete_t2.dropna().max())
+            if not complete_t2.dropna().empty
+            else None
+        ),
+        "contribution_diagnostics": (
+            "Omitted: per-variable attribution is ambiguous under correlated"
+            " covariance, so no contribution column is invented."
+        ),
+        "overlap": dict(three_way),
+        "methodology": (
+            "T²(x) = (x - mu)' S^-1 (x - mu) with mu and the conventional"
+            " sample covariance S estimated from Phase I pass complete cases"
+            " after per-sensor Phase I standardization; the identical Phase I"
+            " transform scores Phase II. Control limit is the finite-sample"
+            " F-based UCL for one future observation. Incomplete lots are"
+            " excluded without imputation and counted in coverage. Overlap"
+            " counts are descriptive lot coincidences, not quality metrics."
+        ),
+        "limitations": (
+            "The 10 sensors remain exploratory candidates (P3-001 found no"
+            " q < 0.05 sensor); T² violations are multivariate anomalies, not"
+            " confirmed defects. No causal interpretation; nothing tuned on"
+            " Phase II labels; sensor selection unchanged."
+        ),
+        "paths": {key: str(path) for key, path in output_paths.items()},
+    }
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -487,10 +805,13 @@ def _spc_config(config: Mapping[str, Any]) -> Mapping[str, Any]:
         "ewma_lambda",
         "ewma_L",
         "ewma_use_time_varying_limits",
+        "hotelling_t2_alpha",
     }
     missing = sorted(required.difference(section))
     if missing:
         raise ValueError(f"Configuration spc section is missing: {missing}.")
+    if not 0 < float(section["hotelling_t2_alpha"]) < 1:
+        raise ValueError("Configuration spc.hotelling_t2_alpha must be in (0, 1).")
     if not 0 < float(section["ewma_lambda"]) <= 1:
         raise ValueError("Configuration spc.ewma_lambda must be in (0, 1].")
     if not np.isfinite(float(section["ewma_L"])) or float(section["ewma_L"]) <= 0:
