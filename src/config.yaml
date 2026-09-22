@@ -65,3 +65,69 @@ metropt3:
     failure_intervals: data/processed/metropt3_failure_intervals.csv
     state_periods: data/processed/metropt3_state_periods.csv
     ingestion_summary: reports/metropt3_ingestion_summary.json
+mes:
+  start_date: "2024-01-01"
+  days: 180
+  shift_hours: 8
+  shifts:
+    - {id: A, start_hour: 6}
+    - {id: B, start_hour: 14}
+    - {id: C, start_hour: 22}
+  lines:
+    - {id: L1}
+    - {id: L2}
+    - {id: L3}
+    - {id: L4}
+  stations_template:
+    - {suffix: S1, name: Loading, base_seconds: 25.0, bottleneck: false}
+    - {suffix: S2, name: Assembly, base_seconds: 50.0, bottleneck: false}
+    - {suffix: S3, name: Processing, base_seconds: 65.0, bottleneck: true}
+    - {suffix: S4, name: Inspection, base_seconds: 30.0, bottleneck: false}
+    - {suffix: S5, name: Packing, base_seconds: 20.0, bottleneck: false}
+  bottleneck_breakdown_weight: 0.35
+  products:
+    - {id: P1, ideal_cycle_time_s: 40.0, scrap_cost: 12.0, base_defect_rate: 0.025}
+    - {id: P2, ideal_cycle_time_s: 55.0, scrap_cost: 18.0, base_defect_rate: 0.030}
+    - {id: P3, ideal_cycle_time_s: 75.0, scrap_cost: 25.0, base_defect_rate: 0.035}
+    - {id: P4, ideal_cycle_time_s: 30.0, scrap_cost: 8.0, base_defect_rate: 0.020}
+  downtime_reasons:
+    - {reason: breakdown, oee_bucket: Availability, planned: false, rate_per_shift: 0.30, duration: {dist: exponential, mean_min: 25.0, max_min: 120.0}}
+    - {reason: changeover, oee_bucket: Availability, planned: false, rate_per_shift: 1.20, duration: {dist: uniform, min_min: 10.0, max_min: 30.0}}
+    - {reason: material_shortage, oee_bucket: Availability, planned: false, rate_per_shift: 0.15, duration: {dist: exponential, mean_min: 40.0, max_min: 180.0}}
+    - {reason: quality_hold, oee_bucket: Availability, planned: false, rate_per_shift: 0.10, duration: {dist: exponential, mean_min: 30.0, max_min: 120.0}}
+    - {reason: minor_stop, oee_bucket: Performance, planned: false, rate_per_shift: 8.0, duration: {dist: uniform, min_min: 2.0, max_min: 6.0}}
+    - {reason: planned_maintenance, oee_bucket: Planned, planned: true, rate_per_day: 0.15, duration: {dist: uniform, min_min: 30.0, max_min: 90.0}}
+  speed:
+    base_factor: 1.07
+    noise_std: 0.03
+  defect_causes: [dimensional, surface defect, contamination, tool wear, supplier material, other]
+  manpower:
+    planned_by_shift: {A: 6, B: 6, C: 5}
+    absence_probability: {A: 0.06, B: 0.06, C: 0.09}
+  scenarios:
+    line2_night:
+      note: Line 2 night shift (C) suffers elevated minor stops and reduced speed; expect measurable Performance loss on L2-C vs L2 day shifts.
+      line: L2
+      shift: C
+      minor_stop_rate_multiplier: 3.0
+      speed_factor_adder: 0.06
+    line3_tool_wear:
+      note: Line 3 tool wear raises defect rate progressively over the horizon (cause 'tool wear'); expect detectable quality deterioration in the second half.
+      line: L3
+      daily_added_defect_rate: 0.0004
+      defect_cause: tool wear
+    supplier_quality_hold:
+      note: One supplier-lot quality hold affecting product P2 mid-horizon with elevated scrap (cause 'supplier material'); expect a visible quality dip in that window.
+      product: P2
+      start_day_offset: 90
+      duration_days: 8
+      added_defect_rate: 0.10
+      defect_cause: supplier material
+  outputs:
+    production_hourly: data/processed/mes_production_hourly.csv
+    downtime_events: data/processed/mes_downtime_events.csv
+    work_orders: data/processed/mes_work_orders.csv
+    manpower_shifts: data/processed/mes_manpower_shifts.csv
+    station_operations: data/processed/mes_station_operations.csv
+    quality_events: data/processed/mes_quality_events.csv
+    simulation_summary: reports/mes_simulation_summary.json
