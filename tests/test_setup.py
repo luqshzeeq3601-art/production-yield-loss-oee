@@ -68,6 +68,10 @@ def test_default_configuration_loads_with_required_sections_and_values():
     assert config["screening"]["correlation_threshold"] == pytest.approx(0.90)
     assert config["screening"]["min_selected"] == 10
     assert config["screening"]["max_selected"] == 15
+    assert config["spc"]["phase1_fraction"] == pytest.approx(0.30)
+    assert config["spc"]["mr_d2"] == pytest.approx(1.128)
+    assert config["spc"]["mr_d4"] == pytest.approx(3.267)
+    assert config["spc"]["p_chart_min_daily_n"] == 10
 
 
 def test_loader_rejects_a_non_mapping_document(tmp_path):
