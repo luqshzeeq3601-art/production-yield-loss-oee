@@ -72,6 +72,9 @@ def test_default_configuration_loads_with_required_sections_and_values():
     assert config["spc"]["mr_d2"] == pytest.approx(1.128)
     assert config["spc"]["mr_d4"] == pytest.approx(3.267)
     assert config["spc"]["p_chart_min_daily_n"] == 10
+    assert config["spc"]["ewma_lambda"] == pytest.approx(0.20)
+    assert config["spc"]["ewma_L"] == pytest.approx(3.0)
+    assert config["spc"]["ewma_use_time_varying_limits"] is True
 
 
 def test_loader_rejects_a_non_mapping_document(tmp_path):

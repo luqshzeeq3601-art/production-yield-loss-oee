@@ -8,6 +8,9 @@
     "d4": 3.267
   },
   "paths": {
+    "ewma_series": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_series.csv",
+    "ewma_summary": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_summary.json",
+    "ewma_violations": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\ewma_violations.csv",
     "limits": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_limits.csv",
     "p_chart": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\p_chart_daily.csv",
     "summary": "%USERPROFILE%\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\spc_univariate_summary.json",
