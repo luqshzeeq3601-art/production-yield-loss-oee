@@ -1,0 +1,129 @@
+{
+  "assumptions": {
+    "breakdown_note": "At most one breakdown per line-shift-day (Bernoulli draw), station-weighted toward the bottleneck; other reasons are line-level.",
+    "overlap_note": "Event minutes overlapping an hour cell are booked to that cell; booked unplanned minutes are capped at planned minutes and minor-stop minutes at run minutes.",
+    "planned_maintenance_note": "Planned maintenance is scheduled downtime excluded from planned production time (shift A only).",
+    "quality_note": "Scrap drawn per hour cell from a binomial with the cell defect rate; causes split the daily scrap proportionally."
+  },
+  "days": 180,
+  "downtime_event_count": 24147,
+  "downtime_minutes_by_bucket": {
+    "Availability": 90830.407,
+    "Performance": 80717.144,
+    "Planned": 6297.439
+  },
+  "end_date": "2024-06-28",
+  "good_count": 1036026,
+  "line_oee": {
+    "L1": {
+      "availability": 0.9155107786068433,
+      "oee": 0.7659193736470011,
+      "performance": 0.8591131973787106,
+      "quality": 0.973798727419001
+    },
+    "L2": {
+      "availability": 0.9088996955982529,
+      "oee": 0.7092203253798434,
+      "performance": 0.8016543810757019,
+      "quality": 0.9733701979045402
+    },
+    "L3": {
+      "availability": 0.908095526593479,
+      "oee": 0.7319624453643994,
+      "performance": 0.8595214649578715,
+      "quality": 0.9377790713096273
+    },
+    "L4": {
+      "availability": 0.9190502511595741,
+      "oee": 0.7693228932280797,
+      "performance": 0.8596682853576662,
+      "quality": 0.9737298709046135
+    }
+  },
+  "line_oee_max": 0.7693228932280797,
+  "line_oee_min": 0.7092203253798434,
+  "lines": [
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "manpower_gap_total": 808,
+  "manpower_records": 2160,
+  "overall": {
+    "availability": 0.9128898195950569,
+    "oee": 0.7440937028719505,
+    "performance": 0.8450305501694084,
+    "quality": 0.9645768956113784
+  },
+  "paths": {
+    "downtime_events": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_downtime_events.csv",
+    "manpower_shifts": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_manpower_shifts.csv",
+    "production_hourly": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_production_hourly.csv",
+    "quality_events": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_quality_events.csv",
+    "simulation_summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\mes_simulation_summary.json",
+    "station_operations": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_station_operations.csv",
+    "work_orders": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\data\\processed\\mes_work_orders.csv"
+  },
+  "products": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "scenarios": {
+    "line2_night": {
+      "line": "L2",
+      "minor_stop_rate_multiplier": 3.0,
+      "note": "Line 2 night shift (C) suffers elevated minor stops and reduced speed; expect measurable Performance loss on L2-C vs L2 day shifts.",
+      "shift": "C",
+      "speed_factor_adder": 0.06
+    },
+    "line3_tool_wear": {
+      "daily_added_defect_rate": 0.0004,
+      "defect_cause": "tool wear",
+      "line": "L3",
+      "note": "Line 3 tool wear raises defect rate progressively over the horizon (cause 'tool wear'); expect detectable quality deterioration in the second half."
+    },
+    "supplier_quality_hold": {
+      "added_defect_rate": 0.1,
+      "defect_cause": "supplier material",
+      "duration_days": 8,
+      "note": "One supplier-lot quality hold affecting product P2 mid-horizon with elevated scrap (cause 'supplier material'); expect a visible quality dip in that window.",
+      "product": "P2",
+      "start_day_offset": 90
+    }
+  },
+  "scrap_count": 38047,
+  "scrap_rate": 0.03542310438862163,
+  "seed": 42,
+  "shift_oee": {
+    "A": {
+      "availability": 0.9167066555555616,
+      "oee": 0.7599959124320756,
+      "performance": 0.8589156116986191,
+      "quality": 0.9652290305863704
+    },
+    "B": {
+      "availability": 0.9095233449074074,
+      "oee": 0.753722226240503,
+      "performance": 0.85934260284917,
+      "quality": 0.9643421034629014
+    },
+    "C": {
+      "availability": 0.9125090075231482,
+      "oee": 0.7188528007758785,
+      "performance": 0.8170705641996457,
+      "quality": 0.9641469775519652
+    }
+  },
+  "shifts": [
+    "A",
+    "B",
+    "C"
+  ],
+  "start_date": "2024-01-01",
+  "station_operation_count": 10800,
+  "total_count": 1074073,
+  "work_order_count": 720
+}
