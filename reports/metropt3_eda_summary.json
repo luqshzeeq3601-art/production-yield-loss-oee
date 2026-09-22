@@ -1,0 +1,305 @@
+{
+  "analog_stats": {
+    "DV_pressure": {
+      "full_max": 9.844,
+      "full_mean": 0.055956189665038424,
+      "full_min": -0.032,
+      "max": 7.98,
+      "mean": 0.05548901414021602,
+      "min": -0.032,
+      "std": 0.3796712048263569
+    },
+    "H1": {
+      "full_max": 10.288,
+      "full_mean": 7.5681549004975786,
+      "full_min": -0.0360000000000013,
+      "max": 10.244,
+      "mean": 7.5819639276179185,
+      "min": -0.032,
+      "std": 3.3213360321993615
+    },
+    "Motor_current": {
+      "full_max": 9.295,
+      "full_mean": 2.0501708034817274,
+      "full_min": 0.0199999999999995,
+      "max": 7.270000000000001,
+      "mean": 2.0467917037476515,
+      "min": 0.0199999999999995,
+      "std": 2.297888527025111
+    },
+    "Oil_temperature": {
+      "full_max": 89.05000000000001,
+      "full_mean": 62.644181738596174,
+      "full_min": 15.400000000000006,
+      "max": 89.0,
+      "mean": 62.64209680609117,
+      "min": 20.599999999999994,
+      "std": 6.506722225184896
+    },
+    "Reservoirs": {
+      "full_max": 10.3,
+      "full_mean": 8.985233443730436,
+      "full_min": 0.7119999999999997,
+      "max": 10.3,
+      "mean": 8.983923148422823,
+      "min": 0.9860000000000008,
+      "std": 0.6373974514162902
+    },
+    "TP2": {
+      "full_max": 10.676,
+      "full_mean": 1.3678259663482208,
+      "full_min": -0.032,
+      "max": 10.606,
+      "mean": 1.3555473944427967,
+      "min": -0.0300000000000011,
+      "std": 3.2385386148640825
+    },
+    "TP3": {
+      "full_max": 10.302,
+      "full_mean": 8.984610701223774,
+      "full_min": 0.7300000000000004,
+      "max": 10.302,
+      "mean": 8.983296944526847,
+      "min": 1.0039999999999996,
+      "std": 0.6381723783917879
+    }
+  },
+  "cadence_seconds": {
+    "max": 172918.0,
+    "median": 10.0,
+    "p99": 12.0
+  },
+  "digital_active_rates": {
+    "COMP": 0.8377138336794225,
+    "Caudal_impulses": 0.9364184712745971,
+    "DV_eletric": 0.15904281617719768,
+    "LPS": 0.0034213388707604073,
+    "MPG": 0.8334816572728172,
+    "Oil_level": 0.9034707801839217,
+    "Pressure_switch": 0.9909423514288539,
+    "Towers": 0.9207356867398399
+  },
+  "digital_binary": true,
+  "event3_gap_note": "Event 3 (Jun 5-7) actual rows 17315 vs ~18900 nominal at 10 s cadence; observed logging/data-availability gap, no interpolation.",
+  "event3_internal_gaps_gt_120s": 2,
+  "events": {
+    "1": {
+      "kind": "Air leak",
+      "prefailure_readings": 6301,
+      "readings_in_window": 8663,
+      "window_end": "2020-04-18 23:59:59",
+      "window_hours": 24.0,
+      "window_start": "2020-04-18 00:00:00"
+    },
+    "2": {
+      "kind": "Air leak",
+      "prefailure_readings": 7466,
+      "readings_in_window": 2360,
+      "window_end": "2020-05-30 06:00:00",
+      "window_hours": 6.5,
+      "window_start": "2020-05-29 23:30:00"
+    },
+    "3": {
+      "kind": "Air leak",
+      "prefailure_readings": 8716,
+      "readings_in_window": 17315,
+      "window_end": "2020-06-07 14:30:00",
+      "window_hours": 52.5,
+      "window_start": "2020-06-05 10:00:00"
+    },
+    "4": {
+      "kind": "Air leak",
+      "prefailure_readings": 6185,
+      "readings_in_window": 1622,
+      "window_end": "2020-07-15 19:00:00",
+      "window_hours": 4.5,
+      "window_start": "2020-07-15 14:30:00"
+    }
+  },
+  "failure_window_rows": 29960,
+  "figures": [
+    "metropt3_cadence_hist.png",
+    "metropt3_analog_hist.png",
+    "metropt3_windows_bar.png",
+    "metropt3_timeline.png"
+  ],
+  "gap_count_gt_120s": 327,
+  "neighborhood_means_6h": {
+    "1": {
+      "during": {
+        "Motor_current": 5.604425429989611,
+        "Oil_temperature": 74.13068221170494,
+        "TP2": 8.518269652545309,
+        "TP3": 8.81194482280965,
+        "n": 8663
+      },
+      "post6h": {
+        "Motor_current": 3.3274529236868187,
+        "Oil_temperature": 65.59406590683847,
+        "TP2": 3.7238939544103067,
+        "TP3": 8.903998017839445,
+        "n": 2018
+      },
+      "pre6h": {
+        "Motor_current": 0.039999999999999994,
+        "Oil_temperature": 49.45000000000001,
+        "TP2": -0.0180000000000006,
+        "TP3": 8.248000000000003,
+        "n": 1790
+      }
+    },
+    "2": {
+      "during": {
+        "Motor_current": 5.566485169491526,
+        "Oil_temperature": 75.87083686440678,
+        "TP2": 8.175206779661016,
+        "TP3": 8.402111864406779,
+        "n": 2360
+      },
+      "post6h": {
+        "Motor_current": 1.855108173076923,
+        "Oil_temperature": 64.88557692307693,
+        "TP2": 0.9613750000000003,
+        "TP3": 9.010298076923076,
+        "n": 2080
+      },
+      "pre6h": {
+        "Motor_current": 1.9203751720972921,
+        "Oil_temperature": 64.27966957319872,
+        "TP2": 1.260851766865535,
+        "TP3": 8.970498393758605,
+        "n": 2179
+      }
+    },
+    "3": {
+      "during": {
+        "Motor_current": 5.493537684088941,
+        "Oil_temperature": 75.51673837712966,
+        "TP2": 7.891594686687843,
+        "TP3": 8.01816240254115,
+        "n": 17315
+      },
+      "post6h": {
+        "Motor_current": null,
+        "Oil_temperature": null,
+        "TP2": null,
+        "TP3": null,
+        "n": 0
+      },
+      "pre6h": {
+        "Motor_current": 2.0267657182193664,
+        "Oil_temperature": 64.21798990362552,
+        "TP2": 1.2582276273519968,
+        "TP3": 9.02600183570445,
+        "n": 2179
+      }
+    },
+    "4": {
+      "during": {
+        "Motor_current": 5.510272811344019,
+        "Oil_temperature": 83.90570283600495,
+        "TP2": 8.265366214549939,
+        "TP3": 8.207420468557336,
+        "n": 1622
+      },
+      "post6h": {
+        "Motor_current": 2.9565119270346116,
+        "Oil_temperature": 70.59829279700655,
+        "TP2": 1.6862394761459316,
+        "TP3": 9.051887745556593,
+        "n": 2138
+      },
+      "pre6h": {
+        "Motor_current": 4.734918540614961,
+        "Oil_temperature": 75.16177145479578,
+        "TP2": 4.6295227168425885,
+        "TP3": 9.168448829738413,
+        "n": 2179
+      }
+    }
+  },
+  "null_cells": 0,
+  "outlier_fraction_iqr_sample": {
+    "DV_pressure": 0.0739048749134777,
+    "H1": 0.15755957678235935,
+    "Motor_current": 0.0,
+    "Oil_temperature": 0.0035202214970829625,
+    "Reservoirs": 0.002926925739147632,
+    "TP2": 0.17591219222782556,
+    "TP3": 0.0029467022644121426
+  },
+  "prefailure_window_rows": 28668,
+  "state_counts": {
+    "load": 201579,
+    "off": 829124,
+    "offloaded": 486201,
+    "starting": 44
+  },
+  "state_period_count": 70620,
+  "systematic_sample": "every 30th source row, deterministic, no RNG",
+  "timestamp_max": "2020-09-01 03:59:50",
+  "timestamp_min": "2020-02-01 00:00:00",
+  "top_gaps": [
+    {
+      "end": "2020-04-27 01:12:49",
+      "gap_seconds": 172918.0
+    },
+    {
+      "end": "2020-06-28 23:07:43",
+      "gap_seconds": 130476.0
+    },
+    {
+      "end": "2020-03-01 04:00:09",
+      "gap_seconds": 100981.0
+    },
+    {
+      "end": "2020-08-05 08:23:01",
+      "gap_seconds": 88833.0
+    },
+    {
+      "end": "2020-05-25 01:14:14",
+      "gap_seconds": 88491.0
+    },
+    {
+      "end": "2020-07-08 15:20:51",
+      "gap_seconds": 86160.0
+    },
+    {
+      "end": "2020-08-23 18:51:01",
+      "gap_seconds": 85157.0
+    },
+    {
+      "end": "2020-05-10 22:48:58",
+      "gap_seconds": 80261.0
+    },
+    {
+      "end": "2020-06-08 11:48:04",
+      "gap_seconds": 77305.0
+    },
+    {
+      "end": "2020-04-02 09:59:17",
+      "gap_seconds": 74617.0
+    },
+    {
+      "end": "2020-03-28 23:05:32",
+      "gap_seconds": 51353.0
+    },
+    {
+      "end": "2020-07-14 21:28:05",
+      "gap_seconds": 51088.0
+    },
+    {
+      "end": "2020-05-01 12:33:38",
+      "gap_seconds": 46455.0
+    },
+    {
+      "end": "2020-08-03 09:01:16",
+      "gap_seconds": 44806.0
+    },
+    {
+      "end": "2020-05-17 23:10:01",
+      "gap_seconds": 43585.0
+    }
+  ],
+  "total_rows": 1516948
+}
