@@ -1,0 +1,103 @@
+{
+  "dimension_counts": {
+    "dim_date": 478,
+    "dim_defect_cause": 6,
+    "dim_downtime_reason": 6,
+    "dim_line": 4,
+    "dim_product": 4,
+    "dim_sensor": 461,
+    "dim_station_machine": 21,
+    "dim_time_shift": 3,
+    "dim_work_order": 720
+  },
+  "fact_counts": {
+    "fact_downtime_event": 24147,
+    "fact_equipment_state_period": 70628,
+    "fact_manpower_shift": 2160,
+    "fact_production_hourly": 17280,
+    "fact_quality_lot": 1567,
+    "fact_quality_scrap": 4096,
+    "fact_sensor_reading": 23442234,
+    "fact_spc_alert": 0,
+    "fact_station_operation": 10800
+  },
+  "load_duration_seconds": 274.9,
+  "postgresql_version": "16.2",
+  "reconciliation": {
+    "equipment_periods_fact": 70628,
+    "mes_downtime": {
+      "fact": 24147,
+      "source": 24147,
+      "staging": 24147
+    },
+    "mes_manpower": {
+      "fact": 2160,
+      "source": 2160,
+      "staging": 2160
+    },
+    "mes_production": {
+      "fact": 17280,
+      "source": 17280,
+      "staging": 17280
+    },
+    "mes_quality_events": {
+      "fact": 4096,
+      "source": 4096,
+      "staging": 4096
+    },
+    "mes_station_operations": {
+      "fact": 10800,
+      "source": 10800,
+      "staging": 10800
+    },
+    "mes_work_orders": {
+      "fact_dim_work_order": 720,
+      "source": 720,
+      "staging": 720
+    },
+    "metropt3_failure_intervals": {
+      "artifact": 4,
+      "staging": 4
+    },
+    "metropt3_readings_expected": 22754220,
+    "metropt3_readings_fact": 22754220,
+    "metropt3_rows": {
+      "source": 1516948,
+      "staging": 1516948
+    },
+    "metropt3_state_periods": {
+      "artifact": 70620,
+      "staging": 70620
+    },
+    "secom_lots": {
+      "fact": 1567,
+      "source": 1567,
+      "staging": 1567
+    },
+    "secom_readings_fact": 688014,
+    "secom_readings_non_null_source": 688014
+  },
+  "rejected_rows": 0,
+  "rerun_strategy": "staging tables are TRUNCATEd (with RESTART IDENTITY) and reloaded; analytics dimensions and facts use INSERT ... ON CONFLICT DO NOTHING on natural keys, so reruns add nothing and counts are stable.",
+  "sensor_readings_by_system": {
+    "METROPT3": 22754220,
+    "SECOM": 688014
+  },
+  "staging_counts": {
+    "staging.mes_downtime_events": 24147,
+    "staging.mes_manpower_shifts": 2160,
+    "staging.mes_production_hourly": 17280,
+    "staging.mes_quality_events": 4096,
+    "staging.mes_station_operations": 10800,
+    "staging.mes_work_orders": 720,
+    "staging.metropt3_failure_intervals": 4,
+    "staging.metropt3_readings": 1516948,
+    "staging.metropt3_state_periods": 70620,
+    "staging.secom_cleaned": 1567
+  },
+  "unresolved_fk_counts": {
+    "downtime_bad_reason": 0,
+    "production_bad_line": 0,
+    "reading_bad_sensor": 0
+  }
+}
