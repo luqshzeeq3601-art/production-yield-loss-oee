@@ -1,0 +1,605 @@
+{
+  "checks": [
+    {
+      "category": "keys",
+      "check_id": "DQ-A01",
+      "check_name": "duplicate dimension natural keys",
+      "details": "duplicate natural-key groups across all dimensions",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "keys",
+      "check_id": "DQ-A02",
+      "check_name": "duplicate downtime event ids",
+      "details": "event_id must be unique",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "keys",
+      "check_id": "DQ-A03",
+      "check_name": "duplicate SECOM lot identities",
+      "details": "(source_system, source_row) must be unique",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "keys",
+      "check_id": "DQ-A04",
+      "check_name": "duplicate station-operation grain",
+      "details": "line x station x shift x date must be unique",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "keys",
+      "check_id": "DQ-A05",
+      "check_name": "duplicate manpower grain",
+      "details": "line x shift x date must be unique",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "keys",
+      "check_id": "DQ-A06",
+      "check_name": "duplicate production grain",
+      "details": "line x shift x date x hour must be unique",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B01",
+      "check_name": "production orphan dimension keys",
+      "details": "production rows with unknown line/shift/date/product",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B02",
+      "check_name": "downtime orphan dimension keys",
+      "details": "downtime rows with unknown line/station/reason/shift/date",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B03",
+      "check_name": "sensor reading orphan sensor keys",
+      "details": "readings with unknown sensor_key",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B04",
+      "check_name": "scrap orphan dimension keys",
+      "details": "scrap rows with unknown date/line/product/cause",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B05",
+      "check_name": "manpower orphan dimension keys",
+      "details": "manpower rows with unknown line/shift/date",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B06",
+      "check_name": "station operation orphan dimension keys",
+      "details": "station rows with unknown line/station/shift/date",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "foreign_keys",
+      "check_id": "DQ-B07",
+      "check_name": "work order orphan dimension keys",
+      "details": "work orders with unknown line/product",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C01",
+      "check_name": "production negative counts or durations",
+      "details": "rows with any negative count or duration",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C02",
+      "check_name": "good_count <= total_count",
+      "details": "rows violating good<=total",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C03",
+      "check_name": "scrap_count <= total_count",
+      "details": "rows violating scrap<=total",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C04",
+      "check_name": "good_count + scrap_count <= total_count",
+      "details": "rows violating parts<=total (simulator semantics)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C05",
+      "check_name": "run_time <= planned_time",
+      "details": "rows violating run<=planned",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C06",
+      "check_name": "ideal cycle time positive where produced",
+      "details": "producing rows with non-positive ideal cycle time",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C07",
+      "check_name": "derived performance within [0,1]",
+      "details": "rows with run>0 breaching P = ideal*total/(run*60)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "production",
+      "check_id": "DQ-C08",
+      "check_name": "derived availability and quality within [0,1]",
+      "details": "rows breaching A = run/planned or Q = good/total on valid denominators",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "downtime",
+      "check_id": "DQ-D01",
+      "check_name": "downtime duration >= 0",
+      "details": "events with negative duration",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "downtime",
+      "check_id": "DQ-D02",
+      "check_name": "downtime end >= start",
+      "details": "events ending before they start",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "downtime",
+      "check_id": "DQ-D03",
+      "check_name": "event station belongs to event line",
+      "details": "station events whose station belongs to another line",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "downtime",
+      "check_id": "DQ-D04",
+      "check_name": "no overlapping same-machine breakdowns",
+      "details": "overlapping breakdown pairs on one machine (simulator contract)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "downtime",
+      "check_id": "DQ-D05",
+      "check_name": "event duration matches timestamps",
+      "details": "events where duration_min disagrees with end-start beyond 0.01 min",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "manpower",
+      "check_id": "DQ-E01",
+      "check_name": "manpower headcounts non-negative",
+      "details": "rows with negative headcount",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "manpower",
+      "check_id": "DQ-E02",
+      "check_name": "actual headcount <= planned",
+      "details": "rows violating actual<=planned (simulator contract)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "station",
+      "check_id": "DQ-F01",
+      "check_name": "station times and throughput non-negative",
+      "details": "rows with non-positive processing or negative wait/throughput",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "station",
+      "check_id": "DQ-F02",
+      "check_name": "station belongs to operation line",
+      "details": "operations whose station belongs to another line",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "station",
+      "check_id": "DQ-F03",
+      "check_name": "station throughput matches shift-day production",
+      "details": "operations whose throughput differs from summed hourly totals",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "station",
+      "check_id": "DQ-F04",
+      "check_name": "MES station sequence valid",
+      "details": "MES stations without sequence 1-5",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "scrap",
+      "check_id": "DQ-G01",
+      "check_name": "scrap units and cost non-negative",
+      "details": "scrap rows with non-positive units or negative cost",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "scrap",
+      "check_id": "DQ-G02",
+      "check_name": "SECOM lot count matches staging",
+      "details": "fact lots vs staging rows (expect 1567 per P1-001 evidence)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "scrap",
+      "check_id": "DQ-G03",
+      "check_name": "SECOM target remains binary 0/1",
+      "details": "lots with target outside {0,1}",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "scrap",
+      "check_id": "DQ-G04",
+      "check_name": "SECOM pass/fail counts match staging",
+      "details": "fail-lot counts fact vs staging (expect 104 per P1-001 evidence)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H01",
+      "check_name": "no NULL sensor readings stored",
+      "details": "readings with NULL value",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H02",
+      "check_name": "SECOM readings match staging non-null cells",
+      "details": "long-form readings vs non-null wide cells (expect 688014 per P2-003 load)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H03",
+      "check_name": "MetroPT readings match staging rows x signals",
+      "details": "readings vs 15 signals per observation (expect 22754220 per P2-003 load)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H04",
+      "check_name": "every SECOM dim sensor has readings",
+      "details": "dim sensors without fact readings (expect 446 identities per P1-001 evidence)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H05",
+      "check_name": "every MetroPT dim sensor has readings",
+      "details": "dim sensors without fact readings (expect 15 identities per P1-002 evidence)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H06",
+      "check_name": "MetroPT reading timestamps match staging bounds",
+      "details": "no invented timestamps: fact bounds must equal staging bounds",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "sensors",
+      "check_id": "DQ-H07",
+      "check_name": "SECOM reading timestamps match staging bounds",
+      "details": "no invented timestamps: fact bounds must equal staging bounds",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "equipment",
+      "check_id": "DQ-I01",
+      "check_name": "equipment period start <= end",
+      "details": "periods ending before they start",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "equipment",
+      "check_id": "DQ-I02",
+      "check_name": "failure periods match documented intervals",
+      "details": "failure windows vs intervals artifact (expect 4 documented events)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "equipment",
+      "check_id": "DQ-I03",
+      "check_name": "prefailure periods match failure periods",
+      "details": "one derived 24 h prefailure window per failure (expect 4)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "equipment",
+      "check_id": "DQ-I04",
+      "check_name": "operating labels come from staging states",
+      "details": "operating_state periods with labels never observed in staging",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "equipment",
+      "check_id": "DQ-I05",
+      "check_name": "failure labels match documented kinds",
+      "details": "failure windows with undocumented kinds",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J01",
+      "check_name": "production staging-to-fact reconciliation",
+      "details": "hourly rows staging vs fact",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J02",
+      "check_name": "downtime staging-to-fact reconciliation",
+      "details": "downtime rows staging vs fact",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J03",
+      "check_name": "manpower staging-to-fact reconciliation",
+      "details": "manpower rows staging vs fact",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J04",
+      "check_name": "station staging-to-fact reconciliation",
+      "details": "station rows staging vs fact",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J05",
+      "check_name": "scrap staging-to-fact reconciliation",
+      "details": "scrap rows staging vs fact",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J06",
+      "check_name": "work order staging-to-dim reconciliation",
+      "details": "work order rows staging vs dim",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "reconciliation",
+      "check_id": "DQ-J07",
+      "check_name": "flagged failure rows match intervals artifact",
+      "details": "in-window flags vs per-event counts (logging gaps stay gaps, no interpolation)",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S01",
+      "check_name": "source-to-staging staging.mes_production_hourly",
+      "details": "source_rows=17280 staged=17280",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S02",
+      "check_name": "source-to-staging staging.mes_downtime_events",
+      "details": "source_rows=24147 staged=24147",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S03",
+      "check_name": "source-to-staging staging.mes_work_orders",
+      "details": "source_rows=720 staged=720",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S04",
+      "check_name": "source-to-staging staging.mes_manpower_shifts",
+      "details": "source_rows=2160 staged=2160",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S05",
+      "check_name": "source-to-staging staging.mes_station_operations",
+      "details": "source_rows=10800 staged=10800",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S06",
+      "check_name": "source-to-staging staging.mes_quality_events",
+      "details": "source_rows=4096 staged=4096",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S07",
+      "check_name": "source-to-staging staging.secom_cleaned",
+      "details": "source_rows=1567 staged=1567",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S08",
+      "check_name": "source-to-staging staging.metropt3_readings",
+      "details": "source_rows=1516948 staged=1516948",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S09",
+      "check_name": "source-to-staging staging.metropt3_failure_intervals",
+      "details": "source_rows=4 staged=4",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    },
+    {
+      "category": "source_reconciliation",
+      "check_id": "DQ-S10",
+      "check_name": "source-to-staging staging.metropt3_state_periods",
+      "details": "source_rows=70620 staged=70620",
+      "severity": "ERROR",
+      "status": "PASS",
+      "violation_count": 0
+    }
+  ],
+  "executed_at_utc": "2026-09-22T08:18:05.048322+00:00",
+  "failed_check_ids": [],
+  "failed_checks": 0,
+  "passed_checks": 65,
+  "postgresql_version": "16.2",
+  "runtime_seconds": 29.9,
+  "source_system_summary": {
+    "production_hourly_rows": 17280,
+    "quality_lots": 1567,
+    "sensor_readings_by_system": {
+      "METROPT3": 22754220,
+      "SECOM": 688014
+    }
+  },
+  "total_checks": 65,
+  "total_violations": 0
+}
