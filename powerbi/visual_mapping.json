@@ -1,0 +1,457 @@
+{
+  "report_title": "Production Yield Loss & OEE Early-Warning System",
+  "version": "1.0.0",
+  "theme": "powerbi/theme.json",
+  "pages": [
+    {
+      "page_id": 1,
+      "name": "Executive_Summary",
+      "display_name": "Executive Summary",
+      "visuals": [
+        {
+          "id": "v_exec_header",
+          "type": "textbox",
+          "title": "Plant Manufacturing Operations & OEE Executive Dashboard",
+          "position": { "x": 10, "y": 10, "width": 1260, "height": 45 }
+        },
+        {
+          "id": "v_exec_slicer_line",
+          "type": "slicer",
+          "title": "Select Line",
+          "field": "dim_line.line_code",
+          "position": { "x": 10, "y": 60, "width": 200, "height": 60 }
+        },
+        {
+          "id": "v_exec_slicer_shift",
+          "type": "slicer",
+          "title": "Select Shift",
+          "field": "dim_time_shift.shift_code",
+          "position": { "x": 220, "y": 60, "width": 200, "height": 60 }
+        },
+        {
+          "id": "v_exec_card_oee",
+          "type": "card",
+          "title": "Plant OEE",
+          "measure": "[OEE]",
+          "format": "0.00%",
+          "target": 0.85,
+          "position": { "x": 10, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_avail",
+          "type": "card",
+          "title": "Availability (A)",
+          "measure": "[Availability]",
+          "format": "0.00%",
+          "target": 0.90,
+          "position": { "x": 190, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_perf",
+          "type": "card",
+          "title": "Performance (P)",
+          "measure": "[Performance]",
+          "format": "0.00%",
+          "target": 0.95,
+          "position": { "x": 370, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_qual",
+          "type": "card",
+          "title": "Quality (Q)",
+          "measure": "[Quality]",
+          "format": "0.00%",
+          "target": 0.98,
+          "position": { "x": 550, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_units",
+          "type": "card",
+          "title": "Total Units",
+          "measure": "[Total Units]",
+          "format": "#,##0",
+          "position": { "x": 730, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_scrap",
+          "type": "card",
+          "title": "Scrap Cost",
+          "measure": "[Total Scrap Cost]",
+          "format": "$#,##0",
+          "position": { "x": 910, "y": 130, "width": 170, "height": 90 }
+        },
+        {
+          "id": "v_exec_card_value",
+          "type": "card",
+          "title": "Annual Recovery Opp.",
+          "measure": "[Annual Recoverable Value ($)]",
+          "format": "$#,##0",
+          "position": { "x": 1090, "y": 130, "width": 180, "height": 90 }
+        },
+        {
+          "id": "v_exec_trend_oee",
+          "type": "line_chart",
+          "title": "OEE Daily Trend vs Target (85%)",
+          "x_axis": "dim_date.full_date",
+          "y_axis": ["[OEE]"],
+          "reference_line": 0.85,
+          "position": { "x": 10, "y": 230, "width": 620, "height": 260 }
+        },
+        {
+          "id": "v_exec_bar_line_shift",
+          "type": "clustered_column_chart",
+          "title": "OEE by Line and Shift",
+          "x_axis": "dim_line.line_code",
+          "series": "dim_time_shift.shift_code",
+          "y_axis": ["[OEE]"],
+          "position": { "x": 640, "y": 230, "width": 630, "height": 260 }
+        },
+        {
+          "id": "v_exec_loss_bridge",
+          "type": "stacked_bar_chart",
+          "title": "Lost Operating Hours by OEE Category",
+          "y_axis": "dim_downtime_reason.oee_bucket",
+          "x_axis": ["[Downtime Hours]"],
+          "position": { "x": 10, "y": 500, "width": 620, "height": 200 }
+        },
+        {
+          "id": "v_exec_excursion_callout",
+          "type": "table",
+          "title": "Recent Yield Excursions & Root Cause Alerts",
+          "columns": ["dim_date.full_date", "dim_line.line_code", "dim_time_shift.shift_code", "[OEE]", "[Scrap Rate %]"],
+          "position": { "x": 640, "y": 500, "width": 630, "height": 200 }
+        }
+      ]
+    },
+    {
+      "page_id": 2,
+      "name": "OEE_Decomposition",
+      "display_name": "OEE Decomposition",
+      "visuals": [
+        {
+          "id": "v_oee_waterfall",
+          "type": "waterfall_chart",
+          "title": "Planned Operating Time to Good Production Bridge",
+          "category": ["Planned Production Time (h)", "Availability Loss Hours", "Performance Loss Hours", "Quality Equivalent Loss Hours", "Ideal Operating Basis (h)"],
+          "values": ["[Planned Production Time (h)]", "-[Availability Loss Hours]", "-[Performance Loss Hours]", "-[Quality Equivalent Loss Hours]"],
+          "position": { "x": 10, "y": 60, "width": 1260, "height": 280 }
+        },
+        {
+          "id": "v_oee_apq_by_line",
+          "type": "clustered_column_chart",
+          "title": "Availability, Performance, and Quality by Line",
+          "x_axis": "dim_line.line_code",
+          "y_axis": ["[Availability]", "[Performance]", "[Quality]"],
+          "position": { "x": 10, "y": 350, "width": 620, "height": 340 }
+        },
+        {
+          "id": "v_oee_matrix_line_shift",
+          "type": "matrix",
+          "title": "Line x Shift Detailed OEE Factor Grid",
+          "rows": ["dim_line.line_code"],
+          "columns": ["dim_time_shift.shift_code"],
+          "values": ["[Availability]", "[Performance]", "[Quality]", "[OEE]"],
+          "position": { "x": 640, "y": 350, "width": 630, "height": 340 }
+        }
+      ]
+    },
+    {
+      "page_id": 3,
+      "name": "SPC_Early_Warning",
+      "display_name": "SPC & Early Warning",
+      "visuals": [
+        {
+          "id": "v_spc_disclaimer_banner",
+          "type": "textbox",
+          "title": "Early Warning Performance: Latency reduced by 70.4% (18h saved). Alert precision is 4.2% (95.8 false alarms/100 lots trade-off; target of >=60% not met).",
+          "position": { "x": 10, "y": 10, "width": 1260, "height": 45 }
+        },
+        {
+          "id": "v_spc_card_latency",
+          "type": "card",
+          "title": "Median Alert Latency",
+          "measure": "[Median Detection Latency (h)]",
+          "format": "0.0 h",
+          "position": { "x": 10, "y": 65, "width": 240, "height": 85 }
+        },
+        {
+          "id": "v_spc_card_precision",
+          "type": "card",
+          "title": "Alert Precision",
+          "measure": "[Alert Precision %]",
+          "format": "0.0%",
+          "position": { "x": 260, "y": 65, "width": 240, "height": 85 }
+        },
+        {
+          "id": "v_spc_card_recall",
+          "type": "card",
+          "title": "Alert Recall",
+          "measure": "[Alert Recall %]",
+          "format": "0.0%",
+          "position": { "x": 510, "y": 65, "width": 240, "height": 85 }
+        },
+        {
+          "id": "v_spc_card_early_flag",
+          "type": "card",
+          "title": "% Flagged Early",
+          "measure": "[Excursions Caught Before Manual Report %]",
+          "format": "0.0%",
+          "position": { "x": 760, "y": 65, "width": 250, "height": 85 }
+        },
+        {
+          "id": "v_spc_card_hours_saved",
+          "type": "card",
+          "title": "Analyst Hours Saved/Yr",
+          "measure": "[Annual Analyst Hours Saved]",
+          "format": "#,##0.0 h",
+          "position": { "x": 1020, "y": 65, "width": 250, "height": 85 }
+        },
+        {
+          "id": "v_spc_control_chart",
+          "type": "line_chart",
+          "title": "Phase II Statistical Process Control Chart (Top Screened Sensor)",
+          "x_axis": "fact_sensor_reading.reading_ts",
+          "y_axis": ["fact_sensor_reading.reading_value"],
+          "position": { "x": 10, "y": 160, "width": 800, "height": 300 }
+        },
+        {
+          "id": "v_spc_methods_compare",
+          "type": "bar_chart",
+          "title": "Detection Method Comparison (Failing Lots Caught)",
+          "y_axis": ["WE Rules (46/46)", "WE + EWMA (46/46)", "WE + EWMA + T2 (46/46)"],
+          "x_axis": [46, 46, 46],
+          "position": { "x": 820, "y": 160, "width": 450, "height": 300 }
+        },
+        {
+          "id": "v_spc_latency_dist",
+          "type": "column_chart",
+          "title": "Hours Saved from Early Warning vs Next-Morning Manual Review",
+          "x_axis": "Hours Saved Bucket",
+          "y_axis": ["Excursion Lot Count"],
+          "position": { "x": 10, "y": 470, "width": 1260, "height": 220 }
+        }
+      ]
+    },
+    {
+      "page_id": 4,
+      "name": "Pareto_RCA",
+      "display_name": "Pareto & RCA",
+      "visuals": [
+        {
+          "id": "v_pareto_scrap",
+          "type": "combo_bar_line_chart",
+          "title": "Scrap Cost Pareto by Defect Cause (Top 3 = 74.4% of $555.9k)",
+          "x_axis": "dim_defect_cause.cause_name",
+          "bar_y": "[Total Scrap Cost]",
+          "line_y": "[Cum % Scrap Cost]",
+          "reference_line": 0.80,
+          "position": { "x": 10, "y": 60, "width": 620, "height": 320 }
+        },
+        {
+          "id": "v_pareto_downtime",
+          "type": "combo_bar_line_chart",
+          "title": "Downtime Pareto by Stoppage Reason (Top 3 = 87.8% of 2,859h)",
+          "x_axis": "dim_downtime_reason.reason_name",
+          "bar_y": "[Downtime Hours]",
+          "line_y": "[Cum % Downtime]",
+          "reference_line": 0.80,
+          "position": { "x": 640, "y": 60, "width": 630, "height": 320 }
+        },
+        {
+          "id": "v_rca_l2_night_evidence",
+          "type": "column_chart",
+          "title": "RCA Finding 1: Line 2 Minor Stop Spike on Night Shift C (2.92x baseline)",
+          "x_axis": "dim_time_shift.shift_code",
+          "y_axis": ["[Downtime Minutes]"],
+          "position": { "x": 10, "y": 390, "width": 410, "height": 300 }
+        },
+        {
+          "id": "v_rca_l3_toolwear_evidence",
+          "type": "line_chart",
+          "title": "RCA Finding 2: Line 3 Tool Wear Quality Drift (H1: 4.3% -> H2: 8.1%)",
+          "x_axis": "dim_date.full_date",
+          "y_axis": ["[Scrap Rate %]"],
+          "position": { "x": 430, "y": 390, "width": 420, "height": 300 }
+        },
+        {
+          "id": "v_rca_p2_supplier_evidence",
+          "type": "column_chart",
+          "title": "RCA Finding 3: Product P2 Supplier Quality Hold Event ($11.2k scrap)",
+          "x_axis": "dim_product.product_code",
+          "y_axis": ["[Total Scrap Cost]"],
+          "position": { "x": 860, "y": 390, "width": 410, "height": 300 }
+        }
+      ]
+    },
+    {
+      "page_id": 5,
+      "name": "Work_Orders",
+      "display_name": "Work Orders",
+      "visuals": [
+        {
+          "id": "v_wo_card_total",
+          "type": "card",
+          "title": "Total Work Orders",
+          "measure": "720",
+          "format": "#,##0",
+          "position": { "x": 10, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_wo_card_ontime",
+          "type": "card",
+          "title": "WO Completion Rate",
+          "measure": "100.0%",
+          "format": "0.0%",
+          "position": { "x": 330, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_wo_card_hours",
+          "type": "card",
+          "title": "Total Scheduled Hours",
+          "measure": "5,760 h",
+          "format": "#,##0 h",
+          "position": { "x": 650, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_wo_card_units",
+          "type": "card",
+          "title": "Total Ordered Units",
+          "measure": "1,074,073",
+          "format": "#,##0",
+          "position": { "x": 970, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_wo_throughput_by_prod",
+          "type": "bar_chart",
+          "title": "Throughput Units vs Ideal Cycle Time by Product",
+          "y_axis": "dim_product.product_code",
+          "x_axis": ["[Total Units]"],
+          "position": { "x": 10, "y": 160, "width": 620, "height": 530 }
+        },
+        {
+          "id": "v_wo_schedule_table",
+          "type": "table",
+          "title": "Work Order Schedule & Performance Detail",
+          "columns": ["dim_date.full_date", "dim_line.line_code", "dim_time_shift.shift_code", "dim_product.product_code", "[Total Units]", "[Good Units]", "[Scrap Units]", "[OEE]"],
+          "position": { "x": 640, "y": 160, "width": 630, "height": 530 }
+        }
+      ]
+    },
+    {
+      "page_id": 6,
+      "name": "Capacity_Manpower",
+      "display_name": "Capacity & Manpower",
+      "visuals": [
+        {
+          "id": "v_cap_card_plan_hc",
+          "type": "card",
+          "title": "Planned Headcount",
+          "measure": "[Planned Headcount]",
+          "format": "#,##0",
+          "position": { "x": 10, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_cap_card_act_hc",
+          "type": "card",
+          "title": "Actual Headcount",
+          "measure": "[Actual Headcount]",
+          "format": "#,##0",
+          "position": { "x": 330, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_cap_card_gap",
+          "type": "card",
+          "title": "Manpower Staffing Gap",
+          "measure": "[Manpower Gap]",
+          "format": "#,##0 shifts",
+          "position": { "x": 650, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_cap_card_util",
+          "type": "card",
+          "title": "Capacity Utilization",
+          "measure": "[Capacity Utilization %]",
+          "format": "0.00%",
+          "position": { "x": 970, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_cap_gap_by_shift",
+          "type": "column_chart",
+          "title": "Operator Absence Gap by Shift (Shift C Night Gap = 318 shifts)",
+          "x_axis": "dim_time_shift.shift_code",
+          "y_axis": ["[Manpower Gap]"],
+          "position": { "x": 10, "y": 160, "width": 620, "height": 260 }
+        },
+        {
+          "id": "v_cap_bottleneck_stations",
+          "type": "bar_chart",
+          "title": "Average Station Processing Time (Processing Station S3 Bottleneck at 65s)",
+          "y_axis": "dim_station_machine.station_name",
+          "x_axis": ["[Average Processing Time (s)]"],
+          "position": { "x": 640, "y": 160, "width": 630, "height": 260 }
+        },
+        {
+          "id": "v_cap_wait_time_trend",
+          "type": "line_chart",
+          "title": "Buffer Wait Time Trends Across Line Workstations",
+          "x_axis": "dim_date.full_date",
+          "y_axis": ["[Average Wait Time (s)]"],
+          "position": { "x": 10, "y": 430, "width": 1260, "height": 260 }
+        }
+      ]
+    },
+    {
+      "page_id": 7,
+      "name": "Alerts_Data_Quality",
+      "display_name": "Alerts & Data Quality",
+      "visuals": [
+        {
+          "id": "v_dq_card_checks",
+          "type": "card",
+          "title": "Automated DQ Assertions",
+          "measure": "65",
+          "format": "#,##0",
+          "position": { "x": 10, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_dq_card_status",
+          "type": "card",
+          "title": "Overall Pipeline DQ Status",
+          "measure": "100.0% PASS",
+          "format": "@",
+          "position": { "x": 330, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_dq_card_violations",
+          "type": "card",
+          "title": "DQ Violations",
+          "measure": "0",
+          "format": "#,##0",
+          "position": { "x": 650, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_dq_card_reconcile",
+          "type": "card",
+          "title": "SQL-to-Model Reconciled",
+          "measure": "100.0%",
+          "format": "0.0%",
+          "position": { "x": 970, "y": 60, "width": 300, "height": 90 }
+        },
+        {
+          "id": "v_dq_assertion_matrix",
+          "type": "table",
+          "title": "PostgreSQL Data-Quality Constraint Verification Invariants",
+          "columns": ["Rule Code", "Category", "Target Table", "Condition", "Violations Count", "Status"],
+          "position": { "x": 10, "y": 160, "width": 620, "height": 530 }
+        },
+        {
+          "id": "v_dq_active_alerts_table",
+          "type": "table",
+          "title": "Active SPC Anomaly Excursion Queue",
+          "columns": ["Alert Timestamp", "Sensor", "Rule Violated", "Method", "Severity", "Status"],
+          "position": { "x": 640, "y": 160, "width": 630, "height": 530 }
+        }
+      ]
+    }
+  ]
+}

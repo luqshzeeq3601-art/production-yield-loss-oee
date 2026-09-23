@@ -1,0 +1,102 @@
+{
+  "dashboard_validation": {
+    "report_title": "Production Yield Loss & OEE Early-Warning System",
+    "version": "1.0.0",
+    "theme": "powerbi/theme.json",
+    "page_count": 7,
+    "total_visuals_specified": 50,
+    "pages": [
+      {
+        "page_id": 1,
+        "name": "Executive_Summary",
+        "display_name": "Executive Summary",
+        "visual_count": 14,
+        "visual_types": [
+          "card",
+          "clustered_column_chart",
+          "slicer",
+          "table",
+          "textbox",
+          "stacked_bar_chart",
+          "line_chart"
+        ]
+      },
+      {
+        "page_id": 2,
+        "name": "OEE_Decomposition",
+        "display_name": "OEE Decomposition",
+        "visual_count": 3,
+        "visual_types": [
+          "clustered_column_chart",
+          "waterfall_chart",
+          "matrix"
+        ]
+      },
+      {
+        "page_id": 3,
+        "name": "SPC_Early_Warning",
+        "display_name": "SPC & Early Warning",
+        "visual_count": 9,
+        "visual_types": [
+          "card",
+          "line_chart",
+          "column_chart",
+          "textbox",
+          "bar_chart"
+        ]
+      },
+      {
+        "page_id": 4,
+        "name": "Pareto_RCA",
+        "display_name": "Pareto & RCA",
+        "visual_count": 5,
+        "visual_types": [
+          "column_chart",
+          "combo_bar_line_chart",
+          "line_chart"
+        ]
+      },
+      {
+        "page_id": 5,
+        "name": "Work_Orders",
+        "display_name": "Work Orders",
+        "visual_count": 6,
+        "visual_types": [
+          "card",
+          "table",
+          "bar_chart"
+        ]
+      },
+      {
+        "page_id": 6,
+        "name": "Capacity_Manpower",
+        "display_name": "Capacity & Manpower",
+        "visual_count": 7,
+        "visual_types": [
+          "line_chart",
+          "card",
+          "column_chart",
+          "bar_chart"
+        ]
+      },
+      {
+        "page_id": 7,
+        "name": "Alerts_Data_Quality",
+        "display_name": "Alerts & Data Quality",
+        "visual_count": 6,
+        "visual_types": [
+          "card",
+          "table"
+        ]
+      }
+    ],
+    "honest_spc_disclaimer_present": true,
+    "status": "VALID"
+  },
+  "specification_artifacts": {
+    "visual_mapping_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\visual_mapping.json",
+    "dashboard_specification_md": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\dashboard_specification.md",
+    "desktop_assembly_guide_md": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\desktop_assembly_guide.md",
+    "theme_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\theme.json"
+  }
+}
