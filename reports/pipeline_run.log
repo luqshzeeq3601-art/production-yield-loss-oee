@@ -1,0 +1,83 @@
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: ================================================================
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: Starting Production Yield Loss & OEE Early-Warning Pipeline
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: ================================================================
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: Configuration: src/config.yaml
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: Reports Directory: C:\Users\luqma\OneDrive\Desktop\Data Analyst Project\Production Yield Loss and OEE Early\reports
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: Skip Database Stages: False
+2026-09-23 15:02:37,598 [INFO] pipeline_orchestrator: Dry Run Mode: False
+2026-09-23 15:02:48,714 [INFO] pgserver: no PG_VERSION file found within C:\Users\luqma\AppData\Local\Temp\p2_002_e5w12h4y. Initializing pgdata
+2026-09-23 15:02:48,741 [INFO] pgserver: Running commandline:
+['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\initdb.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', 'postgres']
+with kwargs: `{'user': None}`
+2026-09-23 15:02:56,439 [INFO] pgserver: Successful postgres command ['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\initdb.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', 'postgres'] with kwargs: `{'user': None}`
+stdout:
+The files belonging to this database system will be owned by user "ZeeqRyz".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "English_Malaysia.1252".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory C:/Users/luqma/AppData/Local/Temp/p2_002_e5w12h4y ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... windows
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... GMT
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    ^"C^:^\Users^\luqma^\AppData^\Local^\Programs^\Python^\Python311^\Lib^\site^-packages^\pgserver^\pginstall^\bin^\pg^_ctl^" -D ^"C^:^\Users^\luqma^\AppData^\Local^\Temp^\p2^_002^_e5w12h4y^" -l logfile start
+
+
+---
+stderr:
+
+---
+
+2026-09-23 15:02:56,440 [INFO] pgserver: no postmaster.pid file found in C:\Users\luqma\AppData\Local\Temp\p2_002_e5w12h4y
+2026-09-23 15:02:56,441 [INFO] pgserver: running pg_ctl... pg_ctl_args=['-w', '-o', '-h "127.0.0.1"', '-o', '-p 64309', '-l', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y\\log', 'start']
+2026-09-23 15:02:56,443 [INFO] pgserver: Running commandline:
+['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\pg_ctl.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '-w', '-o', '-h "127.0.0.1"', '-o', '-p 64309', '-l', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y\\log', 'start']
+with kwargs: `{'user': None, 'timeout': 10}`
+2026-09-23 15:02:56,734 [INFO] pgserver: Successful postgres command ['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\pg_ctl.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '-w', '-o', '-h "127.0.0.1"', '-o', '-p 64309', '-l', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y\\log', 'start'] with kwargs: `{'user': None, 'timeout': 10}`
+stdout:
+waiting for server to start.... done
+server started
+
+---
+stderr:
+
+---
+
+2026-09-23 15:02:56,734 [INFO] pgserver: waiting for postmaster info to show a running process
+2026-09-23 15:02:56,740 [INFO] pgserver: running... checking if ready pinfo=PostmasterInfo(pid=16508, pgdata=C:\Users\luqma\AppData\Local\Temp\p2_002_e5w12h4y, start_time=2026-09-23 15:02:56, hostname=127.0.0.1 port=64309, socket_dir=None status=ready, process=psutil.Process(pid=16508, name='postgres.exe', status='running', started='15:02:56'))
+2026-09-23 15:02:56,745 [INFO] pgserver: Now asserting server is running self._postmaster_info=PostmasterInfo(pid=16508, pgdata=C:\Users\luqma\AppData\Local\Temp\p2_002_e5w12h4y, start_time=2026-09-23 15:02:56, hostname=127.0.0.1 port=64309, socket_dir=None status=ready, process=psutil.Process(pid=16508, name='postgres.exe', status='running', started='15:02:56'))
+2026-09-23 15:02:57,175 [INFO] pgserver: exiting 5736 remaining pids=[5736]
+2026-09-23 15:02:57,176 [INFO] pgserver: cleaning last handle for server: C:\Users\luqma\AppData\Local\Temp\p2_002_e5w12h4y
+2026-09-23 15:02:57,178 [INFO] pgserver: Running commandline:
+['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\pg_ctl.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '-w', 'stop']
+with kwargs: `{'user': None}`
+2026-09-23 15:02:57,764 [INFO] pgserver: Successful postgres command ['C:\\Users\\luqma\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\pgserver\\pginstall\\bin\\pg_ctl.exe', '-D', 'C:\\Users\\luqma\\AppData\\Local\\Temp\\p2_002_e5w12h4y', '-w', 'stop'] with kwargs: `{'user': None}`
+stdout:
+waiting for server to shut down.... done
+server stopped
+
+---
+stderr:
+
+---
+
+2026-09-23 15:03:03,485 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,523 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,525 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,528 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,530 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,532 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,535 [INFO] pgserver: exiting 5736 remaining pids=[]
+2026-09-23 15:03:03,540 [INFO] pgserver: exiting 5736 remaining pids=[]

@@ -54,7 +54,7 @@ def validate_dashboard_specification(mapping_path: Path) -> dict[str, Any]:
             "name": page.get("name"),
             "display_name": page.get("display_name"),
             "visual_count": len(visuals),
-            "visual_types": list(set(v.get("type", "unknown") for v in visuals)),
+            "visual_types": sorted(set(v.get("type", "unknown") for v in visuals)),
         })
 
     return {

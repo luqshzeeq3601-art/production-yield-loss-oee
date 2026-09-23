@@ -14,11 +14,11 @@
         "visual_types": [
           "card",
           "clustered_column_chart",
+          "line_chart",
           "slicer",
-          "table",
-          "textbox",
           "stacked_bar_chart",
-          "line_chart"
+          "table",
+          "textbox"
         ]
       },
       {
@@ -28,8 +28,8 @@
         "visual_count": 3,
         "visual_types": [
           "clustered_column_chart",
-          "waterfall_chart",
-          "matrix"
+          "matrix",
+          "waterfall_chart"
         ]
       },
       {
@@ -38,11 +38,11 @@
         "display_name": "SPC & Early Warning",
         "visual_count": 9,
         "visual_types": [
+          "bar_chart",
           "card",
-          "line_chart",
           "column_chart",
-          "textbox",
-          "bar_chart"
+          "line_chart",
+          "textbox"
         ]
       },
       {
@@ -62,9 +62,9 @@
         "display_name": "Work Orders",
         "visual_count": 6,
         "visual_types": [
+          "bar_chart",
           "card",
-          "table",
-          "bar_chart"
+          "table"
         ]
       },
       {
@@ -73,10 +73,10 @@
         "display_name": "Capacity & Manpower",
         "visual_count": 7,
         "visual_types": [
-          "line_chart",
+          "bar_chart",
           "card",
           "column_chart",
-          "bar_chart"
+          "line_chart"
         ]
       },
       {
