@@ -177,3 +177,16 @@ pareto:
     scrap_pareto: reports/pareto_scrap.csv
     downtime_pareto: reports/pareto_downtime.csv
     summary: reports/pareto_summary.json
+whatif:
+  default_reduction_rate: 0.30
+  reduction_scenarios: [0.10, 0.20, 0.30, 0.40, 0.50]
+  top_n_losses: 3
+  economic_assumptions:
+    unit_contribution_margin: 22.50
+    operating_days_per_year: 365
+    annual_horizon_days: 365
+    baseline_horizon_days: 180
+  outputs:
+    scenarios: reports/oee_whatif_scenarios.csv
+    sensitivity: reports/oee_whatif_sensitivity.csv
+    summary: reports/oee_whatif_summary.json
