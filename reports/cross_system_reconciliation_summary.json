@@ -1,0 +1,31 @@
+{
+  "total_checks": 75,
+  "pass_count": 75,
+  "fail_count": 0,
+  "warning_count": 0,
+  "checks_by_domain": {
+    "MES_PRODUCTION": 13,
+    "MES_DOWNTIME": 9,
+    "MES_QUALITY": 10,
+    "SECOM": 11,
+    "METROPT3": 8,
+    "POWERBI": 6,
+    "WHATIF_IMPACT": 6,
+    "REPORTING": 7,
+    "DQ_VALIDATION": 5
+  },
+  "exact_match_count": 51,
+  "tolerance_match_count": 24,
+  "known_exceptions": [
+    "database-live validation unavailable; committed db_load/dq evidence used instead",
+    "MetroPT-3 logging gaps preserved as gaps per P1-002; not flagged as failures",
+    "pipeline_run_summary.json is a single-stage DRY_RUN test artifact per impact DQ-006",
+    "interactive PBIX assembly remains manual; only SQL-vs-DAX reconciliation checked"
+  ],
+  "modeled_metrics_checked": 6,
+  "database_live": {
+    "available": false,
+    "reason": "no credentials in environment"
+  },
+  "overall_status": "PASS"
+}

@@ -1,0 +1,76 @@
+reconciliation_id,domain,metric_name,source_layer,target_layer,source_value,target_value,unit,tolerance,absolute_difference,relative_difference_pct,status,source_artifact,target_artifact,notes
+MP-01,MES_PRODUCTION,production row count,source_csv,staging,17280,17280,rows,exact,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/db_load_summary.json,source->staging exact per P2-003.
+MP-02,MES_PRODUCTION,production row count,staging,fact,17280,17280,rows,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,staging->fact exact; reruns stable.
+MP-03,MES_PRODUCTION,total count,source_csv,python_report,1074073,1074073,units,exact,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,what-if baseline derived from same CSV.
+MP-04,MES_PRODUCTION,good count,source_csv,python_report,1036026,1036026,units,exact,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,what-if baseline derived from same CSV.
+MP-05,MES_PRODUCTION,scrap count,source_csv,python_report,38047,38047,units,exact,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,what-if baseline derived from same CSV.
+MP-06,MES_PRODUCTION,planned time,source_csv,python_report,1030502.584,1030502.584,minutes,abs<=1e-6,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,additive sum.
+MP-07,MES_PRODUCTION,run time,source_csv,python_report,940735.318,940735.318,minutes,abs<=1e-6,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,additive sum.
+MP-08,MES_PRODUCTION,Availability,derived,python_report,0.9128898196,0.9128898195950569,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,A=run/planned.
+MP-09,MES_PRODUCTION,Performance,derived,python_report,0.8450305502,0.8450305501694083,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,P=ideal/run.
+MP-10,MES_PRODUCTION,Quality,derived,python_report,0.9645768956,0.9645768956113784,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,Q=good/total.
+MP-11,MES_PRODUCTION,OEE,derived,python_report,0.7440937029,0.7440937028719504,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_production_hourly.csv,reports/oee_whatif_summary.json,OEE=AxPxQ.
+MP-12,MES_PRODUCTION,OEE baseline vs Power BI,python_report,powerbi,0.7440937028719504,0.7440937028719504,ratio,abs<=1e-9,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,SQL aggregates vs DAX; expect ~1e-16.
+MP-13,MES_PRODUCTION,total units vs impact,python_report,impact,1074073,1074073,units,exact,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,OEE-005 carries plant total.
+MD-01,MES_DOWNTIME,downtime event count,source_csv,staging,24147,24147,events,exact,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/db_load_summary.json,source->staging exact.
+MD-02,MES_DOWNTIME,downtime event count,staging,fact,24147,24147,events,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,staging->fact exact.
+MD-03,MES_DOWNTIME,total downtime minutes,source_csv,powerbi,177844.99,177844.99,minutes,abs<=0.01,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/powerbi_reconciliation_summary.json,all reasons incl. planned.
+MD-04,MES_DOWNTIME,unplanned downtime minutes,source_csv,python_report,171547.551,171547.551,minutes,abs<=0.01,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/pareto_summary.json,planned_maintenance excluded on both sides.
+MD-05,MES_DOWNTIME,unplanned hours vs Power BI,python_report,powerbi,2859.12585,2859.1258499999994,hours,abs<=1e-6,0.0,0.0,PASS,reports/pareto_summary.json,reports/powerbi_reconciliation_summary.json,minutes/60 conversion; no unit mismatch.
+MD-06,MES_DOWNTIME,top-3 downtime minutes,source_csv,python_report,150539.393,150539.393,minutes,abs<=0.01,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/pareto_summary.json,minor_stop/changeover/breakdown.
+MD-07,MES_DOWNTIME,top-3 concentration,derived,python_report,0.8775374065,0.8775374065235125,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/pareto_summary.json,share=top3/unplanned.
+MD-08,MES_DOWNTIME,planned maintenance minutes,source_csv,powerbi,6297.439,6297.439,minutes,abs<=0.01,0.0,0.0,PASS,data/processed/mes_downtime_events.csv,reports/powerbi_reconciliation_summary.json,planned stays excluded from unplanned on both sides.
+MD-09,MES_DOWNTIME,top-3 hours vs impact,python_report,impact,2508.99,2508.99,hours,abs<=0.005pp,0.0,0.0,PASS,reports/pareto_summary.json,reports/impact_metrics.csv,PAR-004 carries 2dp display value.
+MQ-01,MES_QUALITY,quality event rows,source_csv,staging,4096,4096,rows,exact,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/db_load_summary.json,source->staging exact.
+MQ-02,MES_QUALITY,quality event rows,staging,fact,4096,4096,rows,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,staging->fact exact.
+MQ-03,MES_QUALITY,scrap units,source_csv,python_report,38047,38047,units,exact,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/pareto_summary.json,affected units sum.
+MQ-04a,MES_QUALITY,total scrap cost vs python_report,source_csv,python_report,555891.0,555891.0,$,<=0.01,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/pareto_summary.json,cents-exact across layers.
+MQ-04b,MES_QUALITY,total scrap cost vs powerbi,source_csv,powerbi,555891.0,555891.0,$,<=0.01,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/powerbi_reconciliation_summary.json,cents-exact across layers.
+MQ-04c,MES_QUALITY,total scrap cost vs impact,source_csv,impact,555891.0,555891.0,$,<=0.01,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/impact_metrics.csv,cents-exact across layers.
+MQ-05,MES_QUALITY,top-3 scrap cost vs pareto,source_csv,python_report,413447.0,413447.0,$,<=0.01,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/pareto_summary.json,dimensional/surface/contamination.
+MQ-06,MES_QUALITY,top-3 scrap cost vs impact,python_report,impact,413447.0,413447.0,$,<=0.01,0.0,0.0,PASS,reports/pareto_summary.json,reports/impact_metrics.csv,PAR-002 carries value.
+MQ-07,MES_QUALITY,top-3 scrap concentration,derived,python_report,0.7437555204,0.7437555204167724,ratio,abs<=1e-9,0.0,0.0,PASS,data/processed/mes_quality_events.csv,reports/pareto_summary.json,share=top3/total.
+MQ-08,MES_QUALITY,what-if top-3 scrap input,python_report,python_report,28087,28087,units,exact,0.0,0.0,PASS,reports/pareto_summary.json,reports/oee_whatif_summary.json,"modeled input, not an observed fact."
+SC-01,SECOM,lot count,source_csv,staging,1567,1567,lots,exact,0.0,0.0,PASS,data/processed/secom_cleaned.csv,reports/db_load_summary.json,"1,567 lots."
+SC-02,SECOM,lot count,staging,fact,1567,1567,lots,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,staging->fact exact.
+SC-03,SECOM,fail count,source_csv,python_report,104,104,lots,exact,0.0,0.0,PASS,data/processed/secom_cleaned.csv,reports/secom_cleaning_summary.json,"no label inversion (-1->0 pass, 1->1 fail)."
+SC-04,SECOM,pass count,source_csv,python_report,1463,1463,lots,exact,0.0,0.0,PASS,data/processed/secom_cleaned.csv,reports/secom_cleaning_summary.json,"1,463 pass."
+SC-05,SECOM,retained sensors,python_report,fact,446,446,sensors,exact,0.0,0.0,PASS,reports/secom_cleaning_summary.json,reports/db_load_summary.json,446 = 461 dim_sensor - 15 MetroPT.
+SC-06,SECOM,non-null readings,source_csv,fact,688014,688014,readings,exact,0.0,0.0,PASS,data/processed/secom_cleaned.csv,reports/db_load_summary.json,"688,014 cells."
+SC-07,SECOM,Phase I + Phase II = total,python_report,python_report,1567,1567,lots,exact,0.0,0.0,PASS,reports/spc_backtest_summary.json,data/processed/secom_cleaned.csv,"470 + 1,097 = 1,567; no count drift."
+SC-08,SECOM,Phase II pass+fail = Phase II,python_report,python_report,1097,1097,lots,exact,0.0,0.0,PASS,reports/spc_backtest_summary.json,reports/spc_backtest_summary.json,"1,051 + 46 = 1,097."
+SC-09,SECOM,Phase II fails within total fails,python_report,python_report,1,1,check,exact,0.0,0.0,PASS,reports/spc_backtest_summary.json,data/processed/secom_cleaned.csv,46 <= 104 total fails; subset relation holds.
+SC-10,SECOM,WE precision vs impact,python_report,impact,4.2318,4.23,%,abs<=0.005pp,0.0018,0.042535,PASS,reports/spc_backtest_summary.json,reports/impact_metrics.csv,backtest frozen; impact carries 2dp.
+SC-11,SECOM,combined precision vs impact,python_report,impact,4.2125,4.21,%,abs<=0.005pp,0.0025,0.059347,PASS,reports/spc_backtest_summary.json,reports/impact_metrics.csv,4.21% carried.
+MT-01,METROPT3,source observations,python_report,staging,1516948,1516948,rows,exact,0.0,0.0,PASS,reports/metropt3_ingestion_summary.json,reports/db_load_summary.json,"1,516,948 rows."
+MT-02,METROPT3,signals per observation,python_report,fact,15,15,signals,exact,0.0,0.0,PASS,reports/metropt3_ingestion_summary.json,reports/db_load_summary.json,15 = 7 analog + 8 digital.
+MT-03,METROPT3,normalized readings recomputed,derived,python_report,22754220,22754220,readings,exact,0.0,0.0,PASS,reports/metropt3_ingestion_summary.json,reports/db_load_summary.json,"1,516,948 x 15 = 22,754,220."
+MT-04,METROPT3,normalized readings vs impact,python_report,impact,22754220,22754220,readings,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/impact_metrics.csv,SCL-002 carries count.
+MT-05,METROPT3,failure periods,source_csv,staging,4,4,periods,exact,0.0,0.0,PASS,data/processed/metropt3_failure_intervals.csv,reports/db_load_summary.json,4 documented air-leak windows.
+MT-06,METROPT3,state periods,source_csv,staging,70620,70620,periods,exact,0.0,0.0,PASS,data/processed/metropt3_state_periods.csv,reports/db_load_summary.json,run-length encoded operating states.
+MT-07,METROPT3,equipment fact composition,staging,fact,70628,70628,periods,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,70620 states + 4 failure + 4 prefailure = 70628.
+MT-08,METROPT3,state counts sum to total rows,python_report,python_report,1516948,1516948,rows,exact,0.0,0.0,PASS,reports/metropt3_ingestion_summary.json,reports/metropt3_ingestion_summary.json,"logging gaps preserved as gaps, not interpolated."
+PB-01,POWERBI,Availability SQL vs DAX,sql_view,powerbi,0.9128898195950569,0.9128898195950568,ratio,abs<=1e-9,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,same aggregates; expect ~1e-16.
+PB-02,POWERBI,Performance SQL vs DAX,sql_view,powerbi,0.8450305501694083,0.8450305501694084,ratio,abs<=1e-9,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,same aggregates; expect ~1e-16.
+PB-03,POWERBI,Quality SQL vs DAX,sql_view,powerbi,0.9645768956113784,0.9645768956113784,ratio,abs<=1e-9,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,same aggregates; expect ~1e-16.
+PB-04,POWERBI,OEE SQL vs DAX,sql_view,powerbi,0.7440937028719504,0.7440937028719504,ratio,abs<=1e-9,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,same aggregates; expect ~1e-16.
+PB-05,POWERBI,Scrap Cost SQL vs DAX,sql_view,powerbi,555891.0,555891.0,$,<=0.01,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/powerbi_reconciliation_summary.json,exact to the cent.
+PB-06,POWERBI,reconciliation gate <=0.1%,powerbi,powerbi,1.49204733266801e-14,0.1,%,<=0.1,0.0,0.0,PASS,reports/powerbi_reconciliation_summary.json,reports/powerbi_reconciliation_summary.json,measured 1.49e-14%; interactive PBIX not validated.
+WF-01,WHATIF_IMPACT,projected OEE 30% combined,python_report,impact,78.956,78.96,%,abs<=0.005pp,0.004,0.005066,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,MODELED projection carried at 2dp.
+WF-02,WHATIF_IMPACT,OEE uplift 30% combined,python_report,impact,4.5466,4.55,pp,abs<=0.005pp,0.0034,0.074781,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,MODELED uplift.
+WF-03,WHATIF_IMPACT,extra good units/year,python_report,impact,63864,63864,units/year,exact,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,MODELED rounded int.
+WF-04,WHATIF_IMPACT,annual scrap avoided 30% combined,python_report,impact,251513.59,251513.59,$/year,<=0.01,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,MODELED; never realized savings.
+WF-05,WHATIF_IMPACT,annual recoverable value 30% combined,python_report,impact,1688452.14,1688452.14,$/year,<=0.01,0.0,0.0,PASS,reports/oee_whatif_summary.json,reports/impact_metrics.csv,MODELED; never realized savings.
+WF-06,WHATIF_IMPACT,scenario rows labeled MODELED,impact,impact,1,1,check,exact,0.0,0.0,PASS,reports/impact_metrics.csv,reports/impact_metrics.csv,observed-vs-modeled distinction enforced.
+RP-01,REPORTING,manual hours/week,python_report,impact,6.0,6.0,hours/week,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+RP-02,REPORTING,manual minutes/week,python_report,impact,360,360.0,min/week,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+RP-03,REPORTING,automated target min/week,python_report,impact,10.0,10.0,min/week,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,"configured/project target, not measured runtime."
+RP-04,REPORTING,annual manual hours,python_report,impact,312.0,312.0,hours/year,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+RP-05,REPORTING,annual automated hours,python_report,impact,8.7,8.7,hours/year,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+RP-06,REPORTING,annual hours saved,python_report,impact,303.3,303.3,hours/year,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+RP-07,REPORTING,reporting reduction %,python_report,impact,97.2,97.2,%,exact,0.0,0.0,PASS,reports/manual_reporting_baseline.json,reports/impact_metrics.csv,baseline carried exactly.
+DQ-01,DQ_VALIDATION,DQ checks passed,python_report,impact,65,65,checks,exact,0.0,0.0,PASS,reports/dq_check_summary.json,reports/impact_metrics.csv,65/65 carried.
+DQ-02,DQ_VALIDATION,DQ violations,python_report,impact,0,0,violations,exact,0.0,0.0,PASS,reports/dq_check_summary.json,reports/impact_metrics.csv,0 violations.
+DQ-03,DQ_VALIDATION,DB rejected rows,python_report,python_report,0,0,rows,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,empty DB -> complete load.
+DQ-04,DQ_VALIDATION,unresolved FK count,python_report,python_report,0,0,keys,exact,0.0,0.0,PASS,reports/db_load_summary.json,reports/db_load_summary.json,0 orphans.
+DQ-05,DQ_VALIDATION,DQ checks vs pytest count,python_report,python_report,1,1,check,exact,0.0,0.0,PASS,reports/dq_check_summary.json,reports/full_validation_summary.json,65 DQ checks != 212 pytest tests; distinct gates.
