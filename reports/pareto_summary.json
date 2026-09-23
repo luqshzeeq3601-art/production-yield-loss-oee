@@ -1,0 +1,540 @@
+{
+  "scrap": {
+    "overall": {
+      "total_scrap_cost": 555891.0,
+      "total_units_affected": 38047,
+      "total_records": 4096,
+      "cause_count": 6,
+      "top_n": 3,
+      "top_n_causes": [
+        "dimensional",
+        "surface defect",
+        "contamination"
+      ],
+      "top_n_scrap_cost": 413447.0,
+      "top_n_scrap_cost_share": 0.7437555204167724,
+      "top_n_units_affected": 28087,
+      "top_n_units_share": 0.7382185191999369
+    },
+    "records": [
+      {
+        "rank": 1,
+        "defect_cause": "dimensional",
+        "scrap_cost": 173077.0,
+        "units_affected": 11759,
+        "event_count": 720,
+        "scrap_cost_share": 0.31135060650379304,
+        "cumulative_scrap_cost": 173077.0,
+        "cumulative_scrap_cost_share": 0.31135060650379304,
+        "units_share": 0.30906510368754436,
+        "cumulative_units_share": 0.30906510368754436
+      },
+      {
+        "rank": 2,
+        "defect_cause": "surface defect",
+        "scrap_cost": 137940.0,
+        "units_affected": 9374,
+        "event_count": 720,
+        "scrap_cost_share": 0.2481421717566933,
+        "cumulative_scrap_cost": 311017.0,
+        "cumulative_scrap_cost_share": 0.5594927782604863,
+        "units_share": 0.24637947801403529,
+        "cumulative_units_share": 0.5554445817015796
+      },
+      {
+        "rank": 3,
+        "defect_cause": "contamination",
+        "scrap_cost": 102430.0,
+        "units_affected": 6954,
+        "event_count": 720,
+        "scrap_cost_share": 0.18426274215628605,
+        "cumulative_scrap_cost": 413447.0,
+        "cumulative_scrap_cost_share": 0.7437555204167724,
+        "units_share": 0.1827739374983573,
+        "cumulative_units_share": 0.738218519199937
+      },
+      {
+        "rank": 4,
+        "defect_cause": "tool wear",
+        "scrap_cost": 97275.0,
+        "units_affected": 6921,
+        "event_count": 720,
+        "scrap_cost_share": 0.17498934143564115,
+        "cumulative_scrap_cost": 510722.0,
+        "cumulative_scrap_cost_share": 0.9187448618524136,
+        "units_share": 0.18190658921859804,
+        "cumulative_units_share": 0.920125108418535
+      },
+      {
+        "rank": 5,
+        "defect_cause": "other",
+        "scrap_cost": 28601.0,
+        "units_affected": 1968,
+        "event_count": 720,
+        "scrap_cost_share": 0.051450734046782555,
+        "cumulative_scrap_cost": 539323.0,
+        "cumulative_scrap_cost_share": 0.970195595899196,
+        "units_share": 0.051725497411096805,
+        "cumulative_units_share": 0.9718506058296318
+      },
+      {
+        "rank": 6,
+        "defect_cause": "supplier material",
+        "scrap_cost": 16568.0,
+        "units_affected": 1071,
+        "event_count": 496,
+        "scrap_cost_share": 0.029804404100803934,
+        "cumulative_scrap_cost": 555891.0,
+        "cumulative_scrap_cost_share": 1.0,
+        "units_share": 0.028149394170368228,
+        "cumulative_units_share": 1.0
+      }
+    ]
+  },
+  "downtime_all_events": {
+    "overall": {
+      "total_duration_min": 177844.99000000002,
+      "total_duration_hours": 2964.083166666667,
+      "total_event_count": 24147,
+      "reason_count": 6,
+      "exclude_planned": false,
+      "top_n": 3,
+      "top_n_reasons": [
+        "minor_stop",
+        "changeover",
+        "breakdown"
+      ],
+      "top_n_duration_min": 150539.393,
+      "top_n_duration_hours": 2508.9898833333336,
+      "top_n_duration_share": 0.846464064014398,
+      "top_n_event_count": 23478,
+      "top_n_event_share": 0.9722946949931669
+    },
+    "records": [
+      {
+        "rank": 1,
+        "reason": "minor_stop",
+        "oee_bucket": "Performance",
+        "is_planned": false,
+        "duration_min": 80717.144,
+        "duration_hours": 1345.2857333333334,
+        "event_count": 20150,
+        "downtime_share": 0.4538623438309957,
+        "cumulative_duration_min": 80717.144,
+        "cumulative_duration_hours": 1345.2857333333334,
+        "cumulative_downtime_share": 0.4538623438309957,
+        "event_share": 0.8344721911624633,
+        "cumulative_event_share": 0.8344721911624633
+      },
+      {
+        "rank": 2,
+        "reason": "changeover",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 52781.481,
+        "duration_hours": 879.6913499999999,
+        "event_count": 2640,
+        "downtime_share": 0.2967836260104937,
+        "cumulative_duration_min": 133498.625,
+        "cumulative_duration_hours": 2224.977083333333,
+        "cumulative_downtime_share": 0.7506459698414895,
+        "event_share": 0.10933035159647161,
+        "cumulative_event_share": 0.9438025427589348
+      },
+      {
+        "rank": 3,
+        "reason": "breakdown",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 17040.768,
+        "duration_hours": 284.0128,
+        "event_count": 688,
+        "downtime_share": 0.09581809417290865,
+        "cumulative_duration_min": 150539.393,
+        "cumulative_duration_hours": 2508.9898833333336,
+        "cumulative_downtime_share": 0.8464640640143981,
+        "event_share": 0.028492152234231995,
+        "cumulative_event_share": 0.9722946949931669
+      },
+      {
+        "rank": 4,
+        "reason": "material_shortage",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 14015.027,
+        "duration_hours": 233.58378333333334,
+        "event_count": 330,
+        "downtime_share": 0.07880473326799928,
+        "cumulative_duration_min": 164554.42,
+        "cumulative_duration_hours": 2742.5736666666667,
+        "cumulative_downtime_share": 0.9252687972823974,
+        "event_share": 0.013666293949558952,
+        "cumulative_event_share": 0.9859609889427258
+      },
+      {
+        "rank": 5,
+        "reason": "quality_hold",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 6993.131,
+        "duration_hours": 116.55218333333333,
+        "event_count": 235,
+        "downtime_share": 0.03932149564629287,
+        "cumulative_duration_min": 171547.551,
+        "cumulative_duration_hours": 2859.12585,
+        "cumulative_downtime_share": 0.9645902929286903,
+        "event_share": 0.009732057812564707,
+        "cumulative_event_share": 0.9956930467552905
+      },
+      {
+        "rank": 6,
+        "reason": "planned_maintenance",
+        "oee_bucket": "Planned",
+        "is_planned": true,
+        "duration_min": 6297.439,
+        "duration_hours": 104.95731666666667,
+        "event_count": 104,
+        "downtime_share": 0.03540970707130968,
+        "cumulative_duration_min": 177844.99000000002,
+        "cumulative_duration_hours": 2964.083166666667,
+        "cumulative_downtime_share": 1.0,
+        "event_share": 0.0043069532447094876,
+        "cumulative_event_share": 1.0
+      }
+    ]
+  },
+  "downtime_unplanned": {
+    "overall": {
+      "total_duration_min": 171547.551,
+      "total_duration_hours": 2859.12585,
+      "total_event_count": 24043,
+      "reason_count": 5,
+      "exclude_planned": true,
+      "top_n": 3,
+      "top_n_reasons": [
+        "minor_stop",
+        "changeover",
+        "breakdown"
+      ],
+      "top_n_duration_min": 150539.393,
+      "top_n_duration_hours": 2508.9898833333336,
+      "top_n_duration_share": 0.8775374065235125,
+      "top_n_event_count": 23478,
+      "top_n_event_share": 0.9765004367175477
+    },
+    "records": [
+      {
+        "rank": 1,
+        "reason": "minor_stop",
+        "oee_bucket": "Performance",
+        "is_planned": false,
+        "duration_min": 80717.144,
+        "duration_hours": 1345.2857333333334,
+        "event_count": 20150,
+        "downtime_share": 0.4705234410487154,
+        "cumulative_duration_min": 80717.144,
+        "cumulative_duration_hours": 1345.2857333333334,
+        "cumulative_downtime_share": 0.4705234410487154,
+        "event_share": 0.8380817701617934,
+        "cumulative_event_share": 0.8380817701617934
+      },
+      {
+        "rank": 2,
+        "reason": "changeover",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 52781.481,
+        "duration_hours": 879.6913499999999,
+        "event_count": 2640,
+        "downtime_share": 0.30767842905551007,
+        "cumulative_duration_min": 133498.625,
+        "cumulative_duration_hours": 2224.977083333333,
+        "cumulative_downtime_share": 0.7782018701042255,
+        "event_share": 0.10980326914278585,
+        "cumulative_event_share": 0.9478850393045793
+      },
+      {
+        "rank": 3,
+        "reason": "breakdown",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 17040.768,
+        "duration_hours": 284.0128,
+        "event_count": 688,
+        "downtime_share": 0.09933553641928704,
+        "cumulative_duration_min": 150539.393,
+        "cumulative_duration_hours": 2508.9898833333336,
+        "cumulative_downtime_share": 0.8775374065235125,
+        "event_share": 0.02861539741296843,
+        "cumulative_event_share": 0.9765004367175477
+      },
+      {
+        "rank": 4,
+        "reason": "material_shortage",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 14015.027,
+        "duration_hours": 233.58378333333334,
+        "event_count": 330,
+        "downtime_share": 0.08169762213626704,
+        "cumulative_duration_min": 164554.42,
+        "cumulative_duration_hours": 2742.5736666666667,
+        "cumulative_downtime_share": 0.9592350286597796,
+        "event_share": 0.013725408642848231,
+        "cumulative_event_share": 0.9902258453603959
+      },
+      {
+        "rank": 5,
+        "reason": "quality_hold",
+        "oee_bucket": "Availability",
+        "is_planned": false,
+        "duration_min": 6993.131,
+        "duration_hours": 116.55218333333333,
+        "event_count": 235,
+        "downtime_share": 0.04076497134022042,
+        "cumulative_duration_min": 171547.551,
+        "cumulative_duration_hours": 2859.12585,
+        "cumulative_downtime_share": 1.0,
+        "event_share": 0.009774154639604044,
+        "cumulative_event_share": 1.0
+      }
+    ]
+  },
+  "line_breakdown": {
+    "L1": {
+      "scrap": {
+        "total_scrap_cost": 107947.0,
+        "total_units_affected": 7165,
+        "total_records": 1017,
+        "cause_count": 6,
+        "top_n": 3,
+        "top_n_causes": [
+          "dimensional",
+          "surface defect",
+          "contamination"
+        ],
+        "top_n_scrap_cost": 91380.0,
+        "top_n_scrap_cost_share": 0.8465265361705281,
+        "top_n_units_affected": 6072,
+        "top_n_units_share": 0.8474528960223308
+      },
+      "downtime_all": {
+        "total_duration_min": 40952.557,
+        "total_duration_hours": 682.5426166666667,
+        "total_event_count": 5328,
+        "reason_count": 6,
+        "exclude_planned": false,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 34288.696,
+        "top_n_duration_hours": 571.4782666666667,
+        "top_n_duration_share": 0.8372785123038837,
+        "top_n_event_count": 5162,
+        "top_n_event_share": 0.9688438438438438
+      },
+      "downtime_unplanned": {
+        "total_duration_min": 39282.679000000004,
+        "total_duration_hours": 654.7113166666667,
+        "total_event_count": 5303,
+        "reason_count": 5,
+        "exclude_planned": true,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 34288.696,
+        "top_n_duration_hours": 571.4782666666667,
+        "top_n_duration_share": 0.8728706104794939,
+        "top_n_event_count": 5162,
+        "top_n_event_share": 0.9734112766358666
+      }
+    },
+    "L2": {
+      "scrap": {
+        "total_scrap_cost": 100969.0,
+        "total_units_affected": 6771,
+        "total_records": 996,
+        "cause_count": 6,
+        "top_n": 3,
+        "top_n_causes": [
+          "dimensional",
+          "surface defect",
+          "contamination"
+        ],
+        "top_n_scrap_cost": 86185.0,
+        "top_n_scrap_cost_share": 0.8535788212223553,
+        "top_n_units_affected": 5780,
+        "top_n_units_share": 0.8536405257716733
+      },
+      "downtime_all": {
+        "total_duration_min": 53744.636999999995,
+        "total_duration_hours": 895.7439499999999,
+        "total_event_count": 8252,
+        "reason_count": 6,
+        "exclude_planned": false,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 47321.541999999994,
+        "top_n_duration_hours": 788.6923666666665,
+        "top_n_duration_share": 0.8804886336845107,
+        "top_n_event_count": 8093,
+        "top_n_event_share": 0.9807319437712071
+      },
+      "downtime_unplanned": {
+        "total_duration_min": 52564.181,
+        "total_duration_hours": 876.0696833333333,
+        "total_event_count": 8232,
+        "reason_count": 5,
+        "exclude_planned": true,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 47321.541999999994,
+        "top_n_duration_hours": 788.6923666666665,
+        "top_n_duration_share": 0.9002621385844478,
+        "top_n_event_count": 8093,
+        "top_n_event_share": 0.9831146744412051
+      }
+    },
+    "L3": {
+      "scrap": {
+        "total_scrap_cost": 239596.0,
+        "total_units_affected": 16889,
+        "total_records": 1067,
+        "cause_count": 6,
+        "top_n": 3,
+        "top_n_causes": [
+          "tool wear",
+          "dimensional",
+          "surface defect"
+        ],
+        "top_n_scrap_cost": 188123.0,
+        "top_n_scrap_cost_share": 0.7851675320122206,
+        "top_n_units_affected": 13306,
+        "top_n_units_share": 0.7878500799336845
+      },
+      "downtime_all": {
+        "total_duration_min": 43269.991,
+        "total_duration_hours": 721.1665166666667,
+        "total_event_count": 5315,
+        "reason_count": 6,
+        "exclude_planned": false,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "material_shortage"
+        ],
+        "top_n_duration_min": 35012.763,
+        "top_n_duration_hours": 583.54605,
+        "top_n_duration_share": 0.809169639069257,
+        "top_n_event_count": 5063,
+        "top_n_event_share": 0.9525870178739416
+      },
+      "downtime_unplanned": {
+        "total_duration_min": 41290.316,
+        "total_duration_hours": 688.1719333333333,
+        "total_event_count": 5282,
+        "reason_count": 5,
+        "exclude_planned": true,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "material_shortage"
+        ],
+        "top_n_duration_min": 35012.763,
+        "top_n_duration_hours": 583.54605,
+        "top_n_duration_share": 0.84796548905075,
+        "top_n_event_count": 5063,
+        "top_n_event_share": 0.9585384324119651
+      }
+    },
+    "L4": {
+      "scrap": {
+        "total_scrap_cost": 107379.0,
+        "total_units_affected": 7222,
+        "total_records": 1016,
+        "cause_count": 6,
+        "top_n": 3,
+        "top_n_causes": [
+          "dimensional",
+          "surface defect",
+          "contamination"
+        ],
+        "top_n_scrap_cost": 91048.0,
+        "top_n_scrap_cost_share": 0.847912534108159,
+        "top_n_units_affected": 6124,
+        "top_n_units_share": 0.8479645527554694
+      },
+      "downtime_all": {
+        "total_duration_min": 39877.80499999999,
+        "total_duration_hours": 664.6300833333332,
+        "total_event_count": 5252,
+        "reason_count": 6,
+        "exclude_planned": false,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 33944.147,
+        "top_n_duration_hours": 565.7357833333333,
+        "top_n_duration_share": 0.8512039968097543,
+        "top_n_event_count": 5094,
+        "top_n_event_share": 0.9699162223914698
+      },
+      "downtime_unplanned": {
+        "total_duration_min": 38410.37499999999,
+        "total_duration_hours": 640.1729166666665,
+        "total_event_count": 5226,
+        "reason_count": 5,
+        "exclude_planned": true,
+        "top_n": 3,
+        "top_n_reasons": [
+          "minor_stop",
+          "changeover",
+          "breakdown"
+        ],
+        "top_n_duration_min": 33944.147,
+        "top_n_duration_hours": 565.7357833333333,
+        "top_n_duration_share": 0.8837233950462604,
+        "top_n_event_count": 5094,
+        "top_n_event_share": 0.9747416762342136
+      }
+    }
+  },
+  "key_findings": {
+    "top_3_scrap_causes": [
+      "dimensional",
+      "surface defect",
+      "contamination"
+    ],
+    "top_3_scrap_cost_share": 0.7437555204167724,
+    "top_3_downtime_reasons_unplanned": [
+      "minor_stop",
+      "changeover",
+      "breakdown"
+    ],
+    "top_3_downtime_share_unplanned": 0.8775374065235125
+  },
+  "outputs": {
+    "scrap_pareto": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\pareto_scrap.csv",
+    "downtime_pareto": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\pareto_downtime.csv",
+    "summary": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\pareto_summary.json"
+  }
+}

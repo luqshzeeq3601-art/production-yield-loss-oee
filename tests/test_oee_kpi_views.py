@@ -136,7 +136,10 @@ def test_views_execute_rerunnable_and_canonical_oee(kpi_db):
         "SELECT table_name FROM information_schema.views WHERE table_schema = 'analytics'"
     )
     assert {row[0] for row in cursor.fetchall()} >= {
-        "vw_oee_line_shift", "vw_oee_loss_decomposition"
+        "vw_oee_line_shift",
+        "vw_oee_loss_decomposition",
+        "vw_pareto_scrap",
+        "vw_pareto_downtime",
     }
     cursor.execute(
         """

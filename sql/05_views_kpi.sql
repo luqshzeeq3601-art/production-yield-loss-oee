@@ -238,3 +238,99 @@ COMMENT ON VIEW analytics.vw_oee_loss_decomposition IS
 
 COMMENT ON COLUMN analytics.vw_oee_loss_decomposition.affected_count IS
     'Event count for raw downtime rows; affected production units for reduced-speed and scrap rows.';
+
+CREATE OR REPLACE VIEW analytics.vw_pareto_scrap AS
+WITH cause_aggregates AS (
+    SELECT
+        c.defect_cause_key,
+        c.cause_code,
+        c.cause_name,
+        SUM(q.units_affected) AS total_units_affected,
+        SUM(q.scrap_cost) AS total_scrap_cost,
+        COUNT(*)::BIGINT AS scrap_record_count
+    FROM analytics.fact_quality_scrap AS q
+    JOIN analytics.dim_defect_cause AS c ON c.defect_cause_key = q.defect_cause_key
+    GROUP BY
+        c.defect_cause_key,
+        c.cause_code,
+        c.cause_name
+),
+totals AS (
+    SELECT
+        SUM(total_scrap_cost) AS grand_total_scrap_cost,
+        SUM(total_units_affected) AS grand_total_units_affected
+    FROM cause_aggregates
+)
+SELECT
+    a.defect_cause_key,
+    a.cause_code,
+    a.cause_name,
+    a.total_units_affected,
+    a.total_scrap_cost,
+    a.scrap_record_count,
+    a.total_scrap_cost / NULLIF(t.grand_total_scrap_cost, 0.0) AS scrap_cost_share,
+    SUM(a.total_scrap_cost) OVER (
+        ORDER BY a.total_scrap_cost DESC, a.cause_code
+    ) AS cumulative_scrap_cost,
+    SUM(a.total_scrap_cost) OVER (
+        ORDER BY a.total_scrap_cost DESC, a.cause_code
+    ) / NULLIF(t.grand_total_scrap_cost, 0.0) AS cumulative_scrap_cost_share,
+    ROW_NUMBER() OVER (
+        ORDER BY a.total_scrap_cost DESC, a.cause_code
+    ) AS pareto_rank
+FROM cause_aggregates AS a
+CROSS JOIN totals AS t;
+
+COMMENT ON VIEW analytics.vw_pareto_scrap IS
+    'GRAIN: defect_cause. Ranked cumulative scrap-cost Pareto analysis for root cause analysis.';
+
+CREATE OR REPLACE VIEW analytics.vw_pareto_downtime AS
+WITH reason_aggregates AS (
+    SELECT
+        r.downtime_reason_key,
+        r.reason_code,
+        r.reason_name,
+        r.oee_bucket,
+        r.is_planned,
+        SUM(e.duration_min) AS total_duration_min,
+        SUM(e.duration_min) / 60.0 AS total_duration_hours,
+        COUNT(*)::BIGINT AS event_count
+    FROM analytics.fact_downtime_event AS e
+    JOIN analytics.dim_downtime_reason AS r ON r.downtime_reason_key = e.downtime_reason_key
+    GROUP BY
+        r.downtime_reason_key,
+        r.reason_code,
+        r.reason_name,
+        r.oee_bucket,
+        r.is_planned
+),
+totals AS (
+    SELECT
+        SUM(total_duration_min) AS grand_total_duration_min,
+        SUM(event_count) AS grand_total_events
+    FROM reason_aggregates
+)
+SELECT
+    a.downtime_reason_key,
+    a.reason_code,
+    a.reason_name,
+    a.oee_bucket,
+    a.is_planned,
+    a.total_duration_min,
+    a.total_duration_hours,
+    a.event_count,
+    a.total_duration_min / NULLIF(t.grand_total_duration_min, 0.0) AS downtime_share,
+    SUM(a.total_duration_min) OVER (
+        ORDER BY a.total_duration_min DESC, a.reason_code
+    ) AS cumulative_duration_min,
+    SUM(a.total_duration_min) OVER (
+        ORDER BY a.total_duration_min DESC, a.reason_code
+    ) / NULLIF(t.grand_total_duration_min, 0.0) AS cumulative_downtime_share,
+    ROW_NUMBER() OVER (
+        ORDER BY a.total_duration_min DESC, a.reason_code
+    ) AS pareto_rank
+FROM reason_aggregates AS a
+CROSS JOIN totals AS t;
+
+COMMENT ON VIEW analytics.vw_pareto_downtime IS
+    'GRAIN: downtime_reason. Ranked cumulative downtime-duration Pareto analysis across all events.';
