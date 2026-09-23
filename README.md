@@ -15,6 +15,8 @@ Finds yield drops and line bottlenecks from sensor and MES data before the next-
 | Reporting | 6 h/week → <10 min/week target (−97.2%) |
 | Validation | 259 tests · 65 DQ checks · 75 reconciliation checks |
 
+![OEE by line](docs/assets/oee_by_line.png) ![SPC recall vs precision](docs/assets/spc_method_performance.png)
+
 ## Contents
 
 - [Overview](#overview) · [Business Objectives](#business-objectives) · [Architecture](#architecture) ([diagram](docs/architecture.md))
