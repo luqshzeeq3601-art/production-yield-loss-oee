@@ -1,0 +1,60 @@
+{
+  "total_metrics": 57,
+  "metrics_by_category": {
+    "Reporting Automation": 7,
+    "SPC / Early Warning": 13,
+    "OEE": 15,
+    "Pareto": 4,
+    "What-If (MODELED)": 7,
+    "Data Quality / Validation": 7,
+    "Scale": 4
+  },
+  "metrics_by_evidence_type": {
+    "CONFIGURED_BASELINE": 9,
+    "MEASURED": 35,
+    "MODELED": 6,
+    "VALIDATION": 7
+  },
+  "metrics_pass": 52,
+  "metrics_fail": 5,
+  "objectives": {
+    "O1": {
+      "objective": "O1 — Early Warning",
+      "status": "PARTIAL",
+      "latency_reduction_target": ">=70%",
+      "latency_reduction_achieved": 100.0,
+      "latency_target_met": true,
+      "precision_target": ">=60%",
+      "precision_achieved": 4.21,
+      "precision_target_met": false,
+      "note": "Latency target fully met (100.0% reduction). Precision target NOT met (4.21% vs 60%): low prevalence (4.19%) makes high precision difficult with univariate SPC rules on noisy 590-sensor data. This is an honest limitation."
+    },
+    "O2": {
+      "objective": "O2 — OEE + RCA",
+      "status": "ACHIEVED",
+      "oee_decomposition_calculated": true,
+      "top_3_scrap_concentration": "74.38%",
+      "top_3_scrap_above_60pct": true,
+      "top_3_downtime_concentration": "87.75%",
+      "top_3_downtime_above_60pct": true,
+      "whatif_analysis_completed": true
+    },
+    "O3": {
+      "objective": "O3 — Automation",
+      "status": "ACHIEVED",
+      "baseline_hours_per_week": 6.0,
+      "automated_minutes_per_week": 10.0,
+      "reduction_pct": 97.2,
+      "baseline_6h_confirmed": true,
+      "automated_under_10min": true
+    }
+  },
+  "claims_generated": 11,
+  "safe_claims": 8,
+  "unsafe_claims": 3,
+  "outputs": {
+    "impact_metrics_csv": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\impact_metrics.csv",
+    "impact_claims_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\impact_claims.json",
+    "impact_metrics_summary_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\impact_metrics_summary.json"
+  }
+}
