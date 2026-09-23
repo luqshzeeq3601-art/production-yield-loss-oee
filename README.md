@@ -117,7 +117,7 @@ Semantic model over the star schema with 36 DAX measures (Availability, Performa
 
 ## Testing & Validation
 
-- 229 pytest tests PASS, zero skipped, run under `-W error`
+- 259 pytest tests PASS, zero skipped, run under `-W error`
 - Ephemeral PostgreSQL 16 validation of the full schema/view/DQ chain
 - Deterministic reruns verified (fixed seeds; impact metrics byte-identical)
 - 75/75 cross-system reconciliation PASS (source -> staging -> facts -> reports -> Power BI -> impact)
