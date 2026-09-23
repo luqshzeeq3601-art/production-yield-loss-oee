@@ -1,0 +1,568 @@
+{
+  "line_shift_defect_rates": {
+    "line_differences": {
+      "chi2_statistic": 7634.905183088388,
+      "p_value": 0.0,
+      "degrees_of_freedom": 3,
+      "is_significant_005": true,
+      "records": [
+        {
+          "line": "L1",
+          "good_count": 266295,
+          "scrap_count": 7165,
+          "total_count": 273460,
+          "defect_rate": 0.02620127258099905
+        },
+        {
+          "line": "L2",
+          "good_count": 247493,
+          "scrap_count": 6771,
+          "total_count": 254264,
+          "defect_rate": 0.026629802095459836
+        },
+        {
+          "line": "L3",
+          "good_count": 254547,
+          "scrap_count": 16889,
+          "total_count": 271436,
+          "defect_rate": 0.062220928690372684
+        },
+        {
+          "line": "L4",
+          "good_count": 267691,
+          "scrap_count": 7222,
+          "total_count": 274913,
+          "defect_rate": 0.026270129095386542
+        }
+      ]
+    },
+    "shift_differences": {
+      "chi2_statistic": 6.962218847809799,
+      "p_value": 0.030773251506704354,
+      "degrees_of_freedom": 2,
+      "is_significant_005": true,
+      "records": [
+        {
+          "shift": "A",
+          "good_count": 348300,
+          "scrap_count": 12547,
+          "total_count": 360847,
+          "defect_rate": 0.0347709694136296
+        },
+        {
+          "shift": "B",
+          "good_count": 352414,
+          "scrap_count": 13031,
+          "total_count": 365445,
+          "defect_rate": 0.0356578965370986
+        },
+        {
+          "shift": "C",
+          "good_count": 335312,
+          "scrap_count": 12469,
+          "total_count": 347781,
+          "defect_rate": 0.03585302244803483
+        }
+      ]
+    },
+    "line_by_shift_interaction": {
+      "chi2_statistic": 7639.653209775659,
+      "p_value": 0.0,
+      "degrees_of_freedom": 11,
+      "defect_rates": {
+        "A": {
+          "L1": 0.026056042572923797,
+          "L2": 0.026496296863547354,
+          "L3": 0.06181090341622282,
+          "L4": 0.02542213572479073
+        },
+        "B": {
+          "L1": 0.026292609882850346,
+          "L2": 0.026903508578728277,
+          "L3": 0.06229719542440101,
+          "L4": 0.02706802765316516
+        },
+        "C": {
+          "L1": 0.026254046186265777,
+          "L2": 0.02645421865674749,
+          "L3": 0.06254099435917618,
+          "L4": 0.02630323014512875
+        }
+      }
+    }
+  },
+  "station_bottlenecks": {
+    "bottleneck_station": "Processing",
+    "station_count": 5,
+    "stations": [
+      {
+        "station_name": "Processing",
+        "is_bottleneck": 1,
+        "mean_processing_time_s": 65.01385833333333,
+        "std_processing_time_s": 3.2731877951205264,
+        "mean_wait_time_s": 185.3961138888889,
+        "std_wait_time_s": 191.68370010921873,
+        "mean_throughput_units": 497.25601851851854,
+        "total_throughput_units": 1074073,
+        "mean_downtime_min": 2.6012439814814816,
+        "total_downtime_min": 5618.687,
+        "mean_downtime_event_count": 0.1087962962962963,
+        "total_downtime_event_count": 235
+      },
+      {
+        "station_name": "Assembly",
+        "is_bottleneck": 0,
+        "mean_processing_time_s": 49.94999861111111,
+        "std_processing_time_s": 2.4946941531082514,
+        "mean_wait_time_s": 44.49627916666667,
+        "std_wait_time_s": 44.57125412624816,
+        "mean_throughput_units": 497.25601851851854,
+        "total_throughput_units": 1074073,
+        "mean_downtime_min": 1.3402495370370369,
+        "total_downtime_min": 2894.939,
+        "mean_downtime_event_count": 0.05555555555555555,
+        "total_downtime_event_count": 120
+      },
+      {
+        "station_name": "Inspection",
+        "is_bottleneck": 0,
+        "mean_processing_time_s": 30.033206944444444,
+        "std_processing_time_s": 1.5132930960892956,
+        "mean_wait_time_s": 45.03891064814815,
+        "std_wait_time_s": 43.60424982673338,
+        "mean_throughput_units": 497.25601851851854,
+        "total_throughput_units": 1074073,
+        "mean_downtime_min": 1.3655916666666665,
+        "total_downtime_min": 2949.678,
+        "mean_downtime_event_count": 0.05462962962962963,
+        "total_downtime_event_count": 118
+      },
+      {
+        "station_name": "Loading",
+        "is_bottleneck": 0,
+        "mean_processing_time_s": 24.984044444444443,
+        "std_processing_time_s": 1.252536944552119,
+        "mean_wait_time_s": 43.872710185185184,
+        "std_wait_time_s": 42.52813516958605,
+        "mean_throughput_units": 497.25601851851854,
+        "total_throughput_units": 1074073,
+        "mean_downtime_min": 1.3099055555555557,
+        "total_downtime_min": 2829.396,
+        "mean_downtime_event_count": 0.05,
+        "total_downtime_event_count": 108
+      },
+      {
+        "station_name": "Packing",
+        "is_bottleneck": 0,
+        "mean_processing_time_s": 19.99773657407407,
+        "std_processing_time_s": 1.003941700952716,
+        "mean_wait_time_s": 44.47085138888889,
+        "std_wait_time_s": 44.099765277272816,
+        "mean_throughput_units": 497.25601851851854,
+        "total_throughput_units": 1074073,
+        "mean_downtime_min": 1.2722537037037038,
+        "total_downtime_min": 2748.068,
+        "mean_downtime_event_count": 0.04953703703703704,
+        "total_downtime_event_count": 107
+      }
+    ],
+    "breakdowns_by_station": [
+      {
+        "station": "L1-S1",
+        "breakdown_count": 31,
+        "breakdown_minutes": 798.568
+      },
+      {
+        "station": "L1-S2",
+        "breakdown_count": 32,
+        "breakdown_minutes": 760.635
+      },
+      {
+        "station": "L1-S3",
+        "breakdown_count": 64,
+        "breakdown_minutes": 1383.158
+      },
+      {
+        "station": "L1-S4",
+        "breakdown_count": 26,
+        "breakdown_minutes": 497.084
+      },
+      {
+        "station": "L1-S5",
+        "breakdown_count": 29,
+        "breakdown_minutes": 552.856
+      },
+      {
+        "station": "L2-S1",
+        "breakdown_count": 30,
+        "breakdown_minutes": 792.513
+      },
+      {
+        "station": "L2-S2",
+        "breakdown_count": 27,
+        "breakdown_minutes": 640.999
+      },
+      {
+        "station": "L2-S3",
+        "breakdown_count": 57,
+        "breakdown_minutes": 1053.241
+      },
+      {
+        "station": "L2-S4",
+        "breakdown_count": 32,
+        "breakdown_minutes": 890.909
+      },
+      {
+        "station": "L2-S5",
+        "breakdown_count": 26,
+        "breakdown_minutes": 570.029
+      },
+      {
+        "station": "L3-S1",
+        "breakdown_count": 19,
+        "breakdown_minutes": 509.91200000000003
+      },
+      {
+        "station": "L3-S2",
+        "breakdown_count": 21,
+        "breakdown_minutes": 526.103
+      },
+      {
+        "station": "L3-S3",
+        "breakdown_count": 54,
+        "breakdown_minutes": 1519.6870000000001
+      },
+      {
+        "station": "L3-S4",
+        "breakdown_count": 36,
+        "breakdown_minutes": 1147.2930000000001
+      },
+      {
+        "station": "L3-S5",
+        "breakdown_count": 30,
+        "breakdown_minutes": 797.493
+      },
+      {
+        "station": "L4-S1",
+        "breakdown_count": 28,
+        "breakdown_minutes": 728.403
+      },
+      {
+        "station": "L4-S2",
+        "breakdown_count": 40,
+        "breakdown_minutes": 967.202
+      },
+      {
+        "station": "L4-S3",
+        "breakdown_count": 60,
+        "breakdown_minutes": 1662.6009999999999
+      },
+      {
+        "station": "L4-S4",
+        "breakdown_count": 24,
+        "breakdown_minutes": 414.392
+      },
+      {
+        "station": "L4-S5",
+        "breakdown_count": 22,
+        "breakdown_minutes": 827.6899999999999
+      }
+    ]
+  },
+  "scenario_rediscovery": {
+    "scenario_1_line2_night_shift": {
+      "discovered": true,
+      "injected_description": "L2 night shift minor stops elevated by ~3.0x multiplier and slower cycle speed",
+      "observed_minor_stop_count_c": 4257,
+      "observed_minor_stop_count_day_avg": 1464.5,
+      "observed_multiplier": 2.906794127688631,
+      "performance_by_shift": {
+        "A": 0.8593066990443312,
+        "B": 0.8577371967409787,
+        "C": 0.6867978609366215
+      },
+      "performance_gap_c_vs_a": 0.17250883810770967
+    },
+    "scenario_2_line3_tool_wear": {
+      "discovered": true,
+      "injected_description": "Line 3 tool wear causes progressive defect rate increase in second half",
+      "h1_defect_rate": 0.043178615465915095,
+      "h2_defect_rate": 0.08141255140988846,
+      "relative_increase": 0.885483138618814,
+      "chi2_statistic": 1699.3953103439512,
+      "p_value": 0.0,
+      "tool_wear_scrap_units_by_half": {
+        "H1_first_half": 1617,
+        "H2_second_half": 4031
+      }
+    },
+    "scenario_3_supplier_quality_hold": {
+      "discovered": true,
+      "injected_description": "Supplier quality-hold event affecting Product P2 mid-horizon",
+      "p2_supplier_scrap_units": 620,
+      "p2_supplier_scrap_cost": 11160.0,
+      "other_products_supplier_scrap_units": 451,
+      "p2_share_of_supplier_scrap": 0.5788982259570495
+    }
+  },
+  "metropt3_failure_contrasts": {
+    "methodological_note": "MetroPT-3 failure intervals are transcribed from official dataset documentation; values represent observed sensor level differences during documented air-leak anomalies.",
+    "analog_signals": {
+      "TP2": {
+        "normal": {
+          "mean": 1.2276344739151908,
+          "std": 3.129026284375511,
+          "median": -0.0120000000000004
+        },
+        "pre_failure_24h": {
+          "mean": 1.4476180410213484,
+          "std": 3.4030509182016666,
+          "median": -0.0120000000000004
+        },
+        "failure_window": {
+          "mean": 8.115375300400535,
+          "std": 0.9823755277370539,
+          "median": 8.272
+        },
+        "failure_vs_normal_shift": 6.887740826485344,
+        "mann_whitney_u_p_value": 0.0
+      },
+      "TP3": {
+        "normal": {
+          "mean": 9.000253609633,
+          "std": 0.6340637047734216,
+          "median": 8.982
+        },
+        "pre_failure_24h": {
+          "mean": 8.916687944746757,
+          "std": 0.6170316578983372,
+          "median": 8.842
+        },
+        "failure_window": {
+          "mean": 8.288176902536717,
+          "std": 0.4954194109546419,
+          "median": 8.17
+        },
+        "failure_vs_normal_shift": -0.7120767070962835,
+        "mann_whitney_u_p_value": 1.221501855287099e-180
+      },
+      "H1": {
+        "normal": {
+          "mean": 7.725385839870536,
+          "std": 3.1851006833225326,
+          "median": 8.812
+        },
+        "pre_failure_24h": {
+          "mean": 7.439810659969304,
+          "std": 3.2983155237665907,
+          "median": 8.55
+        },
+        "failure_window": {
+          "mean": 0.037659212283044606,
+          "std": 0.6273450303681817,
+          "median": -0.0079999999999991
+        },
+        "failure_vs_normal_shift": -7.687726627587491,
+        "mann_whitney_u_p_value": 0.0
+      },
+      "DV_pressure": {
+        "normal": {
+          "mean": 0.020025773492786697,
+          "std": 0.27824384703094374,
+          "median": -0.0199999999999995
+        },
+        "pre_failure_24h": {
+          "mean": -0.0014441188781914931,
+          "std": 0.21883478847865181,
+          "median": -0.0199999999999995
+        },
+        "failure_window": {
+          "mean": 1.8598145527369827,
+          "std": 0.5194923092240494,
+          "median": 2.0120000000000005
+        },
+        "failure_vs_normal_shift": 1.839788779244196,
+        "mann_whitney_u_p_value": 0.0
+      },
+      "Reservoirs": {
+        "normal": {
+          "mean": 9.000862689944594,
+          "std": 0.633271896437353,
+          "median": 8.982
+        },
+        "pre_failure_24h": {
+          "mean": 8.917101995256035,
+          "std": 0.6162936813085819,
+          "median": 8.844
+        },
+        "failure_window": {
+          "mean": 8.28966435246996,
+          "std": 0.495363241238185,
+          "median": 8.172
+        },
+        "failure_vs_normal_shift": -0.7111983374746345,
+        "mann_whitney_u_p_value": 2.039883429164221e-183
+      },
+      "Oil_temperature": {
+        "normal": {
+          "mean": 62.362163071205224,
+          "std": 6.247827675640389,
+          "median": 62.5
+        },
+        "pre_failure_24h": {
+          "mean": 63.452626622017576,
+          "std": 8.490390865464374,
+          "median": 64.775
+        },
+        "failure_window": {
+          "mean": 75.59801902536717,
+          "std": 2.9318102109151005,
+          "median": 75.47500000000001
+        },
+        "failure_vs_normal_shift": 13.235855954161941,
+        "mann_whitney_u_p_value": 0.0
+      },
+      "Motor_current": {
+        "normal": {
+          "mean": 1.9768913150063088,
+          "std": 2.2694085313984798,
+          "median": 0.0449999999999999
+        },
+        "pre_failure_24h": {
+          "mean": 2.138832408957723,
+          "std": 2.310083505233028,
+          "median": 0.0449999999999999
+        },
+        "failure_window": {
+          "mean": 5.532253337783712,
+          "std": 0.36671029829754337,
+          "median": 5.5725
+        },
+        "failure_vs_normal_shift": 3.555362022777403,
+        "mann_whitney_u_p_value": 0.0
+      }
+    }
+  },
+  "secom_sensor_contrasts": {
+    "methodological_note": "SECOM sensor-to-yield relationships reflect statistical associations in the UCI historical dataset; statistical significance demonstrates anomaly discrimination capability rather than mechanical physical causation.",
+    "screened_sensors": {
+      "sensor_021": {
+        "pass_mean": -5636.437585499316,
+        "fail_mean": -5362.27427184466,
+        "pass_std": 593.7987686616148,
+        "fail_std": 950.3784543606537,
+        "pass_median": -5529.0,
+        "fail_median": -5447.25,
+        "difference": 274.1633136546561,
+        "cohens_d": 0.43984231328278245,
+        "mann_whitney_p_value": 0.0004461412473224361
+      },
+      "sensor_000": {
+        "pass_mean": 3014.947316403569,
+        "fail_mean": 3007.52625,
+        "pass_std": 72.4618090297368,
+        "fail_std": 88.40968772628496,
+        "pass_median": 3012.68,
+        "fail_median": 2989.3149999999996,
+        "difference": -7.421066403569057,
+        "cohens_d": -0.10079942540533116,
+        "mann_whitney_p_value": 0.031805265262002475
+      },
+      "sensor_064": {
+        "pass_mean": 20.440290521978024,
+        "fail_mean": 21.967568269230767,
+        "pass_std": 4.729374695078945,
+        "fail_std": 7.538979894647286,
+        "pass_median": 20.011850000000003,
+        "fail_median": 20.85955,
+        "difference": 1.527277747252743,
+        "cohens_d": 0.30764291596401083,
+        "mann_whitney_p_value": 0.17116935142388323
+      },
+      "sensor_122": {
+        "pass_mean": 3.917335625859698,
+        "fail_mean": 3.6335096153846154,
+        "pass_std": 0.9134472788971219,
+        "fail_std": 0.7143671922362755,
+        "pass_median": 3.882,
+        "fail_median": 3.5255,
+        "difference": -0.2838260104750825,
+        "cohens_d": -0.31479256702554753,
+        "mann_whitney_p_value": 0.0028239427539653124
+      },
+      "sensor_065": {
+        "pass_mean": 27.027495535714284,
+        "fail_mean": 28.592296153846153,
+        "pass_std": 6.9511833111391255,
+        "fail_std": 9.099575436697055,
+        "pass_median": 26.21745,
+        "fail_median": 27.97485,
+        "difference": 1.5648006181318692,
+        "cohens_d": 0.21998320227714455,
+        "mann_whitney_p_value": 0.1695889908374082
+      },
+      "sensor_022": {
+        "pass_mean": 2705.15817373461,
+        "fail_mean": 2617.339805825243,
+        "pass_std": 279.78002244285994,
+        "fail_std": 458.7168723070666,
+        "pass_median": 2665.25,
+        "fail_median": 2635.75,
+        "difference": -87.81836790936723,
+        "cohens_d": -0.2979025833445671,
+        "mann_whitney_p_value": 0.15747827432696127
+      },
+      "sensor_090": {
+        "pass_mean": 8833.289516985138,
+        "fail_mean": 8748.61942038835,
+        "pass_std": 401.1143753473386,
+        "fail_std": 314.42373639434396,
+        "pass_median": 8835.5701,
+        "fail_median": 8745.81,
+        "difference": -84.67009659678843,
+        "cohens_d": -0.21388316727281276,
+        "mann_whitney_p_value": 0.03204922295486527
+      },
+      "sensor_076": {
+        "pass_mean": -0.02889339819318971,
+        "fail_mean": -0.036268269230769236,
+        "pass_std": 0.03305060484658637,
+        "fail_std": 0.034686698338636225,
+        "pass_median": -0.0283,
+        "fail_median": -0.0353,
+        "difference": -0.007374871037579524,
+        "cohens_d": -0.22238600460329372,
+        "mann_whitney_p_value": 0.03283849123845793
+      },
+      "sensor_562": {
+        "pass_mean": 262.8255634266886,
+        "fail_mean": 261.2747,
+        "pass_std": 7.564182840533778,
+        "fail_std": 8.495291473829278,
+        "pass_median": 264.272,
+        "fail_median": 264.272,
+        "difference": -1.5508634266885792,
+        "cohens_d": -0.20340845108513814,
+        "mann_whitney_p_value": 0.1319605336200197
+      },
+      "sensor_033": {
+        "pass_mean": 8.931261764705882,
+        "fail_mean": 9.3681875,
+        "pass_std": 1.2265800859225726,
+        "fail_std": 2.438023762824034,
+        "pass_median": 8.7662,
+        "fail_median": 8.8941,
+        "difference": 0.4369257352941176,
+        "cohens_d": 0.3259489764030168,
+        "mann_whitney_p_value": 0.00016136083495336387
+      }
+    }
+  },
+  "key_conclusions": [
+    "Line 3 has statistically significantly higher defect rates (6.22% vs 2.63% plant baseline, Chi2 p < 1e-16) driven by progressive tool wear.",
+    "Processing Station S3 represents the primary cycle bottleneck (65.0s processing time vs 20-50s on other stations) with double the breakdown frequency.",
+    "Line 2 Night Shift (C) exhibits 2.92x minor stops (4,257 events) and 0.802 Performance vs 0.859 on day shifts.",
+    "Product P2 experienced an isolated supplier quality-hold event explaining 620 scrap units ($11,160 cost).",
+    "MetroPT-3 air leak failure windows show marked anomalies on TP2 (8.12 vs 1.23 bar normal) and Oil Temperature (75.6 vs 62.4 C normal)."
+  ]
+}
