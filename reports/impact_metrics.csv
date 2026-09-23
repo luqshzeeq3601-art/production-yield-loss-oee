@@ -1,0 +1,58 @@
+metric_id,category,metric_name,value,unit,evidence_type,source_artifact,source_field,status,notes
+RA-001,Reporting Automation,Manual hours per week,6.0,hours/week,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,baseline_workflow.weekly_manual_hours,PASS,14-step documented workflow timed per P5-001.
+RA-002,Reporting Automation,Manual minutes per week,360,min/week,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,baseline_workflow.weekly_manual_minutes,PASS,Sum of 14 step durations.
+RA-003,Reporting Automation,Automated target minutes per week,10.0,min/week,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,automation_target.target_weekly_minutes,PASS,Pipeline runtime + Power BI refresh.
+RA-004,Reporting Automation,Annual manual hours,312.0,hours/year,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,baseline_workflow.annual_manual_hours,PASS,weekly_manual_hours * 52.
+RA-005,Reporting Automation,Annual automated hours,8.7,hours/year,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,automation_target.target_annual_hours,PASS,target_weekly_minutes * 52 / 60.
+RA-006,Reporting Automation,Annual hours saved,303.3,hours/year,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,automation_target.expected_annual_hours_saved,PASS,annual_manual_hours - target_annual_hours.
+RA-007,Reporting Automation,Reporting-time reduction,97.2,%,CONFIGURED_BASELINE,reports/manual_reporting_baseline.json,automation_target.efficiency_gain_pct,PASS,Reduction from 6 h/week to <10 min/week.
+SPC-001,SPC / Early Warning,Phase II lots evaluated,1097,lots,MEASURED,reports/spc_backtest_summary.json,phase2_lots,PASS,Chronological Phase II SECOM lots.
+SPC-002,SPC / Early Warning,Phase II fail prevalence,4.19,%,MEASURED,reports/spc_backtest_summary.json,phase2_prevalence,PASS,46 failing lots out of 1097.
+SPC-003,SPC / Early Warning,Precision (WE+EWMA+T2),4.21,%,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.precision,FAIL,4.21% vs 60% target; high false-alarm rate in low-prevalence data.
+SPC-004,SPC / Early Warning,Recall (WE+EWMA+T2),100.0,%,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.recall,PASS,100% recall: all 46 Phase II failures detected.
+SPC-005,SPC / Early Warning,False alarms per 100 lots (WE+EWMA+T2),95.35,per 100 lots,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.false_alarms_per_100_lots,FAIL,High false-alarm rate driven by univariate rule sensitivity on noisy sensors.
+SPC-006,SPC / Early Warning,Alerts per 100 lots (WE+EWMA+T2),99.54,per 100 lots,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.alerts_per_100_lots,FAIL,Nearly all lots trigger at least one rule violation.
+SPC-007,SPC / Early Warning,Median modeled hours saved,17.98,hours,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.median_hours_saved,PASS,Conditional on detected failures vs next-day 08:00 manual report.
+SPC-008,SPC / Early Warning,P90 modeled hours saved,28.44,hours,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.p90_hours_saved,PASS,90th-percentile latency reduction for detected failures.
+SPC-009,SPC / Early Warning,Failures detected before manual report,100.0,%,MEASURED,reports/spc_backtest_summary.json,methods.WE+EWMA+T2.pct_failures_before_manual,PASS,100% of failures flagged before the next-day 08:00 manual review.
+SPC-010,SPC / Early Warning,Overall latency reduction (WE),100.0,%,MEASURED,reports/spc_backtest_summary.json,methods.WE.overall_latency_reduction_pct,PASS,100% reduction: median detection at lot timestamp vs next-day 08:00.
+SPC-011,SPC / Early Warning,Precision target (>=60%) met,No,boolean,MEASURED,reports/spc_backtest_summary.json,target_assessment.WE+EWMA+T2.precision_met,FAIL,4.21% precision; 60% target NOT achieved. Low prevalence (4.19%) makes high precision difficult with univariate rules.
+SPC-012,SPC / Early Warning,Latency target (>=70%) met,Yes,boolean,MEASURED,reports/spc_backtest_summary.json,target_assessment.WE+EWMA+T2.latency_reduction_met_for_detected_failures,PASS,100% latency reduction achieved for detected failures.
+SPC-013,SPC / Early Warning,Precision (WE only),4.23,%,MEASURED,reports/spc_backtest_summary.json,methods.WE.precision,FAIL,4.23% precision with Western Electric rules alone.
+OEE-001,OEE,Plant Availability,91.29,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.availability,PASS,Aggregate A = SUM(run_time) / SUM(planned_time).
+OEE-002,OEE,Plant Performance,84.5,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.performance,PASS,Aggregate P = SUM(ideal_basis) / SUM(run_time).
+OEE-003,OEE,Plant Quality,96.46,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.quality,PASS,Aggregate Q = SUM(good_count) / SUM(total_count).
+OEE-004,OEE,Plant OEE,74.41,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.oee,PASS,OEE = A x P x Q from additive aggregates.
+OEE-005,OEE,Total units produced (180d),1074073,units,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.total_units,PASS,MES simulation horizon: 4 lines x 3 shifts x 180 days.
+OEE-006,OEE,Good units produced (180d),1036026,units,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.plant_overview.good_units,PASS,
+OEE-007,OEE,Total scrap cost (180d),555891.0,$,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.loss_decomposition.total_scrap_cost,PASS,Sum of unit_scrap_cost x scrap_count across all quality events.
+OEE-008,OEE,Unplanned downtime (180d),2859.13,hours,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.loss_decomposition.unplanned_downtime_hours,PASS,
+OEE-009,OEE,OEE L1,76.59,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.line_breakdown.L1.oee,PASS,Line-level OEE for L1.
+OEE-010,OEE,OEE L2,70.92,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.line_breakdown.L2.oee,PASS,Line-level OEE for L2.
+OEE-011,OEE,OEE L3,73.2,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.line_breakdown.L3.oee,PASS,Line-level OEE for L3.
+OEE-012,OEE,OEE L4,76.93,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.line_breakdown.L4.oee,PASS,Line-level OEE for L4.
+OEE-013,OEE,OEE Shift A,76.0,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.shift_breakdown.A.oee,PASS,Shift-level OEE for shift A.
+OEE-014,OEE,OEE Shift B,75.37,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.shift_breakdown.B.oee,PASS,Shift-level OEE for shift B.
+OEE-015,OEE,OEE Shift C,71.89,%,MEASURED,reports/powerbi_reconciliation_summary.json,dax_evaluation.shift_breakdown.C.oee,PASS,Shift-level OEE for shift C.
+PAR-001,Pareto,Top-3 scrap cost concentration,74.38,%,MEASURED,reports/pareto_summary.json,key_findings.top_3_scrap_cost_share,PASS,"Causes: dimensional, surface defect, contamination."
+PAR-002,Pareto,Top-3 scrap cost (180d),413447.0,$,MEASURED,reports/pareto_summary.json,scrap.overall.top_n_scrap_cost,PASS,"$413,447 of $555,891 total."
+PAR-003,Pareto,Top-3 downtime concentration (unplanned),87.75,%,MEASURED,reports/pareto_summary.json,key_findings.top_3_downtime_share_unplanned,PASS,"Reasons: minor_stop, changeover, breakdown."
+PAR-004,Pareto,"Top-3 downtime hours (unplanned, 180d)",2508.99,hours,MEASURED,reports/pareto_summary.json,downtime_unplanned.overall.top_n_duration_hours,PASS,"Of 2,859.1 total unplanned downtime hours."
+WIF-001,What-If (MODELED),Scenario reduction rate,30.0,%,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.reduction_rate,PASS,30% reduction of top-3 scrap + top-3 downtime losses.
+WIF-002,What-If (MODELED),Projected OEE (combined 30%),78.96,%,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.oee_new,PASS,"MODELED scenario: projected outcome, not realized savings."
+WIF-003,What-If (MODELED),OEE uplift (combined 30%),4.55,percentage points,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.oee_delta_pts,PASS,"MODELED scenario: projected outcome, not realized savings."
+WIF-004,What-If (MODELED),Projected extra good units/year,63864,units/year,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.annual_extra_good_units,PASS,"MODELED scenario: projected outcome, not realized savings."
+WIF-005,What-If (MODELED),Projected annual scrap cost avoided,251513.59,$/year,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.annual_scrap_cost_avoided,PASS,"MODELED scenario: projected outcome, not realized savings."
+WIF-006,What-If (MODELED),Projected total annual recoverable value,1688452.14,$/year,MODELED,reports/oee_whatif_summary.json,headline_scenarios_30pct.combined.total_annual_recoverable_value,PASS,"MODELED scenario: projected outcome, not realized savings. Assumes unit contribution margin $22.5/unit from config.yaml."
+WIF-007,What-If (MODELED),Unit contribution margin (config),22.5,$/unit,CONFIGURED_BASELINE,src/config.yaml,whatif.economic_assumptions.unit_contribution_margin,PASS,"Configured assumption, not a measured financial result."
+DQ-001,Data Quality / Validation,DQ checks passed,65,checks,VALIDATION,reports/dq_check_summary.json,passed_checks,PASS,65 of 65 checks passed.
+DQ-002,Data Quality / Validation,DQ violations,0,violations,VALIDATION,reports/dq_check_summary.json,total_violations,PASS,Zero constraint violations in production data.
+DQ-003,Data Quality / Validation,SQL vs Power BI reconciliation,PASS,status,VALIDATION,reports/powerbi_reconciliation_summary.json,reconciliation.overall_status,PASS,Max relative diff: 1.49e-14% (tolerance: 0.1%).
+DQ-004,Data Quality / Validation,DQ check runtime,29.9,seconds,VALIDATION,reports/dq_check_summary.json,runtime_seconds,PASS,
+DQ-005,Data Quality / Validation,Database load reconciliation,PASS,status,VALIDATION,reports/db_load_summary.json,reconciliation + rejected_rows,PASS,"Source->staging->fact counts match; 0 rejected rows, 0 unresolved FKs. Empty DB -> complete load; reruns stable via TRUNCATE staging + INSERT ON CONFLICT DO NOTHING."
+DQ-006,Data Quality / Validation,Pipeline status,SUCCESS,status,VALIDATION,reports/pipeline_run_summary.json,status,PASS,1 stage(s) recorded as DRY_RUN (dashboard_spec); not a full 14-stage production run. Status reflects dry-run validation.
+DQ-007,Data Quality / Validation,Pipeline runtime,0.0,seconds,VALIDATION,reports/pipeline_run_summary.json,total_duration_seconds,PASS,End-to-end orchestrator wall time for 1 recorded stage(s).
+SCL-001,Scale,SECOM lots processed,1567,lots,MEASURED,reports/dq_check_summary.json,source_system_summary.quality_lots,PASS,"UCI SECOM dataset: 1,567 wafer lots x 590 sensors."
+SCL-002,Scale,MetroPT-3 sensor readings processed,22754220,readings,MEASURED,reports/dq_check_summary.json,source_system_summary.sensor_readings_by_system.METROPT3,PASS,"UCI MetroPT-3 dataset: 1,516,948 rows x 15 signals."
+SCL-003,Scale,MES production rows,17280,rows,MEASURED,reports/dq_check_summary.json,source_system_summary.production_hourly_rows,PASS,4 lines x 3 shifts x 180 days x 8 hours.
+SCL-004,Scale,MES simulation horizon,180,days,CONFIGURED_BASELINE,src/config.yaml,mes.days,PASS,Fixed-seed simulation.

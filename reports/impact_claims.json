@@ -1,0 +1,79 @@
+[
+  {
+    "claim": "Automated a 6-hour/week manual Excel reporting workflow to under 10 minutes/week, saving an estimated 303 analyst-hours per year (97.2% reduction).",
+    "evidence_type": "CONFIGURED_BASELINE",
+    "source": "reports/manual_reporting_baseline.json",
+    "safe_to_use": true,
+    "caveat": "Baseline timing is from a documented 14-step workflow replica; actual analyst efficiency may vary."
+  },
+  {
+    "claim": "Backtested SPC early-warning engine on 1,097 Phase II SECOM lots: Western Electric rules achieved 100% recall (all 46 failures detected) with 4.23% precision.",
+    "evidence_type": "MEASURED",
+    "source": "reports/spc_backtest_summary.json",
+    "safe_to_use": true,
+    "caveat": "Precision is well below the 60% target due to low fail prevalence (4.19%). High alert rate limits operational value without further rule refinement."
+  },
+  {
+    "claim": "SPC alerts reduced defect-to-detection latency by 100% (median 18.0 hours saved) versus a next-day-08:00 manual report baseline.",
+    "evidence_type": "MEASURED",
+    "source": "reports/spc_backtest_summary.json",
+    "safe_to_use": true,
+    "caveat": "Latency is conditional on detected failures and assumes zero compute/response delay in a historical backtest."
+  },
+  {
+    "claim": "Decomposed OEE into Availability (91.29%), Performance (84.50%), and Quality (96.46%) across 4 lines x 3 shifts x 180 days of simulated MES data.",
+    "evidence_type": "MEASURED",
+    "source": "reports/powerbi_reconciliation_summary.json",
+    "safe_to_use": true,
+    "caveat": "MES data is simulated with fixed seed and injected scenarios."
+  },
+  {
+    "claim": "Pareto analysis identified top-3 scrap causes (dimensional, surface defect, contamination) accounting for 74.38% of total scrap cost.",
+    "evidence_type": "MEASURED",
+    "source": "reports/pareto_summary.json",
+    "safe_to_use": true,
+    "caveat": "Based on simulated MES quality events."
+  },
+  {
+    "claim": "Modeled a 30% combined loss-reduction scenario projecting OEE from 74.41% to 78.96% (+4.55 pts) with projected annual recoverable value of $1,688,452.14.",
+    "evidence_type": "MODELED",
+    "source": "reports/oee_whatif_summary.json",
+    "safe_to_use": true,
+    "caveat": "This is a MODELED projection, not a realized financial result. Assumes $22.50/unit contribution margin from config.yaml and 30% reduction in top-3 losses."
+  },
+  {
+    "claim": "Passed 65 automated data quality checks with zero violations across PostgreSQL star schema.",
+    "evidence_type": "VALIDATION",
+    "source": "reports/dq_check_summary.json",
+    "safe_to_use": true,
+    "caveat": ""
+  },
+  {
+    "claim": "SQL-to-DAX KPI reconciliation passed within 0.1% tolerance (max diff: 1.49e-14%).",
+    "evidence_type": "VALIDATION",
+    "source": "reports/powerbi_reconciliation_summary.json",
+    "safe_to_use": true,
+    "caveat": ""
+  },
+  {
+    "claim": "Saved $1.69M in annual scrap and production losses.",
+    "evidence_type": "MODELED",
+    "source": "reports/oee_whatif_summary.json",
+    "safe_to_use": false,
+    "caveat": "UNSAFE: This presents a modeled projection as a realized saving. Use 'Projected annual recoverable value of $1.69M under 30% loss-reduction scenario' instead."
+  },
+  {
+    "claim": "Prevented 38,047 defective units from reaching customers.",
+    "evidence_type": "MODELED",
+    "source": "N/A",
+    "safe_to_use": false,
+    "caveat": "UNSAFE: No defects were prevented. 38,047 is the total scrap count in simulated MES data. SPC alerts are a backtested detection capability, not a prevention mechanism."
+  },
+  {
+    "claim": "Improved factory OEE by 4.55 percentage points.",
+    "evidence_type": "MODELED",
+    "source": "reports/oee_whatif_summary.json",
+    "safe_to_use": false,
+    "caveat": "UNSAFE: 4.55 pts is a modeled what-if projection. No factory OEE was actually improved."
+  }
+]
