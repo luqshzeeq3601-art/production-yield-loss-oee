@@ -17,7 +17,13 @@ import pandas as pd
 from src.config_loader import load_config
 
 
-SQL_FILES = ("01_schema.sql", "02_staging.sql", "03_dims.sql", "04_facts.sql")
+SQL_FILES = (
+    "01_schema.sql",
+    "02_staging.sql",
+    "03_dims.sql",
+    "04_facts.sql",
+    "05_views_kpi.sql",
+)
 
 STAGING_TABLES = (
     "staging.secom_cleaned",
