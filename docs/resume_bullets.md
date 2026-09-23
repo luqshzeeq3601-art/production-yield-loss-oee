@@ -18,7 +18,7 @@ All claims trace to `reports/impact_claims.json` (safe_to_use = true only).
 
 ## C. 60-second interview explanation
 
-"Plants found yield problems days late in Excel, so I built a pipeline that ingests SECOM and compressor sensor data plus simulated MES operations into a PostgreSQL star schema, runs SPC early-warning and OEE/Pareto/RCA analytics, and serves a Power BI layer. It decomposes OEE to 74.41%, concentrates three-quarters of scrap and almost 90% of downtime into three causes each, and cuts reporting from six hours to under ten minutes. The SPC backtest caught every failure about 18 hours earlier — but at 4% precision, so I reported the miss honestly and recommended multivariate-first refinement instead of claiming victory. Everything reconciles: 229 tests, 65 DQ checks, 75 cross-system checks."
+"Plants found yield problems days late in Excel, so I built a pipeline that ingests SECOM and compressor sensor data plus simulated MES operations into a PostgreSQL star schema, runs SPC early-warning and OEE/Pareto/RCA analytics, and serves a Power BI layer. It decomposes OEE to 74.41%, concentrates three-quarters of scrap and almost 90% of downtime into three causes each, and cuts reporting from six hours to under ten minutes. The SPC backtest caught every failure about 18 hours earlier — but at 4% precision, so I reported the miss honestly and recommended multivariate-first refinement instead of claiming victory. Everything reconciles: 259 tests, 65 DQ checks, 75 cross-system checks."
 
 ## D. Technical interview talking points
 
@@ -31,4 +31,4 @@ All claims trace to `reports/impact_claims.json` (safe_to_use = true only).
 
 ## E. Recruiter-friendly project summary
 
-End-to-end manufacturing analytics platform (Python, PostgreSQL, Power BI) over 1.5M+ sensor observations and 180 days of operations: OEE 74.41% decomposed, top causes isolated, reporting automated (6 h to <10 min target), SPC backtest with 100% recall reported transparently at 4.21% precision, and a modeled $1.69M recovery scenario — all validated by 229 tests and 75/75 reconciliation checks.
+End-to-end manufacturing analytics platform (Python, PostgreSQL, Power BI) over 1.5M+ sensor observations and 180 days of operations: OEE 74.41% decomposed, top causes isolated, reporting automated (6 h to <10 min target), SPC backtest with 100% recall reported transparently at 4.21% precision, and a modeled $1.69M recovery scenario — all validated by 259 tests and 75/75 reconciliation checks.
