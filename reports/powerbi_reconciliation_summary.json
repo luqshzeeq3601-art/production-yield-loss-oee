@@ -1,0 +1,194 @@
+{
+  "dax_evaluation": {
+    "plant_overview": {
+      "planned_production_time_h": 17175.04306666667,
+      "run_time_h": 15678.921966666667,
+      "ideal_operating_basis_h": 13249.168055555556,
+      "total_units": 1074073,
+      "good_units": 1036026,
+      "scrap_units": 38047,
+      "yield_pct": 0.9645768956113784,
+      "scrap_rate_pct": 0.03542310438862163,
+      "availability": 0.9128898195950568,
+      "performance": 0.8450305501694084,
+      "quality": 0.9645768956113784,
+      "oee": 0.7440937028719504,
+      "oee_target": 0.85,
+      "oee_vs_target": -0.10590629712804955
+    },
+    "loss_decomposition": {
+      "downtime_minutes": 177844.99,
+      "downtime_hours": 2964.0831666666663,
+      "unplanned_downtime_hours": 2859.1258499999994,
+      "planned_downtime_hours": 104.95731666666667,
+      "availability_loss_hours": 1496.1211000000021,
+      "performance_loss_hours": 2429.753911111111,
+      "quality_equivalent_loss_hours": 496.5361111111111,
+      "total_scrap_cost": 555891.0,
+      "top3_scrap_cost": 413447.0,
+      "top3_scrap_share": 0.7437555204167724
+    },
+    "manpower_and_capacity": {
+      "planned_headcount": 12240,
+      "actual_headcount": 11432,
+      "manpower_gap": 808,
+      "capacity_utilization": 0.9128898195950568
+    },
+    "station_bottlenecks": {
+      "avg_processing_time_s": 37.99576898148148,
+      "avg_wait_time_s": 72.65497305555556,
+      "bottleneck_processing_time_s": 65.01385833333333
+    },
+    "line_breakdown": {
+      "L1": {
+        "planned_hours": 4292.1688,
+        "run_hours": 3929.5268,
+        "ideal_hours": 3375.9083333333333,
+        "total_units": 273460,
+        "good_units": 266295,
+        "availability": 0.9155107786068432,
+        "performance": 0.8591131973787106,
+        "quality": 0.973798727419001,
+        "oee": 0.765919373647001
+      },
+      "L2": {
+        "planned_hours": 4300.325733333333,
+        "run_hours": 3908.56475,
+        "ideal_hours": 3133.3180555555555,
+        "total_units": 254264,
+        "good_units": 247493,
+        "availability": 0.9088996955982529,
+        "performance": 0.8016543810757019,
+        "quality": 0.9733701979045402,
+        "oee": 0.7092203253798434
+      },
+      "L3": {
+        "planned_hours": 4287.005866666666,
+        "run_hours": 3893.01085,
+        "ideal_hours": 3346.126388888889,
+        "total_units": 271436,
+        "good_units": 254547,
+        "availability": 0.9080955265934789,
+        "performance": 0.8595214649578715,
+        "quality": 0.9377790713096273,
+        "oee": 0.7319624453643993
+      },
+      "L4": {
+        "planned_hours": 4295.542666666666,
+        "run_hours": 3947.8195666666666,
+        "ideal_hours": 3393.8152777777777,
+        "total_units": 274913,
+        "good_units": 267691,
+        "availability": 0.9190502511595742,
+        "performance": 0.8596682853576662,
+        "quality": 0.9737298709046135,
+        "oee": 0.7693228932280798
+      }
+    },
+    "shift_breakdown": {
+      "A": {
+        "planned_hours": 5655.043066666667,
+        "run_hours": 5184.0156166666675,
+        "ideal_hours": 4452.631944444444,
+        "total_units": 360847,
+        "good_units": 348300,
+        "availability": 0.9167066555555616,
+        "performance": 0.858915611698619,
+        "quality": 0.9652290305863704,
+        "oee": 0.7599959124320755
+      },
+      "B": {
+        "planned_hours": 5760.0,
+        "run_hours": 5238.854466666667,
+        "ideal_hours": 4501.970833333334,
+        "total_units": 365445,
+        "good_units": 352414,
+        "availability": 0.9095233449074074,
+        "performance": 0.85934260284917,
+        "quality": 0.9643421034629014,
+        "oee": 0.753722226240503
+      },
+      "C": {
+        "planned_hours": 5760.0,
+        "run_hours": 5256.0518833333335,
+        "ideal_hours": 4294.565277777778,
+        "total_units": 347781,
+        "good_units": 335312,
+        "availability": 0.9125090075231482,
+        "performance": 0.8170705641996459,
+        "quality": 0.9641469775519652,
+        "oee": 0.7188528007758785
+      }
+    }
+  },
+  "reconciliation": {
+    "max_relative_diff_pct": 1.49204733266801e-14,
+    "overall_status": "PASS",
+    "tolerance_threshold_pct": 0.1,
+    "metrics": [
+      {
+        "metric": "Availability",
+        "sql_value": 0.9128898195950569,
+        "dax_value": 0.9128898195950568,
+        "absolute_diff": 1.1102230246251565e-16,
+        "relative_diff_pct": 1.2161632223236243e-14,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "Performance",
+        "sql_value": 0.8450305501694084,
+        "dax_value": 0.8450305501694084,
+        "absolute_diff": 0.0,
+        "relative_diff_pct": 0.0,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "Quality",
+        "sql_value": 0.9645768956113784,
+        "dax_value": 0.9645768956113784,
+        "absolute_diff": 0.0,
+        "relative_diff_pct": 0.0,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "OEE",
+        "sql_value": 0.7440937028719505,
+        "dax_value": 0.7440937028719504,
+        "absolute_diff": 1.1102230246251565e-16,
+        "relative_diff_pct": 1.49204733266801e-14,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "Total Units",
+        "sql_value": 1074073.0,
+        "dax_value": 1074073.0,
+        "absolute_diff": 0.0,
+        "relative_diff_pct": 0.0,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "Good Units",
+        "sql_value": 1036026.0,
+        "dax_value": 1036026.0,
+        "absolute_diff": 0.0,
+        "relative_diff_pct": 0.0,
+        "passes_01pct_tolerance": true
+      },
+      {
+        "metric": "Scrap Units",
+        "sql_value": 38047.0,
+        "dax_value": 38047.0,
+        "absolute_diff": 0.0,
+        "relative_diff_pct": 0.0,
+        "passes_01pct_tolerance": true
+      }
+    ]
+  },
+  "model_artifacts": {
+    "theme_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\theme.json",
+    "model_mapping_csv": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\model_mapping.csv",
+    "measures_dax": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\measures.dax",
+    "measure_catalog_md": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\powerbi\\measure_catalog.md",
+    "powerbi_model_doc": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\docs\\powerbi_model.md"
+  }
+}

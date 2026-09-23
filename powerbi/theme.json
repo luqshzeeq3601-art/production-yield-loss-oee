@@ -1,0 +1,74 @@
+{
+  "name": "Manufacturing OEE Operations Theme",
+  "dataColors": [
+    "#1B365D",
+    "#2C5282",
+    "#319795",
+    "#D69E2E",
+    "#E53E3E",
+    "#805AD5",
+    "#4A5568",
+    "#CBD5E0"
+  ],
+  "background": "#F7FAFC",
+  "foreground": "#1A202C",
+  "tableAccent": "#1B365D",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "show": true,
+            "fontColor": { "solid": { "color": "#1A202C" } },
+            "fontSize": 12,
+            "fontFamily": "Segoe UI Semibold"
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#E2E8F0" } },
+            "radius": 4
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#000000" } },
+            "transparency": 95,
+            "preset": "Custom",
+            "position": "Outer",
+            "shadowAngle": 90,
+            "shadowDistance": 2,
+            "shadowBlur": 4
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
+          {
+            "fontFamily": "Segoe UI",
+            "fontSize": 24,
+            "color": { "solid": { "color": "#1B365D" } }
+          }
+        ],
+        "categoryLabels": [
+          {
+            "fontFamily": "Segoe UI",
+            "fontSize": 10,
+            "color": { "solid": { "color": "#718096" } }
+          }
+        ]
+      }
+    }
+  }
+}
