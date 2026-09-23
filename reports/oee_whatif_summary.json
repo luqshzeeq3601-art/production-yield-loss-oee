@@ -1,0 +1,120 @@
+{
+  "baseline": {
+    "planned_time_min": 1030502.584,
+    "run_time_min": 940735.318,
+    "ideal_basis_min": 794950.0833333333,
+    "total_count": 1074073,
+    "good_count": 1036026,
+    "scrap_count": 38047,
+    "total_scrap_cost": 555891.0,
+    "availability": 0.9128898195950569,
+    "performance": 0.8450305501694083,
+    "quality": 0.9645768956113784,
+    "oee": 0.7440937028719504,
+    "top3_scrap_causes": [
+      "dimensional",
+      "surface defect",
+      "contamination"
+    ],
+    "top3_scrap_cost": 413447.0,
+    "top3_scrap_units": 28087,
+    "top3_downtime_reasons": [
+      "minor_stop",
+      "changeover",
+      "breakdown"
+    ],
+    "top3_downtime_min": 150539.393,
+    "top3_availability_downtime_min": 69822.249,
+    "top3_performance_downtime_min": 80717.144
+  },
+  "economic_assumptions": {
+    "unit_contribution_margin": 22.5,
+    "operating_days_per_year": 365,
+    "annual_horizon_days": 365,
+    "baseline_horizon_days": 180
+  },
+  "headline_scenarios_30pct": {
+    "scrap_only": {
+      "scenario_mode": "scrap_only",
+      "reduction_rate": 0.3,
+      "reduction_pct": "30%",
+      "availability_baseline": 0.9128898195950569,
+      "availability_new": 0.9128898195950569,
+      "availability_delta_pts": 0.0,
+      "performance_baseline": 0.8450305501694083,
+      "performance_new": 0.8450305501694083,
+      "performance_delta_pts": 0.0,
+      "quality_baseline": 0.9645768956113784,
+      "quality_new": 0.9724218931115483,
+      "quality_delta_pts": 0.784499750016987,
+      "oee_baseline": 0.7440937028719504,
+      "oee_new": 0.7501454891685967,
+      "oee_delta_pts": 0.6051786296646267,
+      "oee_relative_gain_pct": 0.813309704582691,
+      "extra_good_units_180d": 8426.099999999977,
+      "annual_extra_good_units": 17086.258333333284,
+      "annual_scrap_cost_avoided": 251513.59166666665,
+      "annual_contribution_margin_value": 384440.8124999989,
+      "total_annual_recoverable_value": 635954.4041666655
+    },
+    "downtime_only": {
+      "scenario_mode": "downtime_only",
+      "reduction_rate": 0.3,
+      "reduction_pct": "30%",
+      "availability_baseline": 0.9128898195950569,
+      "availability_new": 0.9332164786692082,
+      "availability_delta_pts": 2.032665907415132,
+      "performance_baseline": 0.8450305501694083,
+      "performance_new": 0.8702105404196303,
+      "performance_delta_pts": 2.5179990250221995,
+      "quality_baseline": 0.9645768956113784,
+      "quality_new": 0.9645768956113784,
+      "quality_delta_pts": 0.0,
+      "oee_baseline": 0.7440937028719504,
+      "oee_new": 0.7833278967824184,
+      "oee_delta_pts": 3.9234193910468007,
+      "oee_relative_gain_pct": 5.272749085100071,
+      "extra_good_units_180d": 23068.443575477926,
+      "annual_extra_good_units": 46777.67725027468,
+      "annual_scrap_cost_avoided": 0.0,
+      "annual_contribution_margin_value": 1052497.7381311804,
+      "total_annual_recoverable_value": 1052497.7381311804
+    },
+    "combined": {
+      "scenario_mode": "combined",
+      "reduction_rate": 0.3,
+      "reduction_pct": "30%",
+      "availability_baseline": 0.9128898195950569,
+      "availability_new": 0.9332164786692082,
+      "availability_delta_pts": 2.032665907415132,
+      "performance_baseline": 0.8450305501694083,
+      "performance_new": 0.8702105404196303,
+      "performance_delta_pts": 2.5179990250221995,
+      "quality_baseline": 0.9645768956113784,
+      "quality_new": 0.972251018943262,
+      "quality_delta_pts": 0.7674123331883664,
+      "oee_baseline": 0.7440937028719504,
+      "oee_new": 0.7895600125593604,
+      "oee_delta_pts": 4.5466309687409945,
+      "oee_relative_gain_pct": 6.110293570813104,
+      "extra_good_units_180d": 31494.543575477786,
+      "annual_extra_good_units": 63863.93558360773,
+      "annual_scrap_cost_avoided": 251513.59166666665,
+      "annual_contribution_margin_value": 1436938.550631174,
+      "total_annual_recoverable_value": 1688452.1422978404
+    }
+  },
+  "key_impact_summary": {
+    "baseline_oee": 0.7440937028719504,
+    "combined_30pct_oee": 0.7895600125593604,
+    "oee_uplift_pts": 4.5466309687409945,
+    "annual_scrap_cost_avoided": 251513.59166666665,
+    "annual_extra_good_units": 63863.93558360773,
+    "total_annual_recoverable_value": 1688452.1422978404
+  },
+  "outputs": {
+    "scenarios_csv": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\oee_whatif_scenarios.csv",
+    "sensitivity_csv": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\oee_whatif_sensitivity.csv",
+    "summary_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\oee_whatif_summary.json"
+  }
+}
