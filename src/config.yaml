@@ -171,3 +171,9 @@ mes:
     station_operations: data/processed/mes_station_operations.csv
     quality_events: data/processed/mes_quality_events.csv
     simulation_summary: reports/mes_simulation_summary.json
+pareto:
+  top_n: 3
+  outputs:
+    scrap_pareto: reports/pareto_scrap.csv
+    downtime_pareto: reports/pareto_downtime.csv
+    summary: reports/pareto_summary.json
