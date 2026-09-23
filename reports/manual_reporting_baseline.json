@@ -1,0 +1,39 @@
+{
+  "baseline_workflow": {
+    "total_steps": 14,
+    "weekly_manual_minutes": 360,
+    "weekly_manual_hours": 6.0,
+    "annual_manual_hours": 312.0,
+    "operator_roles": [
+      "Operations Analyst",
+      "Quality Analyst",
+      "Manufacturing Lead"
+    ]
+  },
+  "automation_target": {
+    "target_weekly_minutes": 10.0,
+    "target_annual_hours": 8.7,
+    "expected_annual_hours_saved": 303.3,
+    "efficiency_gain_pct": 97.2
+  },
+  "manual_error_risks": [
+    "Formula copy-paste drift across new lines/shifts resulting in distorted OEE figures.",
+    "Averaging row-level hourly OEE percentages instead of weighting aggregate components.",
+    "Stale VLOOKUP reference tables after product ideal cycle times or scrap costs change.",
+    "1-3 day reporting latency delaying critical root cause intervention and early scrap prevention.",
+    "Unsynchronized shift timestamp boundaries between maintenance logs and production counters."
+  ],
+  "step_breakdown_by_phase": {
+    "1. Data Extraction": 80,
+    "2. Data Ingestion & Staging": 55,
+    "3. Data Cleaning & Validation": 55,
+    "4. KPI Calculation & Modeling": 95,
+    "5. Report Assembly & Formatting": 60,
+    "6. Distribution & Archival": 15
+  },
+  "outputs": {
+    "workbook": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\excel\\manual_report_baseline.xlsx",
+    "steps_csv": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\manual_reporting_steps.csv",
+    "summary_json": "C:\\Users\\luqma\\OneDrive\\Desktop\\Data Analyst Project\\Production Yield Loss and OEE Early\\reports\\manual_reporting_baseline.json"
+  }
+}
