@@ -1,0 +1,30 @@
+name: ci
+
+on: [push, pull_request]
+
+# CI runs the full suite EXCEPT three tests that need the locally reproducible
+# 224 MB readings file (data/processed/metropt3_readings.csv, gitignored).
+# Full local validation (all 259 tests) is documented in README.md.
+# Deselected (each reads the gitignored readings file; regenerate locally via
+# `py -3.11 -m src.ingest_metropt3`, then run the full suite):
+# - tests/test_rca_statistical.py::test_metropt3_failure_window_contrasts
+# - tests/test_rca_statistical.py::test_run_produces_valid_rca_report
+# - tests/test_schema.py::test_staging_covers_actual_sources
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: pip install -e .
+      - name: Full suite (CI-safe subset)
+        run: >-
+          python -m pytest -q -W error
+          --deselect tests/test_rca_statistical.py::test_metropt3_failure_window_contrasts
+          --deselect tests/test_rca_statistical.py::test_run_produces_valid_rca_report
+          --deselect tests/test_schema.py::test_staging_covers_actual_sources
