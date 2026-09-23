@@ -1,0 +1,33 @@
+{
+  "pipeline_name": "Production Yield Loss & OEE Early-Warning Pipeline",
+  "status": "SUCCESS",
+  "started_at": "2026-09-23T07:02:37.522540+00:00",
+  "completed_at": "2026-09-23T07:02:37.555060+00:00",
+  "total_duration_seconds": 0.033,
+  "stages_executed": 1,
+  "stages_succeeded": 1,
+  "stages_failed": 0,
+  "stages_skipped": 0,
+  "failure_stage": null,
+  "failure_error": null,
+  "environment": {
+    "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "config_path": "src/config.yaml"
+  },
+  "stages": [
+    {
+      "name": "dashboard_spec",
+      "description": "7-page Power BI dashboard visual mappings, layout specs, and assembly guide",
+      "db_dependent": false,
+      "started_at": "2026-09-23T07:02:37.555060+00:00",
+      "completed_at": "2026-09-23T07:02:37.555060+00:00",
+      "duration_seconds": 0.0,
+      "status": "DRY_RUN",
+      "outputs": {
+        "simulated": true
+      },
+      "error": null
+    }
+  ]
+}
