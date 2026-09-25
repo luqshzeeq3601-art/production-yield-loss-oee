@@ -28,8 +28,8 @@ secrets/
 *.pbit.tmp
 
 # Python build artifacts.
-build/
-dist/
+/build/
+/dist/
 *.egg-info/
 
 # Python bytecode and caches.
