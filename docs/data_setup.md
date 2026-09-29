@@ -28,3 +28,17 @@ py -3.11 -m scripts.verify_data --processed-only
 ```
 
 checks expected files, required columns, and row-count ranges for the committed processed layer without needing raw downloads or a database. Raw-file checks run only when `data/raw/` is present.
+
+## Power BI assembly data path
+
+`py -3.11 -m scripts.bootstrap_powerbi_db prepare` uses the existing loader's
+explicit serving profile. It loads all six MES sources (including 2,160 manpower
+and 10,800 station rows), cleaned SECOM, compact MetroPT interval/state evidence
+for DQ, and frozen analytical report snapshots. No dashboard uses MetroPT
+reading-level data; the large CSV and raw MetroPT download are not assembly blockers.
+The default full analytical loader/pipeline still require them, unchanged.
+
+The serving profile runs 59 DQ checks and explicitly excludes six checks tied
+to MetroPT readings. `--full-analytics` loads the complete real processed dataset
+and runs all 65. See `powerbi/powerbi_connection_checklist.md` for persistent
+PostgreSQL startup, local environment credentials, import relations, and validation.

@@ -2,7 +2,7 @@
 
 Finds yield drops and line bottlenecks from sensor and MES data before the next-morning manual report. Built with PostgreSQL, Python (pandas, SciPy), Power BI, and Excel on the real UCI SECOM and MetroPT-3 datasets plus a simulated MES.
 
-**Status:** Complete and validated — 259 tests, 65/65 DQ checks, 75/75 reconciliation checks. O1 PARTIAL (precision miss reported honestly); O2/O3 achieved.
+**Status:** Analytics verified; repository/environment prepared for manual Power BI Desktop assembly — 275 tests, 65/65 DQ checks, 75/75 reconciliation checks. O1 PARTIAL (precision miss reported honestly); O2/O3 achieved.
 
 ## Results at a Glance
 
@@ -13,7 +13,7 @@ Finds yield drops and line bottlenecks from sensor and MES data before the next-
 | Top-3 downtime concentration | 87.75% of unplanned hours |
 | SPC recall / precision (Western Electric, 1,097 lots) | 100% / 4.23% — target 60% **not met** |
 | Reporting | 6 h/week → <10 min/week target (−97.2%) |
-| Validation | 259 tests · 65 DQ checks · 75 reconciliation checks |
+| Validation | 275 tests · 65 DQ checks · 75 reconciliation checks |
 
 ![OEE by line](docs/assets/oee_by_line.png) ![SPC recall vs precision](docs/assets/spc_method_performance.png)
 
@@ -136,12 +136,12 @@ Documented 14-step manual Excel baseline: 6.0 h/week (360 min) → automated tar
 
 ## Power BI
 
-Semantic model over the star schema with 36 DAX measures (Availability, Performance, Quality, OEE, OEE vs Target, Scrap Cost, Cum % Pareto, Yield %, Alerts Open, Median Alert Latency, Hours Saved, WO On-Time %, Capacity Utilization %, Manpower Gap, and others). SQL-to-DAX headline KPIs reconcile within 0.1% (measured ~1e-14%). Seven dashboard pages are fully specified (`powerbi/dashboard_specification.md` + `visual_mapping.json`): Executive Summary, OEE Decomposition, SPC Monitor, Pareto + RCA, Work Orders, Capacity + Manpower, Alerts + Data Quality. **The final `.pbix` requires manual assembly in Power BI Desktop** (`powerbi/desktop_assembly_guide.md`); no completed `.pbix` is committed.
+Semantic specification over 25 mapped relations with 83 DAX measures (Availability, Performance, Quality, OEE, OEE vs Target, Scrap Cost, Cum % Pareto, Yield %, Alerts Open, Median Alert Latency, Hours Saved, WO On-Time %, Capacity Utilization %, Manpower Gap, and others). SQL-to-DAX headline KPIs reconcile within 0.1% (measured ~1e-14%). Seven dashboard pages are fully specified (`powerbi/dashboard_specification.md` + `visual_mapping.json`): Executive Summary, OEE Decomposition, SPC Monitor, Pareto + RCA, Work Orders, Capacity + Manpower, Alerts + Data Quality. **The final `.pbix` requires manual assembly in Power BI Desktop** (`powerbi/desktop_assembly_guide.md`); no completed `.pbix` is committed.
 
 ## Testing & Validation
 
-- 259 pytest tests PASS, zero skipped, run under `-W error`
-- Ephemeral PostgreSQL 16 validation of the full schema/view/DQ chain
+- 275 pytest tests PASS, zero skipped, run under `-W error`
+- Ephemeral PostgreSQL test gates plus persistent PostgreSQL 16.15 live schema/view/DQ validation
 - Deterministic reruns verified (fixed seeds; impact metrics byte-identical)
 - 75/75 cross-system reconciliation PASS (source -> staging -> facts -> reports -> Power BI -> impact)
 
@@ -185,3 +185,9 @@ Raw SECOM/MetroPT-3 downloads and a PostgreSQL server are required for the full 
 - Economic recovery figures are **modeled projections**, never realized savings.
 - The Power BI `.pbix` is specified but requires manual Desktop assembly.
 - Alert latency is modeled from same-lot timestamps, not observed factory response time.
+
+## Power BI Assembly Preparation
+
+Start the persistent warehouse with `py -3.11 -m scripts.bootstrap_powerbi_db start`. Run `py -3.11 -m scripts.bootstrap_powerbi_db check --full-analytics` for the current full warehouse. The optional serving load (`prepare` without that flag) needs no MetroPT reading-level file and runs 59 scoped DQ checks with six explicit exclusions; the full pipeline remains unchanged.
+
+Connection: `127.0.0.1:5432/production_yield_oee`, database authentication using the ignored local `.env`. See the [connection checklist](powerbi/powerbi_connection_checklist.md), [seven-page readiness matrix](powerbi/page_readiness.md), [live evidence](reports/powerbi_readiness.json), and [current validation](reports/powerbi_preparation_validation.json). Actual Power BI-engine execution is still a Desktop assembly step. Work-order completion is 266/720 (36.94%); 454 orders are partial.

@@ -2,7 +2,16 @@
 
 ## 1. Overview & Architecture
 
-The Power BI analytical layer connects directly to the PostgreSQL 16 warehouse (`production_yield_oee`) using a Star Schema design. All facts are preserved at their native granularities, with dimension tables providing single-direction filter propagation.
+The Power BI analytical layer connects to the persistent PostgreSQL 16.15 warehouse at `127.0.0.1:5432/production_yield_oee`. `powerbi/model_mapping.csv` is the exact 25-relation import contract; all facts retain their original grain and single-direction dimension filters. `dim_date` imports the continuous `vw_powerbi_date`; `fact_sensor_reading` imports selected Phase II SECOM data from `vw_spc_readings`, excluding MetroPT readings. See the connection checklist for startup/authentication.
+
+Work Orders use `analytics.vw_work_orders`, linked to Date (order date), Line,
+Product. Source status is 266 complete and 454 partial of 720; completion 36.94%.
+The simulated on-time flag is 391/720 (54.31%), with no observed completion
+timestamp or station/shift assignment. SPC benchmarks, impact, DQ, reconciliation,
+and bridge helpers are disconnected evidence tables; preserve their caveats and
+do not apply 2024 MES filters to 2008 SPC benchmarks. Model column/measure/page
+dependencies are checked live by `src/powerbi_serving.py`; actual Power BI engine
+reconciliation remains for Desktop assembly.
 
 ```
                   +----------------------+
@@ -37,7 +46,7 @@ The Power BI analytical layer connects directly to the PostgreSQL 16 warehouse (
 ## 2. Dimension Tables (Conformance & Grain)
 
 1. **`dim_date`**: Calendar date dimension marked as the official date table in Power BI.
-   - Grain: One record per day (`2024-01-01` to `2024-06-28`).
+   - Grain: One record per calendar day across all source date ranges and work-order due dates; the serving view fills calendar gaps for Power BI's marked date table.
    - Surrogate Key: `date_key` (Format: `YYYYMMDD` integer).
    - Attributes: `full_date`, `year`, `quarter`, `month`, `month_name`, `week`, `day`, `day_of_week`, `is_weekend`.
 
@@ -65,7 +74,7 @@ The Power BI analytical layer connects directly to the PostgreSQL 16 warehouse (
    - Grain: Defect taxonomy (`dimensional`, `surface defect`, `contamination`, `tool wear`, `supplier material`, `other`).
 
 8. **`dim_sensor`**: Physical sensor dimension across SECOM and MetroPT-3.
-   - Grain: Sensor identifier (`sensor_000`–`sensor_590`, `TP2`, `Oil_temperature`, etc.).
+   - Grain: Observed sensor identifier: 446 retained SECOM codes (`sensor_000` through the source's `sensor_589`) plus 15 lowercase MetroPT signal codes (`tp2`, `oil_temperature`, etc.). No USL/LSL or measured criticality is fabricated.
 
 ---
 
@@ -79,8 +88,8 @@ The Power BI analytical layer connects directly to the PostgreSQL 16 warehouse (
 | `fact_quality_lot` | `SECOM lot (source_row)` | `target` (0/1), `target_label` (pass/fail) | 1,567 |
 | `fact_manpower_shift` | `line x shift x date` | `planned_headcount`, `actual_headcount` | 2,160 |
 | `fact_station_operation` | `line x station x shift x date` | `processing_time_s`, `wait_time_s`, `throughput_units` | 10,800 |
-| `fact_spc_alert` | `spc_alert_key` | `statistic_value`, `ucl`, `lcl`, `severity`, `status` | 1,154 |
-| `fact_sensor_reading` | `sensor x source x row` | `reading_value`, `reading_ts` | 23.4M |
+| `fact_spc_alert` | `spc_alert_key` | `statistic_value`, `control_limit_ucl`, `control_limit_lcl`, `severity`, `status` | 7,081 historical diagnostic events |
+| `fact_sensor_reading` (alias of `vw_spc_readings`) | `sensor x Phase II SECOM row` | `reading_value`, `reading_ts`, frozen `centerline`, `ucl`, `lcl`, WE marker | 10,756 imported readings; full warehouse remains 23,442,234 |
 
 ---
 
@@ -107,4 +116,7 @@ All DAX aggregations are mathematically identical to their SQL view counterparts
 - **Quality**: $\sum \text{good\_count} / \sum \text{total\_count}$
 - **OEE**: $A \times P \times Q$
 
-Maximum observed discrepancy between SQL and DAX KPI outputs across the entire warehouse: **0.00%** (Well within the $\le 0.1\%$ project tolerance gate).
+Source/component formula emulation reconciles within 0.1%; the committed
+artifact records a maximum relative difference of approximately 1.49e-14%.
+The preparation gate also queries live SQL aggregates. Actual Power BI-engine
+execution and Desktop headline reconciliation remain for the assembly task.

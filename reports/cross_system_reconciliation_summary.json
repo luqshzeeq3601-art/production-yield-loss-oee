@@ -17,15 +17,19 @@
   "exact_match_count": 51,
   "tolerance_match_count": 24,
   "known_exceptions": [
-    "database-live validation unavailable; committed db_load/dq evidence used instead",
+    "75 comparisons use committed db_load/dq/report evidence; live aggregate probe is supplemental",
     "MetroPT-3 logging gaps preserved as gaps per P1-002; not flagged as failures",
     "pipeline_run_summary.json is a single-stage DRY_RUN test artifact per impact DQ-006",
     "interactive PBIX assembly remains manual; only SQL-vs-DAX reconciliation checked"
   ],
   "modeled_metrics_checked": 6,
   "database_live": {
-    "available": false,
-    "reason": "no credentials in environment"
+    "available": true,
+    "production_rows": 17280,
+    "total_count": 1074073,
+    "good_count": 1036026,
+    "downtime_events": 24147,
+    "downtime_minutes": 177844.99000000014
   },
   "overall_status": "PASS"
 }

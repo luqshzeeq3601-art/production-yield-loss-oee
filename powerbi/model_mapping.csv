@@ -1,17 +1,26 @@
 table_name,table_type,schema_source,primary_key,foreign_keys,storage_mode,description
-dim_date,Dimension,analytics.dim_date,date_key,"",Import,"Calendar date dimension marked as date table with year, quarter, month, week, is_weekend"
-dim_line,Dimension,analytics.dim_line,line_key,"",Import,"Manufacturing line dimension (L1, L2, L3, L4)"
-dim_time_shift,Dimension,analytics.dim_time_shift,shift_key,"",Import,"8-hour shift dimension (Shift A: 06-14, Shift B: 14-22, Shift C: 22-06)"
-dim_station_machine,Dimension,analytics.dim_station_machine,station_machine_key,"",Import,"Workstation machines (Loading, Assembly, Processing S3, Inspection, Packing)"
-dim_product,Dimension,analytics.dim_product,product_key,"",Import,"Manufactured product catalog (P1-P4) with ideal cycle seconds and scrap cost"
-dim_downtime_reason,Dimension,analytics.dim_downtime_reason,downtime_reason_key,"",Import,"Downtime reason hierarchy mapped to OEE buckets (Availability, Performance, Planned)"
-dim_defect_cause,Dimension,analytics.dim_defect_cause,defect_cause_key,"",Import,"Scrap defect cause hierarchy (dimensional, surface defect, contamination, tool wear, supplier material, other)"
-dim_sensor,Dimension,analytics.dim_sensor,sensor_key,"",Import,"Screened sensor catalog from SECOM and MetroPT-3 with USL/LSL and criticality"
+dim_date,Dimension,analytics.vw_powerbi_date,date_key,,Import,Continuous calendar spanning source dates and work-order due dates; mark full_date as date table
+dim_line,Dimension,analytics.dim_line,line_key,,Import,"Manufacturing line dimension (L1, L2, L3, L4)"
+dim_time_shift,Dimension,analytics.dim_time_shift,shift_key,,Import,"8-hour shift dimension (Shift A: 06-14, Shift B: 14-22, Shift C: 22-06)"
+dim_station_machine,Dimension,analytics.dim_station_machine,station_machine_key,,Import,"Workstation machines (Loading, Assembly, Processing S3, Inspection, Packing)"
+dim_product,Dimension,analytics.dim_product,product_key,,Import,Manufactured product catalog (P1-P4) with ideal cycle seconds and scrap cost
+dim_downtime_reason,Dimension,analytics.dim_downtime_reason,downtime_reason_key,,Import,"Downtime reason hierarchy mapped to OEE buckets (Availability, Performance, Planned)"
+dim_defect_cause,Dimension,analytics.dim_defect_cause,defect_cause_key,,Import,"Scrap defect cause hierarchy (dimensional, surface defect, contamination, tool wear, supplier material, other)"
+dim_sensor,Dimension,analytics.dim_sensor,sensor_key,,Import,Observed SECOM/MetroPT sensor codes; no invented specification limits or criticality
 fact_production_hourly,Fact,analytics.fact_production_hourly,"line_key, shift_key, date_key, hour_in_shift","line_key -> dim_line, shift_key -> dim_time_shift, date_key -> dim_date, product_key -> dim_product",Import,"Hourly production grain: planned time, run time, ideal CT, actual CT, total count, good count, scrap count"
 fact_downtime_event,Fact,analytics.fact_downtime_event,downtime_event_key,"line_key -> dim_line, shift_key -> dim_time_shift, date_key -> dim_date, downtime_reason_key -> dim_downtime_reason, station_machine_key -> dim_station_machine",Import,"Downtime event grain: timestamps, duration minutes, planned status, supplier tag"
-fact_quality_scrap,Fact,analytics.fact_quality_scrap,quality_scrap_key,"date_key -> dim_date, line_key -> dim_line, product_key -> dim_product, defect_cause_key -> dim_defect_cause",Import,"Scrap cost grain: daily units affected and scrap cost by product and cause"
-fact_quality_lot,Fact,analytics.fact_quality_lot,quality_lot_key,"",Import,"SECOM wafer lot grain: pass/fail target labels for early warning SPC backtesting"
-fact_manpower_shift,Fact,analytics.fact_manpower_shift,"line_key, shift_key, date_key","line_key -> dim_line, shift_key -> dim_time_shift, date_key -> dim_date",Import,"Shift staffing grain: planned headcount vs actual headcount"
+fact_quality_scrap,Fact,analytics.fact_quality_scrap,quality_scrap_key,"date_key -> dim_date, line_key -> dim_line, product_key -> dim_product, defect_cause_key -> dim_defect_cause",Import,Scrap cost grain: daily units affected and scrap cost by product and cause
+fact_quality_lot,Fact,analytics.fact_quality_lot,quality_lot_key,,Import,SECOM wafer lot grain: pass/fail target labels for early warning SPC backtesting
+fact_manpower_shift,Fact,analytics.fact_manpower_shift,"line_key, shift_key, date_key","line_key -> dim_line, shift_key -> dim_time_shift, date_key -> dim_date",Import,Shift staffing grain: planned headcount vs actual headcount
 fact_station_operation,Fact,analytics.fact_station_operation,"line_key, station_machine_key, shift_key, date_key","line_key -> dim_line, station_machine_key -> dim_station_machine, shift_key -> dim_time_shift, date_key -> dim_date",Import,"Station bottleneck grain: processing time, wait time, throughput units"
-fact_spc_alert,Fact,analytics.fact_spc_alert,spc_alert_key,"sensor_key -> dim_sensor",Import,"SPC excursion alert log: rule code, method (WE, EWMA, T2), severity, status"
-fact_sensor_reading,Fact,analytics.fact_sensor_reading,sensor_reading_key,"sensor_key -> dim_sensor",Import,"Long format sensor reading time-series for screened parameters"
+fact_spc_alert,Fact,analytics.fact_spc_alert,spc_alert_key,sensor_key -> dim_sensor,Import,"SPC excursion alert log: rule code, method (WE, EWMA, T2), severity, status"
+fact_sensor_reading,Fact,analytics.vw_spc_readings,sensor_reading_key,sensor_key -> dim_sensor,Import,Selected SECOM sensors in Phase II only; frozen limits and WE markers; source_row is zero-based
+vw_work_orders,Fact,analytics.vw_work_orders,work_order_key,"date_key -> dim_date, line_key -> dim_line, product_key -> dim_product",Import,One observed MES order; source status/quantities/on_time flag; no observed completion timestamp or shift/station attribution
+pb_spc_methods,Fact,analytics.pb_spc_methods,method,,Import,Frozen method-specific confusion counts and metrics; disconnected benchmark
+pb_spc_lots,Fact,analytics.pb_spc_lots,source_row,,Import,Phase II lots; zero-based SPC identities and observed targets; disconnected from MES calendar
+pb_spc_failures,Fact,analytics.pb_spc_failures,"source_row, method",,Import,One failing lot per method; modeled timing and one-hour lead-time buckets
+pb_spc_limits,Fact,analytics.pb_spc_limits,sensor_key,sensor_key -> dim_sensor,Import,Frozen Phase I I-MR limits for selected sensors
+pb_impact_metrics,Fact,analytics.pb_impact_metrics,metric_id,,Import,Traceable impact evidence; numeric_value for numeric metrics; MEASURED/MODELED/CONFIGURED labels
+pb_dq_checks,Fact,analytics.pb_dq_checks,check_id,,Import,Snapshot of live SQL and source DQ execution; check count depends on warehouse profile
+pb_reconciliation,Fact,analytics.pb_reconciliation,reconciliation_id,,Import,75 artifact comparisons; live aggregate probe is supplemental; no PBIX execution claimed
+pb_oee_bridge,Fact,analytics.pb_oee_bridge,step,,Import,Disconnected five-step physical time bridge labels; sort by step_order

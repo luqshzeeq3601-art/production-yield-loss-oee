@@ -1,0 +1,216 @@
+{
+  "task": "POWERBI-PREP",
+  "status": "PASS",
+  "executed_at_utc": "2026-09-29T10:10:50.715112+00:00",
+  "execution_mode": "primary Codex agent only; task-specific user-authorized Sol Advisor exception",
+  "sol_advisor_used": false,
+  "independent_reviewer_used": false,
+  "python_version": "3.11.9",
+  "python_executable": "C:\\Users\\ZeeqRyz\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "test_command": "py -3.11 -m pytest -q -W error",
+  "test_total": 275,
+  "test_passed": 275,
+  "test_failed": 0,
+  "test_errors": 0,
+  "test_skipped": 0,
+  "test_runtime_seconds": 135.596,
+  "focused_documentation_tests": {
+    "passed": 44,
+    "failed": 0,
+    "runtime_seconds": 1.5
+  },
+  "lint_format_gate": "No configured lint/format commands in pyproject/CI; compileall and git diff --check passed",
+  "data_verification": "scripts.verify_data --processed-only: 9/9 files, including manpower and station operations",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "name": "production_yield_oee",
+    "user": "powerbi_local",
+    "version": "16.15",
+    "credential_source": ".env or process environment",
+    "database_url_source": "not set; POSTGRES_* variables"
+  },
+  "restart_verified": true,
+  "live_dq": {
+    "total_checks": 65,
+    "passed_checks": 65,
+    "failed_checks": 0,
+    "total_violations": 0,
+    "excluded_checks": []
+  },
+  "reconciliation": {
+    "checks": 75,
+    "passed": 75,
+    "basis": "75 artifact comparisons; supplemental live aggregate probe",
+    "database_live": {
+      "available": true,
+      "production_rows": 17280,
+      "total_count": 1074073,
+      "good_count": 1036026,
+      "downtime_events": 24147,
+      "downtime_minutes": 177844.99000000014
+    }
+  },
+  "source_staging_fact_reconciliation": {
+    "equipment_periods_fact": 70628,
+    "mes_downtime": {
+      "fact": 24147,
+      "source": 24147,
+      "staging": 24147
+    },
+    "mes_manpower": {
+      "fact": 2160,
+      "source": 2160,
+      "staging": 2160
+    },
+    "mes_production": {
+      "fact": 17280,
+      "source": 17280,
+      "staging": 17280
+    },
+    "mes_quality_events": {
+      "fact": 4096,
+      "source": 4096,
+      "staging": 4096
+    },
+    "mes_station_operations": {
+      "fact": 10800,
+      "source": 10800,
+      "staging": 10800
+    },
+    "mes_work_orders": {
+      "fact_dim_work_order": 720,
+      "source": 720,
+      "staging": 720
+    },
+    "metropt3_failure_intervals": {
+      "artifact": 4,
+      "staging": 4
+    },
+    "metropt3_readings_expected": 22754220,
+    "metropt3_readings_fact": 22754220,
+    "metropt3_rows": {
+      "source": 1516948,
+      "staging": 1516948
+    },
+    "metropt3_state_periods": {
+      "artifact": 70620,
+      "staging": 70620
+    },
+    "secom_lots": {
+      "fact": 1567,
+      "source": 1567,
+      "staging": 1567
+    },
+    "secom_readings_fact": 688014,
+    "secom_readings_non_null_source": 688014
+  },
+  "rejected_rows": 0,
+  "unresolved_fk_counts": {
+    "downtime_bad_reason": 0,
+    "production_bad_line": 0,
+    "reading_bad_sensor": 0
+  },
+  "model_relation_count": 25,
+  "dax_measure_count": 83,
+  "pages_ready": 7,
+  "metropt_readings_required_for_powerbi": false,
+  "serving_profile_proof": "Real PostgreSQL tests pass with reading-level MetroPT file absent; 59 checks, 6 explicit exclusions; full defaults still require real data",
+  "protected_evidence_files": {
+    "reports/cross_system_reconciliation.csv": "7994c6efe1f9e52eb1c62deba712b157a071a8d81d41d8bf12f62dec65c86c0e",
+    "reports/dashboard_specification_summary.json": "3563ab097c9cfbf819c0965e619924c19e88cbe7085c8b1efb7595a71eebfc03",
+    "reports/db_load_summary.json": "ac7f0a98f711ee0e3aad97b4c3d99b7129456c9df9263ce5e98e3c04b127b1bf",
+    "reports/dq_check_summary.json": "66ac590299c9e0570e4989d17327c95b50a5a547630325b4ea06bb905c7a58df",
+    "reports/ewma_series.csv": "89fbaaba53447dcfcd5d8e7a81272f21907d77c7b8827e916b320cb32a63f995",
+    "reports/ewma_summary.json": "aa76b08a767c2118edc8b626b676022e4186ea3d4886c7dfdcf19d3198853368",
+    "reports/ewma_violations.csv": "3eb88b3732c7d586b26d3e1a043b8ac9bc8233f493a711c02ba0554fcf1853ec",
+    "reports/feature_screening.csv": "6daa88d83ed9157e554e3b1898767297a49825599e31eb2495c621653a185ce8",
+    "reports/feature_screening_summary.json": "396492deabeff64abc0f36c373b708da06f89421c0d59621d6633a355a501227",
+    "reports/final_portfolio_audit.json": "6221ab3e33a8c64dd2d64bad6238734b8d0b9fbf3e6d00186d28107af14c15f6",
+    "reports/full_validation_summary.json": "ed30687e1497206ae52f3fa9fca9e42f0fc873b4acbb3f0c73078007fbc778e8",
+    "reports/hotelling_t2_series.csv": "ffa40e2f59c4f07f0888a4c8f279667a432f9b102ed4aec96a0a4b7bd4afee16",
+    "reports/hotelling_t2_summary.json": "ece51a9222eb28c08d3da1e71ad55eb287d359cd1b53456927a059ed3088e7f6",
+    "reports/hotelling_t2_violations.csv": "99d5057b9c2be0a431c6789247f01ee1aac6bc82667295714b80cd0e6372bbc9",
+    "reports/impact_claims.json": "444ea42943cbe475aa4e3c3b5d434af4de15ea0cc8a796ac5867d18e9aba0836",
+    "reports/impact_metrics.csv": "2e3ca110892023a9dcb3ad76dd0f68bdb3781dd992a9faccea609f55a1f59e13",
+    "reports/impact_metrics_summary.json": "5befe2796ee4753faf41ee975476de0c3c43f5f1753909dccc02f433d56960a8",
+    "reports/manual_reporting_baseline.json": "e6395856b9bd3539bc902ee5a82289495aded4b44ccdc60b0aa629e3f471ab89",
+    "reports/manual_reporting_steps.csv": "36d98e4eee861a09815f31c571b2e02c8202d4ff0874eeacd6bc61cc3a3b7cea",
+    "reports/mes_simulation_summary.json": "aeca678191756d9d124aa26e22505428895a9ff0c2930f38e2f5d7dafe2acf91",
+    "reports/metropt3_eda_summary.json": "dbcda51fa434f7674e8f3b5251863952c5ea68417486618f1fd34b0e2dc1a547",
+    "reports/metropt3_ingestion_summary.json": "04e21ef3cc9f9c6a1bb460f2ac31eb6b3e7ebdea651060b027319e5c20372857",
+    "reports/oee_whatif_scenarios.csv": "1292ddecbd5b055c319bff3211aadae1f5d7c23f54bb3a6511b69cd681f5b5d5",
+    "reports/oee_whatif_sensitivity.csv": "e962f214bdf7a8a0aba2179f03450ee2fd0d4c6a2a8f581e33d5971a8a9d16a7",
+    "reports/oee_whatif_summary.json": "a17d3addd6c5657128de6fcbc5537ab1a4c1d380a9fe9b700f5ba61854eb3799",
+    "reports/pareto_downtime.csv": "a0db694da4267f81c23f660a7c148a2b051cb3313ef8f3bd7450b14f35b27c71",
+    "reports/pareto_scrap.csv": "29b7a40e793946fc0a4404afbf8b585ab94ba618a185c18ca60fe0912506f898",
+    "reports/pareto_summary.json": "a8fece82fb512e32027cb5b86b335465fcd7bea338ed51c88c4ad871351f2d06",
+    "reports/pipeline_run.log": "bfc919c6d63336bb4ec5b3e93e9e1a06af6a5d47ce0fee95e97b371c98949324",
+    "reports/pipeline_run_summary.json": "09288603f641fdc59e509d4f602ff565aaa89fce115deca1ea845294096aa5cb",
+    "reports/powerbi_reconciliation_summary.json": "abd8a55aa6b2fb179ca1bd90d017a7f01424c632f458fe7266e1d8ead032dcf4",
+    "reports/p_chart_daily.csv": "f8d9afb3c44bfbe1023f1862482388df9e0401cbff23f34e2dc688ec2c94607b",
+    "reports/rca_statistical_summary.json": "e036fb7b47f46644ec2b2211b7a77c8db65ccafe0fd6abd5a95feeca5c32d7d3",
+    "reports/secom_cleaning_summary.json": "721b4e86b8ed5d19b96ab32caddd6f70757d33efdbd43702b9bcf49db9da8e65",
+    "reports/secom_eda_summary.json": "6c96b8e6290fc9c47a58bebb92d0e0679889e23446a88f875782f96b85cd246f",
+    "reports/secom_missingness_profile.csv": "b105c45efafbc7bd6d87c0d4580af307925b0fc800ae3d8d6eb4d166b600cf5f",
+    "reports/spc_backtest_excursions.csv": "9a057ffc41fb3714db994b1e7e7cb82bc6b1d673545a8dc155efd16423f8ac95",
+    "reports/spc_backtest_failures.csv": "ebf200a81d317bd4afb3182157eb162e90f9dff9770d444bbf7db17786881b6f",
+    "reports/spc_backtest_lots.csv": "344ae820a51633378774f9fda7d25db092d6b7462519b8a1f02ad902e6877af9",
+    "reports/spc_backtest_methods.csv": "229f63eecf458f2bbe9c3dd20bbc2272065e9d471174c907b5846b0b7cbff009",
+    "reports/spc_backtest_summary.json": "e55ed7b411bc336b1802a70f20d9101a50a2866c3de555c81c75714453d67eeb",
+    "reports/spc_limits.csv": "3cab04e2f5999e88ac479b0a512bee78ffc586cf2945d19f04dfce86cbb38498",
+    "reports/spc_rule_violations.csv": "008230ca0d488a7093ecf15fbc43fa6da7fc417fa67ca3d14d2d4bc39f27b3d9",
+    "reports/spc_univariate_summary.json": "ae9b17506aa281a5f8020544fd766387b8a65913bd213462dc17dc6f1087eff9",
+    "reports/figures/metropt3_analog_hist.png": "929790ed059e260e820d31f46e224296b8b0f48f5fe1885163541d62cc868cad",
+    "reports/figures/metropt3_cadence_hist.png": "58cd925d99d42c868276a5f3102f6b5ae76a9a007b4feab2128b7d743ddd9049",
+    "reports/figures/metropt3_timeline.png": "0fbf6903a0da4246094c5c47f06756e96f30713f0199c19f08c9636970975545",
+    "reports/figures/metropt3_windows_bar.png": "aa70f54dfb7f106aa44502ab2a6746f981bde194c7a951bb8bf201f303c6215c",
+    "reports/figures/secom_daily_volume_failrate.png": "11f6b90b75f82f7db81ab865c4303488b24a613a157284222890e5f1ea945083",
+    "reports/figures/secom_missingness_hist.png": "4dbe008945c4aae49ab299973c8496975616f15ee5141c39e54a8e08a8265592",
+    "reports/figures/secom_outlier_hist.png": "e700b63076d24a9d792b0b2f5ede2b0f81e4b733863ae5f3d8880f3aed11b1f5",
+    "reports/figures/secom_top10_corr.png": "e46850b4220322e4cc43b0a647f081015f2652680b286144e759fad212daf662",
+    "reports/figures/secom_variance_hist.png": "0a5c8c8d14f681b5416be3d11d36ef208a9ec0e674187de7d842a13e80b590de"
+  },
+  "powerbi_desktop_opened": false,
+  "pbix_created": false,
+  "actual_powerbi_engine_verified": false,
+  "review": "primary-agent full diff/self-review only; no Sol Advisor review",
+  "warnings": [
+    "pgserver emitted post-test cleanup logging errors after 275 PASS; process exit code was 0"
+  ],
+  "changed_files": [
+    ".env.example",
+    ".gitignore",
+    "CHANGELOG.md",
+    "README.md",
+    "docs/architecture.md",
+    "docs/case_study.md",
+    "docs/data_setup.md",
+    "docs/demo_walkthrough.md",
+    "docs/powerbi_model.md",
+    "docs/project_facts.md",
+    "docs/release_checklist.md",
+    "docs/resume_bullets.md",
+    "powerbi-reference-site/dist/app.js",
+    "powerbi/dashboard_specification.md",
+    "powerbi/desktop_assembly_guide.md",
+    "powerbi/measure_catalog.md",
+    "powerbi/measures.dax",
+    "powerbi/model_mapping.csv",
+    "powerbi/page_readiness.md",
+    "powerbi/powerbi_connection_checklist.md",
+    "powerbi/visual_mapping.json",
+    "reports/cross_system_reconciliation_summary.json",
+    "reports/powerbi_preparation_validation.json",
+    "reports/powerbi_readiness.json",
+    "scripts/bootstrap_powerbi_db.py",
+    "scripts/verify_data.py",
+    "sql/07_powerbi_serving.sql",
+    "src/cross_system_reconciliation.py",
+    "src/load_db.py",
+    "src/powerbi_serving.py",
+    "src/run_dq_checks.py",
+    "tests/test_powerbi_handoff.py",
+    "tests/test_powerbi_readiness.py"
+  ]
+}

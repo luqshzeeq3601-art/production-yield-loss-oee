@@ -1,0 +1,332 @@
+{
+  "task": "POWERBI-PREP",
+  "status": "READY",
+  "python_version": "3.11.9",
+  "executed_at_utc": "2026-09-29T10:04:44.388163+00:00",
+  "python_executable": "C:\\Users\\ZeeqRyz\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "name": "production_yield_oee",
+    "user": "powerbi_local",
+    "version": "16.15",
+    "credential_source": ".env or process environment",
+    "database_url_source": "not set; POSTGRES_* variables"
+  },
+  "warehouse_profile": "full_analytics",
+  "metropt_readings_required_for_powerbi": false,
+  "powerbi_desktop_opened": false,
+  "dq": {
+    "total_checks": 65,
+    "passed_checks": 65,
+    "failed_checks": 0,
+    "total_violations": 0,
+    "excluded_checks": []
+  },
+  "reconciliation": {
+    "checks": 75,
+    "passed": 75,
+    "basis": "75 artifact comparisons; supplemental live aggregate probe",
+    "database_live": {
+      "available": true,
+      "production_rows": 17280,
+      "total_count": 1074073,
+      "good_count": 1036026,
+      "downtime_events": 24147,
+      "downtime_minutes": 177844.99000000014
+    }
+  },
+  "evidence_rows": {
+    "pb_spc_methods": 5,
+    "pb_spc_lots": 1097,
+    "pb_spc_failures": 230,
+    "pb_spc_limits": 10,
+    "pb_impact_metrics": 57,
+    "pb_dq_checks": 65,
+    "pb_reconciliation": 75,
+    "pb_oee_bridge": 5,
+    "fact_spc_alert": 7081
+  },
+  "live_validation": {
+    "select_one": 1,
+    "plant": {
+      "planned_time_min": 1030502.5840000028,
+      "run_time_min": 940735.3180000018,
+      "ideal_time_min": 794950.0833333334,
+      "total_count": 1074073,
+      "good_count": 1036026,
+      "scrap_count": 38047,
+      "availability": 0.9128898195950562,
+      "performance": 0.8450305501694068,
+      "quality": 0.9645768956113784,
+      "oee": 0.7440937028719484
+    },
+    "scrap_cost": 555891.0,
+    "unplanned_downtime_minutes": 171547.5510000002,
+    "work_orders": {
+      "complete": 266,
+      "partial": 454
+    },
+    "manpower": [
+      12240,
+      11432
+    ],
+    "pages": [
+      {
+        "page": "Executive Summary",
+        "status": "READY",
+        "relations": [
+          "dim_date",
+          "dim_defect_cause",
+          "dim_downtime_reason",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift",
+          "fact_downtime_event",
+          "fact_production_hourly",
+          "fact_quality_scrap",
+          "pb_impact_metrics"
+        ],
+        "dimensions": [
+          "dim_date",
+          "dim_defect_cause",
+          "dim_downtime_reason",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift"
+        ],
+        "measures": [
+          "Annual Recoverable Value ($)",
+          "Availability",
+          "Downtime Hours",
+          "OEE",
+          "Performance",
+          "Quality",
+          "Scrap Rate %",
+          "Total Scrap Cost",
+          "Total Units"
+        ],
+        "relation_rows": {
+          "dim_date": 5826,
+          "dim_defect_cause": 6,
+          "dim_downtime_reason": 6,
+          "dim_line": 4,
+          "dim_product": 4,
+          "dim_station_machine": 21,
+          "dim_time_shift": 3,
+          "fact_downtime_event": 24147,
+          "fact_production_hourly": 17280,
+          "fact_quality_scrap": 4096,
+          "pb_impact_metrics": 57
+        }
+      },
+      {
+        "page": "OEE Decomposition",
+        "status": "READY",
+        "relations": [
+          "dim_date",
+          "dim_line",
+          "dim_product",
+          "dim_time_shift",
+          "fact_production_hourly",
+          "pb_oee_bridge"
+        ],
+        "dimensions": [
+          "dim_date",
+          "dim_line",
+          "dim_product",
+          "dim_time_shift"
+        ],
+        "measures": [
+          "Availability",
+          "OEE",
+          "OEE Bridge Hours",
+          "Performance",
+          "Quality"
+        ],
+        "relation_rows": {
+          "dim_date": 5826,
+          "dim_line": 4,
+          "dim_product": 4,
+          "dim_time_shift": 3,
+          "fact_production_hourly": 17280,
+          "pb_oee_bridge": 5
+        }
+      },
+      {
+        "page": "SPC & Early Warning",
+        "status": "READY",
+        "relations": [
+          "dim_sensor",
+          "fact_sensor_reading",
+          "pb_spc_failures",
+          "pb_spc_methods"
+        ],
+        "dimensions": [
+          "dim_sensor"
+        ],
+        "measures": [
+          "Alert Precision %",
+          "Alert Recall %",
+          "Excursions Caught Before Manual Report %",
+          "Failure Lead-Time Count",
+          "Failures Detected",
+          "Median Early Detection Advantage (h)",
+          "Phase II Lots",
+          "SPC Centerline",
+          "SPC LCL",
+          "SPC Reading Value",
+          "SPC UCL",
+          "SPC Violation Value"
+        ],
+        "relation_rows": {
+          "dim_sensor": 461,
+          "fact_sensor_reading": 10756,
+          "pb_spc_failures": 230,
+          "pb_spc_methods": 5
+        }
+      },
+      {
+        "page": "Pareto & RCA",
+        "status": "READY",
+        "relations": [
+          "dim_date",
+          "dim_defect_cause",
+          "dim_downtime_reason",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift",
+          "fact_downtime_event",
+          "fact_production_hourly",
+          "fact_quality_scrap"
+        ],
+        "dimensions": [
+          "dim_date",
+          "dim_defect_cause",
+          "dim_downtime_reason",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift"
+        ],
+        "measures": [
+          "Cum % Downtime",
+          "Cum % Scrap Cost",
+          "Downtime Events",
+          "Downtime Hours",
+          "Scrap Rate %",
+          "Total Scrap Cost"
+        ],
+        "relation_rows": {
+          "dim_date": 5826,
+          "dim_defect_cause": 6,
+          "dim_downtime_reason": 6,
+          "dim_line": 4,
+          "dim_product": 4,
+          "dim_station_machine": 21,
+          "dim_time_shift": 3,
+          "fact_downtime_event": 24147,
+          "fact_production_hourly": 17280,
+          "fact_quality_scrap": 4096
+        }
+      },
+      {
+        "page": "Work Orders",
+        "status": "READY",
+        "relations": [
+          "dim_date",
+          "dim_line",
+          "dim_product",
+          "vw_work_orders"
+        ],
+        "dimensions": [
+          "dim_date",
+          "dim_line",
+          "dim_product"
+        ],
+        "measures": [
+          "WO Completion %",
+          "WO On-Time %",
+          "WO Planned Units",
+          "WO Produced Units",
+          "Work Orders Total"
+        ],
+        "relation_rows": {
+          "dim_date": 5826,
+          "dim_line": 4,
+          "dim_product": 4,
+          "vw_work_orders": 720
+        }
+      },
+      {
+        "page": "Capacity & Manpower",
+        "status": "READY",
+        "relations": [
+          "dim_date",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift",
+          "fact_manpower_shift",
+          "fact_production_hourly",
+          "fact_station_operation"
+        ],
+        "dimensions": [
+          "dim_date",
+          "dim_line",
+          "dim_product",
+          "dim_station_machine",
+          "dim_time_shift"
+        ],
+        "measures": [
+          "Actual Headcount",
+          "Average Processing Time (s)",
+          "Average Wait Time (s)",
+          "Capacity Utilization %",
+          "Manpower Gap",
+          "Planned Headcount"
+        ],
+        "relation_rows": {
+          "dim_date": 5826,
+          "dim_line": 4,
+          "dim_product": 4,
+          "dim_station_machine": 21,
+          "dim_time_shift": 3,
+          "fact_manpower_shift": 2160,
+          "fact_production_hourly": 17280,
+          "fact_station_operation": 10800
+        }
+      },
+      {
+        "page": "Alerts & Data Quality",
+        "status": "READY",
+        "relations": [
+          "dim_sensor",
+          "fact_spc_alert",
+          "pb_dq_checks",
+          "pb_reconciliation"
+        ],
+        "dimensions": [
+          "dim_sensor"
+        ],
+        "measures": [
+          "DQ Checks Total",
+          "DQ Status",
+          "DQ Violations",
+          "Reconciliation Pass %"
+        ],
+        "relation_rows": {
+          "dim_sensor": 461,
+          "fact_spc_alert": 7081,
+          "pb_dq_checks": 65,
+          "pb_reconciliation": 75
+        }
+      }
+    ],
+    "powerbi_engine_executed": false,
+    "comparison_basis": "live SQL vs source components and Python DAX-formula emulation; PBIX not assembled"
+  }
+}

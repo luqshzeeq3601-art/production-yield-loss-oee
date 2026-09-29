@@ -19,7 +19,7 @@ flowchart TB
     PG --> OEE["OEE / Pareto / RCA / What-if<br/>SQL views + Python"]
     SPC --> OEE
     DQ --> PBI
-    OEE --> PBI["Power BI semantic layer<br/>36 DAX measures"]
+    OEE --> PBI["Power BI semantic layer<br/>83 DAX measures"]
     PBI --> REP["Reporting / portfolio outputs<br/>pipeline + Excel baseline"]
 ```
 
