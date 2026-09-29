@@ -69,7 +69,7 @@ class LoaderError(Exception):
     """Fatal loader failure with the failing phase attached."""
 
 
-def run(config_path: str | Path | None = None) -> dict[str, Any]:
+def run(config_path: str | Path | None = None, *, powerbi_only: bool = False) -> dict[str, Any]:
     """Execute the full load pipeline and return the reconciliation summary."""
 
     started = time.perf_counter()
@@ -94,10 +94,10 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
         with conn:
             with conn.cursor() as cursor:
                 _phase(cursor, "ddl", _run_sql_files, cursor, sql_dir)
-                _phase(cursor, "staging", _load_staging, conn, cursor, config)
+                _phase(cursor, "staging", _load_staging, conn, cursor, config, powerbi_only)
                 _phase(cursor, "dimensions", _load_dimensions, cursor, config)
-                _phase(cursor, "facts", _load_facts, cursor, config)
-                _phase(cursor, "reconciliation", _reconcile, cursor, config, summary)
+                _phase(cursor, "facts", _load_facts, cursor, config, powerbi_only)
+                _phase(cursor, "reconciliation", _reconcile, cursor, config, summary, powerbi_only)
                 cursor.execute("SHOW server_version")
                 summary["postgresql_version"] = cursor.fetchone()[0]
     except LoaderError:
@@ -108,7 +108,11 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
         conn.close()
 
     summary["load_duration_seconds"] = round(time.perf_counter() - started, 1)
-    summary_path = _reports_path(config) / "db_load_summary.json"
+    summary["profile"] = "powerbi" if powerbi_only else "full_analytics"
+    summary["excluded_sources"] = ["metropt3_readings"] if powerbi_only else []
+    summary_path = _reports_path(config) / (
+        "powerbi_db_load_summary.json" if powerbi_only else "db_load_summary.json"
+    )
     _write_json(summary_path, summary)
     print(f"db_load_summary: {summary_path}")
     return summary
@@ -149,9 +153,13 @@ def _resolve_dsn(config: Mapping[str, Any]) -> str:
             "Database credentials are unavailable. Set DATABASE_URL or both "
             f"{database.get('user_env')} and {database.get('password_env')}."
         )
-    return (
-        f"host={database.get('host', 'localhost')} port={database.get('port', 5432)}"
-        f" dbname={database.get('name')} user={user} password={password}"
+    from psycopg2.extensions import make_dsn
+
+    return make_dsn(
+        host=os.environ.get("POSTGRES_HOST", database.get("host", "localhost")),
+        port=os.environ.get("POSTGRES_PORT", database.get("port", 5432)),
+        dbname=os.environ.get("POSTGRES_DB", database.get("name")),
+        user=user, password=password,
     )
 
 
@@ -173,8 +181,10 @@ def _run_sql_files(cursor: Any, sql_dir: Path) -> None:
         cursor.execute((sql_dir / name).read_text(encoding="utf-8"))
 
 
-def _load_staging(conn: Any, cursor: Any, config: Mapping[str, Any]) -> None:
+def _load_staging(conn: Any, cursor: Any, config: Mapping[str, Any], powerbi_only: bool = False) -> None:
     for table in STAGING_TABLES:
+        if powerbi_only and table == "staging.metropt3_readings":
+            continue
         cursor.execute(f"TRUNCATE {table} RESTART IDENTITY")
     _copy_csv(conn, cursor, "staging.mes_production_hourly", _processed(config, "production_hourly", config["mes"]))
     _copy_csv(conn, cursor, "staging.mes_downtime_events", _processed(config, "downtime_events", config["mes"]))
@@ -183,7 +193,8 @@ def _load_staging(conn: Any, cursor: Any, config: Mapping[str, Any]) -> None:
     _copy_csv(conn, cursor, "staging.mes_station_operations", _processed(config, "station_operations", config["mes"]))
     _copy_csv(conn, cursor, "staging.mes_quality_events", _processed(config, "quality_events", config["mes"]))
     _copy_csv(conn, cursor, "staging.secom_cleaned", _processed(config, "cleaned_data", config["secom"]))
-    _copy_csv(conn, cursor, "staging.metropt3_readings", _processed(config, "processed_readings", config["metropt3"]))
+    if not powerbi_only:
+        _copy_csv(conn, cursor, "staging.metropt3_readings", _processed(config, "processed_readings", config["metropt3"]))
     _copy_csv(conn, cursor, "staging.metropt3_failure_intervals", _processed(config, "failure_intervals", config["metropt3"]))
     _copy_csv(conn, cursor, "staging.metropt3_state_periods", _processed(config, "state_periods", config["metropt3"]))
 
@@ -392,7 +403,7 @@ def _sensor_rows(config: Mapping[str, Any]) -> list[tuple]:
     return rows
 
 
-def _load_facts(cursor: Any, config: Mapping[str, Any]) -> None:
+def _load_facts(cursor: Any, config: Mapping[str, Any], powerbi_only: bool = False) -> None:
     cursor.execute(
         """
         INSERT INTO analytics.fact_production_hourly
@@ -439,7 +450,8 @@ def _load_facts(cursor: Any, config: Mapping[str, Any]) -> None:
         """
     )
     _load_secom_readings(cursor, config)
-    _load_metropt_readings(cursor, config)
+    if not powerbi_only:
+        _load_metropt_readings(cursor, config)
     cursor.execute(
         """
         INSERT INTO analytics.fact_manpower_shift
@@ -578,7 +590,7 @@ def _load_metropt_readings(cursor: Any, config: Mapping[str, Any]) -> None:
         lower = upper + 1
 
 
-def _reconcile(cursor: Any, config: Mapping[str, Any], summary: dict[str, Any]) -> None:
+def _reconcile(cursor: Any, config: Mapping[str, Any], summary: dict[str, Any], powerbi_only: bool = False) -> None:
     staging_counts = {table: _count(cursor, table) for table in STAGING_TABLES}
     dimension_counts = {
         table: _count(cursor, f"analytics.{table}")
@@ -608,7 +620,7 @@ def _reconcile(cursor: Any, config: Mapping[str, Any], summary: dict[str, Any]) 
             "fact_spc_alert",
         )
     }
-    source_counts = _source_counts(config)
+    source_counts = _source_counts(config, powerbi_only)
     cursor.execute(
         "SELECT source_system, COUNT(*) FROM analytics.fact_sensor_reading"
         " GROUP BY source_system"
@@ -696,7 +708,7 @@ def _reconcile(cursor: Any, config: Mapping[str, Any], summary: dict[str, Any]) 
             f"{reconciliation['secom_readings_non_null_source']} != "
             f"{reconciliation['secom_readings_fact']}"
         )
-    if reconciliation["metropt3_readings_expected"] != reconciliation["metropt3_readings_fact"]:
+    if not powerbi_only and reconciliation["metropt3_readings_expected"] != reconciliation["metropt3_readings_fact"]:
         raise LoaderError(
             "MetroPT-3 readings mismatch: "
             f"{reconciliation['metropt3_readings_expected']} != "
@@ -713,8 +725,11 @@ def _reconcile(cursor: Any, config: Mapping[str, Any], summary: dict[str, Any]) 
         )
     if any(unresolved.values()):
         raise LoaderError(f"unresolved foreign keys: {unresolved}")
-    if fact_counts["fact_spc_alert"] != 0:
+    if not powerbi_only and fact_counts["fact_spc_alert"] != 0:
         raise LoaderError("fact_spc_alert must remain empty in P2-003")
+    if powerbi_only:
+        for key in ("metropt3_rows", "metropt3_readings_expected", "metropt3_readings_fact"):
+            reconciliation.pop(key)
     summary.update(
         {
             "staging_counts": staging_counts,
@@ -744,7 +759,7 @@ def _count(cursor: Any, table: str) -> int:
     return int(cursor.fetchone()[0])
 
 
-def _source_counts(config: Mapping[str, Any]) -> dict[str, int]:
+def _source_counts(config: Mapping[str, Any], powerbi_only: bool = False) -> dict[str, int]:
     mes = config["mes"]
     counts = {}
     for key in (
@@ -760,7 +775,7 @@ def _source_counts(config: Mapping[str, Any]) -> dict[str, int]:
         _resolve_configured_path(config["secom"]["outputs"]["cleaned_data"])
     )
     counts["secom_non_null_readings"] = _secom_non_null_count(config)
-    counts["metropt3_readings"] = _csv_rows(
+    counts["metropt3_readings"] = 0 if powerbi_only else _csv_rows(
         _resolve_configured_path(config["metropt3"]["outputs"]["processed_readings"])
     )
     counts["metropt3_failure_intervals"] = _csv_rows(

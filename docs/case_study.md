@@ -22,11 +22,11 @@ OEE decomposed to 91.29% x 84.50% x 96.46% = 74.41%, with L2 Performance and L3 
 
 ## 6. Results
 
-O2 and O3 fully achieved; O1 split (see below). Automation arithmetic: 312.0 h/year manual vs 8.7 h/year target = ~303.3 h/year saved (97.2%). The modeled 30% combined scenario projects 74.41% -> 78.96% OEE (+4.55 pts) and $1.69M annual recoverable value. Validation: 259 tests, 65/65 DQ, 75/75 cross-system reconciliation, SQL-DAX diff ~1e-14%.
+O2 and O3 fully achieved; O1 split (see below). Automation arithmetic: 312.0 h/year manual vs 8.7 h/year target = ~303.3 h/year saved (97.2%). The modeled 30% combined scenario projects 74.41% -> 78.96% OEE (+4.55 pts) and $1.69M annual recoverable value. Validation: 275 tests, 65/65 DQ, 75/75 cross-system reconciliation, SQL-DAX diff ~1e-14%.
 
 ## 7. What failed / what I learned
 
-The 60% precision target failed badly (4.21%) because univariate rules on 590 noisy sensors at 4.19% prevalence flag nearly every lot. Lesson: recall without precision is not an operational win — the honest result redirected the recommendation toward rule refinement (multivariate-first alerting, cost-aware thresholds) instead of a false success story. I kept the failed metric visible in every artifact rather than tuning thresholds post hoc.
+The 60% precision target failed badly (4.21%) with the selected rule alerts flagging nearly every lot at 4.19% failure prevalence. Lesson: recall without precision is not an operational win — the honest result redirected the recommendation toward rule refinement (multivariate-first alerting, cost-aware thresholds) instead of a false success story. I kept the failed metric visible in every artifact rather than tuning thresholds post hoc.
 
 ## 8. Business interpretation
 
@@ -38,7 +38,7 @@ Measured value today: honest loss decomposition plus ~300 h/year of reporting ca
 
 ## 10. Validation
 
-Full suite (259 PASS, `-W error`), ephemeral PostgreSQL 16 schema/view/DQ execution, deterministic reruns (impact outputs byte-identical), and a 75-check source-to-report reconciliation across all nine domains — all green.
+Full suite (275 PASS, `-W error`), ephemeral PostgreSQL 16 schema/view/DQ execution, deterministic reruns (impact outputs byte-identical), and a 75-check source-to-report reconciliation across all nine domains — all green.
 
 ## 11. Limitations
 

@@ -73,6 +73,9 @@ SUM(fact_downtime_event[duration_min])
 [Downtime Hours] = 
 [Downtime Minutes] / 60.0
 
+[Downtime Events] =
+COUNTROWS(fact_downtime_event)
+
 [Unplanned Downtime Hours] = 
 CALCULATE(
     [Downtime Hours],
@@ -180,7 +183,7 @@ AVERAGE(fact_station_operation[wait_time_s])
 [Bottleneck Processing Time (s)] = 
 CALCULATE(
     [Average Processing Time (s)],
-    dim_station_machine[is_bottleneck] = 1
+    dim_station_machine[is_bottleneck] = TRUE()
 )
 
 
@@ -204,25 +207,138 @@ CALCULATE(
 )
 
 [Median Detection Latency (h)] = 
-18.0
+CALCULATE(MAX(pb_spc_methods[median_detection_latency_hours]), pb_spc_methods[method] = "WE+EWMA+T2")
+
+[Median Early Detection Advantage (h)] =
+CALCULATE(MAX(pb_spc_methods[median_hours_saved]), pb_spc_methods[method] = "WE+EWMA+T2")
+
+[WE Precision %] =
+CALCULATE(MAX(pb_spc_methods[precision]), pb_spc_methods[method] = "WE")
+
+[WE EWMA Precision %] =
+CALCULATE(MAX(pb_spc_methods[precision]), pb_spc_methods[method] = "WE+EWMA")
+
+[Combined Precision %] =
+CALCULATE(MAX(pb_spc_methods[precision]), pb_spc_methods[method] = "WE+EWMA+T2")
 
 [Alert Precision %] = 
-0.0419
+[Combined Precision %]
 
 [Alert Recall %] = 
-1.0000
+CALCULATE(MAX(pb_spc_methods[recall]), pb_spc_methods[method] = "WE+EWMA+T2")
 
 [Excursions Caught Before Manual Report %] = 
-1.0000
+CALCULATE(MAX(pb_spc_methods[pct_failures_before_manual]), pb_spc_methods[method] = "WE+EWMA+T2") / 100.0
+
+[Phase II Lots] =
+COUNTROWS(pb_spc_lots)
+
+[Phase II Failures] =
+CALCULATE(COUNTROWS(pb_spc_lots), pb_spc_lots[target] = 1)
+
+[Phase II Failure Prevalence %] =
+DIVIDE([Phase II Failures], [Phase II Lots], BLANK())
+
+[Combined False Alerts / 100 Lots] =
+CALCULATE(MAX(pb_spc_methods[false_alarms_per_100_lots]), pb_spc_methods[method] = "WE+EWMA+T2")
+
+[Failures Detected] =
+IF(HASONEVALUE(pb_spc_methods[method]), MAX(pb_spc_methods[TP]), BLANK())
+
+[Failure Lead-Time Count] =
+COUNTROWS(pb_spc_failures)
+
+[SPC Reading Value] =
+SELECTEDVALUE(fact_sensor_reading[reading_value])
+
+[SPC Centerline] =
+MAX(fact_sensor_reading[centerline])
+
+[SPC UCL] =
+MAX(fact_sensor_reading[ucl])
+
+[SPC LCL] =
+MIN(fact_sensor_reading[lcl])
+
+[SPC Violation Value] =
+CALCULATE([SPC Reading Value], fact_sensor_reading[we_violation] = TRUE())
 
 [Manual Baseline Hours / Week] = 
-6.0
+CALCULATE(MAX(pb_impact_metrics[numeric_value]), pb_impact_metrics[metric_id] = "RA-001")
 
 [Automated Pipeline Hours / Week] = 
-0.167
+CALCULATE(MAX(pb_impact_metrics[numeric_value]), pb_impact_metrics[metric_id] = "RA-003") / 60.0
 
 [Annual Analyst Hours Saved] = 
-303.3
+CALCULATE(MAX(pb_impact_metrics[numeric_value]), pb_impact_metrics[metric_id] = "RA-006")
 
 [Annual Recoverable Value ($)] = 
-1688452.14
+CALCULATE(MAX(pb_impact_metrics[numeric_value]), pb_impact_metrics[metric_id] = "WIF-006")
+
+// -----------------------------------------------------------------------------
+// 7. WORK ORDERS: OBSERVED SOURCE STATUS AND SIMULATOR ON-TIME FLAG
+// -----------------------------------------------------------------------------
+
+[Work Orders Total] =
+COUNTROWS(vw_work_orders)
+
+[Completed Work Orders] =
+CALCULATE([Work Orders Total], vw_work_orders[status] = "complete")
+
+[Partial Work Orders] =
+CALCULATE([Work Orders Total], vw_work_orders[status] = "partial")
+
+[WO Completion %] =
+DIVIDE([Completed Work Orders], [Work Orders Total], BLANK())
+
+[WO On-Time %] =
+DIVIDE(CALCULATE([Work Orders Total], vw_work_orders[on_time] = 1), [Work Orders Total], BLANK())
+
+[WO Planned Units] =
+SUM(vw_work_orders[planned_qty])
+
+[WO Produced Units] =
+SUM(vw_work_orders[produced_qty])
+
+[WO Good Units] =
+SUM(vw_work_orders[good_qty])
+
+[WO Scrap Units] =
+SUM(vw_work_orders[scrap_qty])
+
+[Throughput Units / Run Hour] =
+DIVIDE([Total Units], [Run Time (h)], BLANK())
+
+// -----------------------------------------------------------------------------
+// 8. LIVE DQ SNAPSHOT AND ARTIFACT RECONCILIATION
+// -----------------------------------------------------------------------------
+
+[DQ Checks Total] =
+COUNTROWS(pb_dq_checks)
+
+[DQ Checks Passed] =
+CALCULATE(COUNTROWS(pb_dq_checks), pb_dq_checks[status] = "PASS")
+
+[DQ Violations] =
+SUM(pb_dq_checks[violation_count])
+
+[DQ Pass %] =
+DIVIDE([DQ Checks Passed], [DQ Checks Total], BLANK())
+
+[DQ Status] =
+IF([DQ Pass %] = 1.0, "PASS", "FAIL")
+
+[Reconciliation Pass %] =
+DIVIDE(CALCULATE(COUNTROWS(pb_reconciliation), pb_reconciliation[status] = "PASS"), COUNTROWS(pb_reconciliation), BLANK())
+
+// Physical time bridge; the final basis is product-weighted ideal good time.
+[Ideal Good Output Basis (h)] =
+SUMX(fact_production_hourly, fact_production_hourly[ideal_cycle_time_s] * fact_production_hourly[good_count]) / 3600.0
+
+[OEE Bridge Hours] =
+SWITCH(SELECTEDVALUE(pb_oee_bridge[step]),
+    "Planned", [Planned Production Time (h)],
+    "Availability Loss", -[Availability Loss Hours],
+    "Performance Loss", -[Performance Loss Hours],
+    "Quality Loss", -[Quality Equivalent Loss Hours],
+    "Good Output", [Ideal Good Output Basis (h)], BLANK())

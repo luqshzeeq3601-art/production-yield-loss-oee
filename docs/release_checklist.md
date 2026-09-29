@@ -8,3 +8,7 @@
 - [ ] Confirm `data/raw/` and `data/interim/` stay untracked/local
 - [ ] Review `docs/resume_bullets.md` figures against `reports/impact_metrics.csv` one last time
 - [ ] Do NOT create Git tags/releases from this checklist alone — release only when explicitly authorized
+
+## Current preparation gate
+
+POWERBI-PREP: 275 tests under Python 3.11; live persistent PostgreSQL DQ 65/65; artifact reconciliation 75/75; 25 relations and seven page dependencies. See `reports/powerbi_preparation_validation.json`. Desktop/PBIX assembly remains the next task.

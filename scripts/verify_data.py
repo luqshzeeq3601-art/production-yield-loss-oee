@@ -33,6 +33,12 @@ PROCESSED_EXPECTATIONS: dict[str, dict] = {
         "columns": ["units_affected", "scrap_cost", "defect_cause"],
     },
     "data/processed/mes_work_orders.csv": {"rows": 720, "columns": []},
+    "data/processed/mes_manpower_shifts.csv": {
+        "rows": 2160, "columns": ["planned_headcount", "actual_headcount"],
+    },
+    "data/processed/mes_station_operations.csv": {
+        "rows": 10800, "columns": ["processing_time_s", "wait_time_s", "throughput_units"],
+    },
     "data/processed/secom_cleaned.csv": {
         "rows": 1567,
         "columns": ["target"],
@@ -63,7 +69,8 @@ def check_file(rel: str, spec: dict, errors: list[str]) -> None:
             errors.append(f"{rel}: missing column '{col}'")
     if "rows" in spec:
         try:
-            n = sum(1 for _ in open(path, encoding="utf-8")) - 1
+            with path.open(encoding="utf-8") as stream:
+                n = sum(1 for _ in stream) - 1
         except Exception as exc:
             errors.append(f"{rel}: could not count rows ({exc})")
             return

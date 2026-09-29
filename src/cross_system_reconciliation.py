@@ -20,8 +20,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import os
-import socket
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -185,36 +183,29 @@ def _exact_row(
 
 def probe_live_database(config: dict[str, Any]) -> dict[str, Any]:
     """Return live PostgreSQL totals when reachable, else unavailable marker."""
-    db = config.get("database", {})
-    host = db.get("host", "localhost")
-    port = int(db.get("port", 5432))
-    name = db.get("name", "production_yield_oee")
-    user = os.environ.get(db.get("user_env") or "POSTGRES_USER", "")
-    password = os.environ.get(db.get("password_env") or "POSTGRES_PASSWORD", "")
-    if not user:
-        return {"available": False, "reason": "no credentials in environment"}
     try:
-        sock = socket.create_connection((host, port), timeout=3)
-        sock.close()
-    except OSError as exc:
-        return {"available": False, "reason": f"unreachable {host}:{port} ({exc})"}
+        from src.load_db import _resolve_dsn
+        dsn = _resolve_dsn(config)
+    except Exception:
+        return {"available": False, "reason": "no credentials in environment"}
     try:
         import psycopg2
 
-        conn = psycopg2.connect(host=host, port=port, dbname=name,
-                                user=user, password=password, connect_timeout=3)
-        cur = conn.cursor()
-        cur.execute("SELECT COUNT(*), COALESCE(SUM(total_count),0), COALESCE(SUM(good_count),0) "
-                    "FROM fact_production_hourly")
-        n, total, good = cur.fetchone()
-        cur.execute("SELECT COUNT(*), COALESCE(SUM(duration_min),0) FROM fact_downtime_event")
-        dn, dur = cur.fetchone()
-        conn.close()
+        conn = psycopg2.connect(dsn, connect_timeout=3)
+        try:
+            cur = conn.cursor()
+            cur.execute("SELECT COUNT(*), COALESCE(SUM(total_count),0), COALESCE(SUM(good_count),0) "
+                        "FROM analytics.fact_production_hourly")
+            n, total, good = cur.fetchone()
+            cur.execute("SELECT COUNT(*), COALESCE(SUM(duration_min),0) FROM analytics.fact_downtime_event")
+            dn, dur = cur.fetchone()
+        finally:
+            conn.close()
         return {"available": True, "production_rows": int(n), "total_count": int(total),
                 "good_count": int(good), "downtime_events": int(dn),
                 "downtime_minutes": float(dur)}
-    except Exception as exc:
-        return {"available": False, "reason": f"query failed ({exc})"}
+    except Exception:
+        return {"available": False, "reason": "connection or schema-qualified query failed"}
 
 
 # ---------------------------------------------------------------------------
@@ -799,7 +790,7 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
         "exact_match_count": sum(1 for r in rows if r["tolerance"] in ("exact", "<=0.01")),
         "tolerance_match_count": sum(1 for r in rows if r["tolerance"] not in ("exact", "<=0.01")),
         "known_exceptions": [
-            "database-live validation unavailable; committed db_load/dq evidence used instead",
+            "75 comparisons use committed db_load/dq/report evidence; live aggregate probe is supplemental",
             "MetroPT-3 logging gaps preserved as gaps per P1-002; not flagged as failures",
             "pipeline_run_summary.json is a single-stage DRY_RUN test artifact per impact DQ-006",
             "interactive PBIX assembly remains manual; only SQL-vs-DAX reconciliation checked",

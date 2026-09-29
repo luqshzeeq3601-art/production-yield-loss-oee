@@ -28,8 +28,12 @@ STAGING_SOURCES = (
     ("staging.metropt3_state_periods", ("metropt3", "state_periods")),
 )
 
+# Reading-dependent checks are outside the explicitly selected serving profile.
+# The default analytical profile always runs every check, unchanged.
+POWERBI_EXCLUDED_CHECKS = ("DQ-H03", "DQ-H05", "DQ-H06", "DQ-I04", "DQ-J07", "DQ-S08")
 
-def run(config_path: str | Path | None = None) -> dict[str, Any]:
+
+def run(config_path: str | Path | None = None, *, powerbi_only: bool = False) -> dict[str, Any]:
     """Run all DQ checks and return the summary payload."""
 
     started = time.perf_counter()
@@ -52,6 +56,8 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
                 )
                 cursor.execute(sql)
                 for row in cursor.fetchall():
+                    if powerbi_only and row[0] in POWERBI_EXCLUDED_CHECKS:
+                        continue
                     checks.append(
                         {
                             "check_id": row[0],
@@ -63,7 +69,7 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
                             "details": row[6],
                         }
                     )
-                checks.extend(_source_checks(cursor, config))
+                checks.extend(_source_checks(cursor, config, powerbi_only))
                 cursor.execute("SHOW server_version")
                 version = cursor.fetchone()[0]
                 source_summary = _source_system_summary(cursor)
@@ -82,6 +88,8 @@ def run(config_path: str | Path | None = None) -> dict[str, Any]:
         "source_system_summary": source_summary,
         "runtime_seconds": round(time.perf_counter() - started, 1),
         "checks": checks,
+        "profile": "powerbi" if powerbi_only else "full_analytics",
+        "excluded_checks": list(POWERBI_EXCLUDED_CHECKS) if powerbi_only else [],
     }
     summary_path = _reports_path(config) / "dq_check_summary.json"
     summary_path.parent.mkdir(parents=True, exist_ok=True)
@@ -119,11 +127,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
-def _source_checks(cursor: Any, config: Mapping[str, Any]) -> list[dict[str, Any]]:
+def _source_checks(cursor: Any, config: Mapping[str, Any], powerbi_only: bool = False) -> list[dict[str, Any]]:
     """Compare live staging counts against source CSV row counts."""
 
     results = []
     for position, (table, (section, key)) in enumerate(STAGING_SOURCES, start=1):
+        if powerbi_only and table == "staging.metropt3_readings":
+            continue
         path = _resolve_configured_path(config[section]["outputs"][key])
         with path.open("r", encoding="utf-8", newline="") as handle:
             source_rows = sum(1 for _ in handle) - 1

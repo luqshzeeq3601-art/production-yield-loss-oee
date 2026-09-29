@@ -22,11 +22,11 @@ Use these exact figures in README, resume, LinkedIn, and interviews. Sources in 
 
 ## VALIDATION
 
-- Tests: 229 PASS, 0 skipped, `-W error` [full_validation_summary]
+- Tests: 275 PASS, 0 skipped, `-W error` [powerbi_preparation_validation; historical full_validation_summary remains unchanged]
 - DQ: 65/65 PASS, 0 violations, 0 rejected rows, 0 unresolved FKs [dq_check_summary, db_load_summary]
 - Cross-system reconciliation: 75/75 PASS across 9 domains [cross_system_reconciliation_summary]
 - SQL vs DAX: PASS within 0.1% (measured ~1.49e-14%) [powerbi_reconciliation_summary]
-- Power BI: 36 DAX measures specified; 7 dashboard pages specified; final `.pbix` requires manual Desktop assembly (not committed) [measures.dax, dashboard_specification]
+- Power BI: 83 DAX measures specified; 7 dashboard pages specified; final `.pbix` requires manual Desktop assembly (not committed) [measures.dax, dashboard_specification]
 
 ## BUSINESS OUTCOMES
 

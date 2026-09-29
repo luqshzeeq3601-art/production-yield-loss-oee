@@ -1,83 +1,98 @@
 # Power BI Measure Catalog
 
-Complete dictionary of DAX measures implemented in the semantic model, mapped to home tables, formatting, business definition, and PostgreSQL reconciliation status.
+DAX definitions are in `measures.dax`. Import names exactly as `model_mapping.csv`.
+Values below are source/evidence checks and Python emulation; actual Power BI engine execution remains for Desktop assembly.
 
----
+| Measure | Home table | Format | Definition / evidence |
+|---|---|---|---|
+| `Planned Production Time (h)` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Run Time (h)` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Ideal Operating Basis (h)` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Total Units` | `fact_production_hourly` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Good Units` | `fact_production_hourly` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Scrap Units` | `fact_production_hourly` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Yield %` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Scrap Rate %` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Availability` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Performance` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Quality` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `OEE` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `OEE Target` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `OEE vs Target` | `fact_production_hourly` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `OEE Target Status` | `fact_production_hourly` | `@` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Downtime Minutes` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Downtime Hours` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Downtime Events` | `fact_downtime_event` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Unplanned Downtime Hours` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Planned Downtime Hours` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Availability Loss Hours` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Performance Loss Hours` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Quality Equivalent Loss Hours` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Total Scrap Cost` | `fact_quality_scrap` | `$#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Top 3 Scrap Cost` | `fact_quality_scrap` | `$#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Top 3 Scrap Cost Share` | `fact_quality_scrap` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Scrap Cost All Causes` | `fact_quality_scrap` | `$#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Cum Scrap Cost` | `fact_quality_scrap` | `$#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Cum % Scrap Cost` | `fact_quality_scrap` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Downtime All Reasons` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Cum Downtime Hours` | `fact_downtime_event` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Cum % Downtime` | `fact_downtime_event` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Planned Headcount` | `fact_manpower_shift` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Actual Headcount` | `fact_manpower_shift` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Manpower Gap` | `fact_manpower_shift` | `#,##0.00` | Planned minus actual operator-shifts: 12240 - 11432 = 808; not unique workers. |
+| `Capacity Utilization %` | `fact_production_hourly` | `0.00%` | Existing definition preserved: run/planned, equal to Availability (91.29%). |
+| `Average Processing Time (s)` | `fact_station_operation` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Average Wait Time (s)` | `fact_station_operation` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Bottleneck Processing Time (s)` | `fact_station_operation` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Alerts Total` | `fact_spc_alert` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Alerts Open` | `fact_spc_alert` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Alerts Critical` | `fact_spc_alert` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Median Detection Latency (h)` | `pb_spc_methods` | `#,##0.00` | Modeled same-lot detection latency: 0 h. Zero compute/response delay assumed. |
+| `Median Early Detection Advantage (h)` | `pb_spc_methods` | `#,##0.00` | Modeled lead vs next-day 08:00: 17.9833 h; not detection latency. |
+| `WE Precision %` | `pb_spc_methods` | `0.00%` | TP/(TP+FP), WE only: 46/(46+1041) = 4.23%. |
+| `WE EWMA Precision %` | `pb_spc_methods` | `0.00%` | WE+EWMA only: 46/(46+1046) = 4.21%. |
+| `Combined Precision %` | `pb_spc_methods` | `0.00%` | WE+EWMA+T2: 4.21%; benchmark table, disconnected from MES filters. |
+| `Alert Precision %` | `pb_spc_methods` | `0.00%` | Alias of Combined Precision %, never failure prevalence. |
+| `Alert Recall %` | `pb_spc_methods` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Excursions Caught Before Manual Report %` | `pb_spc_methods` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Phase II Lots` | `pb_spc_lots` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Phase II Failures` | `pb_spc_lots` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Phase II Failure Prevalence %` | `pb_spc_lots` | `0.00%` | 46/1097 = 4.19%; class prevalence, not precision. |
+| `Combined False Alerts / 100 Lots` | `pb_spc_methods` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Failures Detected` | `pb_spc_methods` | `#,##0` | TP in single-method context; blank grand total prevents double counting methods. |
+| `Failure Lead-Time Count` | `pb_spc_failures` | `#,##0` | Filter method to WE+EWMA+T2 for the 46-failure histogram. |
+| `SPC Reading Value` | `fact_sensor_reading` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `SPC Centerline` | `fact_sensor_reading` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `SPC UCL` | `fact_sensor_reading` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `SPC LCL` | `fact_sensor_reading` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `SPC Violation Value` | `fact_sensor_reading` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Manual Baseline Hours / Week` | `pb_impact_metrics` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Automated Pipeline Hours / Week` | `pb_impact_metrics` | `#,##0.00` | RA-003/60: ten-minute target, not measured full production runtime. |
+| `Annual Analyst Hours Saved` | `pb_impact_metrics` | `#,##0.00` | RA-006: 303.3 h/year, configured automation target, not observed runtime. |
+| `Annual Recoverable Value ($)` | `pb_impact_metrics` | `$#,##0.00` | WIF-006: $1,688,452.14 MODELED scenario, not realized savings. |
+| `Work Orders Total` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Completed Work Orders` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Partial Work Orders` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `WO Completion %` | `vw_work_orders` | `0.00%` | 266 complete / 720 = 36.94%; status is produced_qty >= planned_qty. |
+| `WO On-Time %` | `vw_work_orders` | `0.00%` | 391 source on_time flags / 720 = 54.31%; simulated flag, no observed completion date. |
+| `WO Planned Units` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `WO Produced Units` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `WO Good Units` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `WO Scrap Units` | `vw_work_orders` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Throughput Units / Run Hour` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `DQ Checks Total` | `pb_dq_checks` | `#,##0` | Live DQ snapshot: 65 full-profile checks or 59 serving checks; six reading-dependent checks explicitly excluded in serving. |
+| `DQ Checks Passed` | `pb_dq_checks` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `DQ Violations` | `pb_dq_checks` | `#,##0` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `DQ Pass %` | `pb_dq_checks` | `0.00%` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `DQ Status` | `pb_dq_checks` | `@` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `Reconciliation Pass %` | `pb_reconciliation` | `0.00%` | 75/75 artifact comparisons; supplemental live aggregate probe is separate. |
+| `Ideal Good Output Basis (h)` | `fact_production_hourly` | `#,##0.00` | From additive source components or the linked evidence snapshot; see exact DAX definition. |
+| `OEE Bridge Hours` | `pb_oee_bridge` | `#,##0.00` | Physical five-step time bridge; mark Planned and Good Output as waterfall totals. |
 
-## 1. Core Production & Time Measures
+## Model boundaries
 
-| Measure Name | Home Table | Format | DAX Expression | Description | SQL Reconciled |
-|---|---|---|---|---|:---:|
-| `Planned Production Time (h)` | `fact_production_hourly` | `#,##0.0` | `SUM(fact_production_hourly[planned_time_min]) / 60.0` | Total scheduled operating time in hours. | Yes (17,175.0 h) |
-| `Run Time (h)` | `fact_production_hourly` | `#,##0.0` | `SUM(fact_production_hourly[run_time_min]) / 60.0` | Total actual operating run time in hours. | Yes (15,678.9 h) |
-| `Ideal Operating Basis (h)` | `fact_production_hourly` | `#,##0.0` | `SUMX(fact_production_hourly, fact_production_hourly[ideal_cycle_time_s] * fact_production_hourly[total_count]) / 3600.0` | Theoretical minimum time required to produce total units at ideal cycle rate. | Yes (13,249.2 h) |
-| `Total Units` | `fact_production_hourly` | `#,##0` | `SUM(fact_production_hourly[total_count])` | Total gross production pieces produced across all lines. | Yes (1,074,073 units) |
-| `Good Units` | `fact_production_hourly` | `#,##0` | `SUM(fact_production_hourly[good_count])` | Total first-pass conforming units produced. | Yes (1,036,026 units) |
-| `Scrap Units` | `fact_production_hourly` | `#,##0` | `SUM(fact_production_hourly[scrap_count])` | Total non-conforming units rejected. | Yes (38,047 units) |
-| `Yield %` | `fact_production_hourly` | `0.00%` | `DIVIDE([Good Units], [Total Units], BLANK())` | First-pass manufacturing yield percentage. | Yes (96.46%) |
-| `Scrap Rate %` | `fact_production_hourly` | `0.00%` | `DIVIDE([Scrap Units], [Total Units], BLANK())` | Percentage of total production rejected as scrap. | Yes (3.54%) |
-
----
-
-## 2. OEE Decomposition Measures
-
-| Measure Name | Home Table | Format | DAX Expression | Description | SQL Reconciled |
-|---|---|---|---|---|:---:|
-| `Availability` | `fact_production_hourly` | `0.00%` | `DIVIDE([Run Time (h)], [Planned Production Time (h)], BLANK())` | Ratio of actual operating run time to planned production time ($A$). | Yes (91.29%) |
-| `Performance` | `fact_production_hourly` | `0.00%` | `DIVIDE([Ideal Operating Basis (h)], [Run Time (h)], BLANK())` | Operating speed efficiency against standard ideal cycle times ($P$). | Yes (84.50%) |
-| `Quality` | `fact_production_hourly` | `0.00%` | `DIVIDE([Good Units], [Total Units], BLANK())` | Conforming unit ratio ($Q$). | Yes (96.46%) |
-| `OEE` | `fact_production_hourly` | `0.00%` | `[Availability] * [Performance] * [Quality]` | Overall Equipment Effectiveness ($A \times P \times Q$). | Yes (74.41%) |
-| `OEE Target` | `fact_production_hourly` | `0.00%` | `0.85` | Benchmark world-class OEE target. | Yes (85.00%) |
-| `OEE vs Target` | `fact_production_hourly` | `+0.00%;-0.00%;0.00%` | `[OEE] - [OEE Target]` | Variance between actual plant OEE and target benchmark. | Yes (-10.59 pts) |
-
----
-
-## 3. Loss & Cost Decomposition Measures
-
-| Measure Name | Home Table | Format | DAX Expression | Description | SQL Reconciled |
-|---|---|---|---|---|:---:|
-| `Downtime Minutes` | `fact_downtime_event` | `#,##0.0` | `SUM(fact_downtime_event[duration_min])` | Total downtime duration across all events in minutes. | Yes (177,845.0 min) |
-| `Downtime Hours` | `fact_downtime_event` | `#,##0.0` | `[Downtime Minutes] / 60.0` | Total downtime duration in hours. | Yes (2,964.1 h) |
-| `Unplanned Downtime Hours` | `fact_downtime_event` | `#,##0.0` | `CALCULATE([Downtime Hours], dim_downtime_reason[is_planned] = FALSE())` | Unplanned lost hours (breakdowns, changeovers, minor stops, shortages). | Yes (2,859.1 h) |
-| `Planned Downtime Hours` | `fact_downtime_event` | `#,##0.0` | `CALCULATE([Downtime Hours], dim_downtime_reason[is_planned] = TRUE())` | Scheduled maintenance downtime excluded from Availability. | Yes (105.0 h) |
-| `Availability Loss Hours` | `fact_production_hourly` | `#,##0.0` | `[Planned Production Time (h)] - [Run Time (h)]` | Lost operating time due to equipment stoppages. | Yes (1,496.1 h) |
-| `Performance Loss Hours` | `fact_production_hourly` | `#,##0.0` | `[Run Time (h)] - [Ideal Operating Basis (h)]` | Lost operating time due to cycle-time speed loss and minor stops. | Yes (2,429.8 h) |
-| `Quality Equivalent Loss Hours` | `fact_production_hourly` | `#,##0.0` | `SUMX(fact_production_hourly, fact_production_hourly[ideal_cycle_time_s] * fact_production_hourly[scrap_count]) / 3600.0` | Time-equivalent loss invested in defective scrap units. | Yes (470.6 h) |
-| `Total Scrap Cost` | `fact_quality_scrap` | `$#,##0` | `SUM(fact_quality_scrap[scrap_cost])` | Total financial scrap cost based on product unit costs. | Yes ($555,891.00) |
-| `Top 3 Scrap Cost Share` | `fact_quality_scrap` | `0.00%` | `DIVIDE([Top 3 Scrap Cost], [Total Scrap Cost], BLANK())` | Concentration percentage of scrap cost in top 3 defect causes. | Yes (74.38%) |
-
----
-
-## 4. Pareto & Cumulative Measures
-
-| Measure Name | Home Table | Format | DAX Expression | Description |
-|---|---|---|---|---|
-| `Scrap Cost All Causes` | `fact_quality_scrap` | `$#,##0` | `CALCULATE([Total Scrap Cost], ALLSELECTED(dim_defect_cause))` | Denominator total for dynamic visual filtering. |
-| `Cum % Scrap Cost` | `fact_quality_scrap` | `0.00%` | `DIVIDE([Cum Scrap Cost], [Scrap Cost All Causes], BLANK())` | Running cumulative percentage for Pareto line series. |
-| `Downtime All Reasons` | `fact_downtime_event` | `#,##0.0` | `CALCULATE([Downtime Hours], ALLSELECTED(dim_downtime_reason))` | Denominator total for downtime Pareto chart. |
-| `Cum % Downtime` | `fact_downtime_event` | `0.00%` | `DIVIDE([Cum Downtime Hours], [Downtime All Reasons], BLANK())` | Running cumulative percentage of downtime hours. |
-
----
-
-## 5. Capacity, Manpower & Operations
-
-| Measure Name | Home Table | Format | DAX Expression | Description | SQL Reconciled |
-|---|---|---|---|---|:---:|
-| `Planned Headcount` | `fact_manpower_shift` | `#,##0` | `SUM(fact_manpower_shift[planned_headcount])` | Budgeted operator staffing across lines and shifts. | Yes (12,240) |
-| `Actual Headcount` | `fact_manpower_shift` | `#,##0` | `SUM(fact_manpower_shift[actual_headcount])` | Actual present operator staffing. | Yes (11,432) |
-| `Manpower Gap` | `fact_manpower_shift` | `#,##0` | `[Planned Headcount] - [Actual Headcount]` | Net operator absenteeism / staffing shortage. | Yes (808) |
-| `Capacity Utilization %` | `fact_production_hourly` | `0.00%` | `DIVIDE([Run Time (h)], [Planned Production Time (h)], BLANK())` | Plant asset utilization rate. | Yes (91.29%) |
-| `Bottleneck Processing Time (s)` | `fact_station_operation` | `0.0 s` | `CALCULATE([Average Processing Time (s)], dim_station_machine[is_bottleneck] = 1)` | Average cycle time at bottleneck station S3 (Processing). | Yes (65.0 s) |
-
----
-
-## 6. SPC, Automation & Business Impact
-
-| Measure Name | Home Table | Format | DAX Expression | Description | Reconciled |
-|---|---|---|---|---|:---:|
-| `Alerts Total` | `fact_spc_alert` | `#,##0` | `COUNTROWS(fact_spc_alert)` | Total statistical process control rule excursion events. | Yes (1,154) |
-| `Alerts Open` | `fact_spc_alert` | `#,##0` | `CALCULATE(COUNTROWS(fact_spc_alert), fact_spc_alert[status] = "open")` | Currently unacknowledged SPC excursions. | Yes (1,154) |
-| `Alert Precision %` | `fact_spc_alert` | `0.0%` | `0.0419` | Phase II SPC alert precision (honest trade-off reported). | Yes (4.2%) |
-| `Median Detection Latency (h)` | `fact_spc_alert` | `0.0 h` | `18.0` | Hours from excursion occurrence to early warning flag. | Yes (18.0 h) |
-| `Annual Analyst Hours Saved` | `_Model_Parameters` | `#,##0.0 h` | `303.3` | Net annual analyst reporting hours saved vs manual Excel. | Yes (303.3 h) |
-| `Annual Recoverable Value ($)` | `_Model_Parameters` | `$#,##0` | `1688452.14` | Modeled financial value recoverable from 30% loss reduction. | Yes ($1,688,452.14) |
+- Work orders relate to Date (order date), Line, Product only. No shift, station, completion-date, or hourly-order attribution is observed.
+- SPC benchmark/lot/failure tables are disconnected from the MES calendar. Frozen limits relate to Sensor; the reading view imports only selected Phase II SECOM sensors.
+- Impact, DQ, reconciliation, and bridge tables are disconnected snapshots. Show their evidence labels and profile; do not synchronize MES slicers onto SPC benchmark cards.
+- Alert event counts differ from alerted-lot precision denominators. Open/warning are initial diagnostic workflow labels, not measured operational severity or acknowledgment.
+- High recall was achieved at the cost of a very high false-positive burden. The 60% precision target was not achieved.
