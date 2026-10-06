@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-06 — Remaining-project assessment and tracking
+
+- Added [PROJECT_TRACK_LOG.md](PROJECT_TRACK_LOG.md) with task evidence, remaining gates, and the user-directed Power BI stopping point; linked it from the implementation plan.
+- Reran the existing suite: 275 passed; processed-file verification: 9/9 passed; isolated pipeline CLI: 14 dry-run stages. Current live PostgreSQL validation was unavailable.
+- Identified P5-004 integration/run-proof gaps and deferred actual Power BI validation and final portfolio acceptance.
+- Read-only PBIX archive inspection confirmed seven pages and 36 visual containers. Preserved the pre-existing PBIX edit and restored test-generated analytical/reporting changes from exact pre-test copies.
+
 ## 2026-09-29 — Power BI assembly preparation (POWERBI-PREP)
 
 - Persistent PostgreSQL 16.15 startup, local environment credentials, and live serving validation.

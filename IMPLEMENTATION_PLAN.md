@@ -1,5 +1,12 @@
 # Production Yield Loss & OEE Early-Warning System — Implementation Plan
 
+## Current checkpoint — 2026-10-06
+
+- Current task status, verification evidence, and remaining work are tracked in [PROJECT_TRACK_LOG.md](PROJECT_TRACK_LOG.md). Append a dated record after each future task.
+- Next implementation task: **P5-004**, complete pipeline integration and prove a real run from an empty database.
+- User stopping point: **Power BI (P5-002 / P5-003)**. The existing PBIX has seven pages; actual Desktop/model/visual validation remains open.
+- This checkpoint is an assessment, not a new project-completion or formal review verdict.
+
 ## Context
 The project brief (`Production Yield Loss and OEE Early.md`) describes a problem common in semiconductor, E&E, and medical-device plants. Yield drops and line bottlenecks show up days late in manual Excel reports, so scrap and missed deliveries build up before anyone acts. The folder is misnamed ("Procure-to-Pay…"). The user confirmed this project is the OEE / Yield system.
 
