@@ -18,10 +18,9 @@
   --border: rgba(11, 11, 11, 0.10);
   --wash: rgba(11, 11, 11, 0.04);
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
-  --dim: #d6d5cf;
-  --seq-lo: #cde2fb; --seq-hi: #184f95;
+  --dim: #d6d5cf; --context: #c3c2b7;
+  --seq-lo: #e6f0fc; --seq-hi: #184f95;
   --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
-  --good-text: #006300; --bad-text: #b02a2a;
   --band: rgba(11, 11, 11, 0.035);
 }
 @media (prefers-color-scheme: dark) {
@@ -30,8 +29,8 @@
     --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10); --wash: rgba(255, 255, 255, 0.05);
     --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-    --dim: #3a3a37; --seq-lo: #1d2a3a; --seq-hi: #6da7ec;
-    --good-text: #0ca30c; --bad-text: #e66767; --band: rgba(255, 255, 255, 0.04);
+    --dim: #3a3a37; --context: #4a4a46; --seq-lo: #1f2a37; --seq-hi: #6da7ec;
+    --band: rgba(255, 255, 255, 0.04);
   }
 }
 :root[data-theme="dark"] {
@@ -39,8 +38,8 @@
   --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255, 255, 255, 0.10); --wash: rgba(255, 255, 255, 0.05);
   --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-  --dim: #3a3a37; --seq-lo: #1d2a3a; --seq-hi: #6da7ec;
-  --good-text: #0ca30c; --bad-text: #e66767; --band: rgba(255, 255, 255, 0.04);
+  --dim: #3a3a37; --context: #4a4a46; --seq-lo: #1f2a37; --seq-hi: #6da7ec;
+  --band: rgba(255, 255, 255, 0.04);
 }
 * { box-sizing: border-box; }
 body {
@@ -54,14 +53,24 @@ h1 { font-size: 22px; margin: 0 0 4px; font-weight: 650; letter-spacing: -0.01em
 h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin: 32px 0 12px; }
 h3 { font-size: 15px; margin: 0; font-weight: 600; }
 .note { color: var(--ink-2); font-size: 12.5px; margin: 2px 0 12px; }
-button { font: inherit; color: inherit; }
+button, select { font: inherit; color: inherit; }
 .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
-.seg button { border: 0; background: none; padding: 6px 12px; cursor: pointer; color: var(--ink-2); }
+.seg button { border: 0; background: none; padding: 6px 12px; cursor: pointer; color: var(--ink-2); white-space: nowrap; }
 .seg button + button { border-left: 1px solid var(--border); }
 .seg button:hover { background: var(--wash); }
 .seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); }
-.seg button:focus-visible { outline: 2px solid var(--s1); outline-offset: -2px; }
-.filters { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 20px 0 0; color: var(--ink-2); font-size: 13px; }
+.seg button:focus-visible, select:focus-visible { outline: 2px solid var(--s1); outline-offset: -2px; }
+select { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px; }
+.filters {
+  display: flex; gap: 10px 20px; align-items: center; flex-wrap: wrap;
+  padding: 10px 0; background: var(--page); border-bottom: 1px solid var(--grid); color: var(--ink-2); font-size: 13px;
+}
+.filters .grp { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.filters .grp { min-width: 0; max-width: 100%; }
+@media (min-width: 900px) { .filters { position: sticky; top: 0; z-index: 5; } }
+.filters .seg { max-width: 100%; min-width: 0; overflow-x: auto; }
+details > div { overflow-x: auto; }
+.scope { color: var(--muted); font-size: 12.5px; margin: 10px 0 0; }
 .grid { display: grid; gap: 16px; }
 .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -78,7 +87,11 @@ button { font: inherit; color: inherit; }
 .axisline { stroke: var(--axis); stroke-width: 1; shape-rendering: crispEdges; }
 .refline { stroke: var(--ink-2); stroke-width: 1; shape-rendering: crispEdges; }
 .hit { fill: transparent; cursor: default; }
-.mark { transition: opacity .15s; }
+.sm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; }
+@media (max-width: 560px) { .sm { grid-template-columns: minmax(0, 1fr); } }
+.sm-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); margin-bottom: 2px; }
+.sm-head i { width: 14px; height: 2px; border-radius: 1px; }
+.sm-head b { color: var(--ink); font-weight: 650; }
 .kpis { display: grid; grid-template-columns: minmax(0, 1.25fr) repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kpis2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
 @media (max-width: 900px) { .kpis, .kpis2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hero { grid-column: 1 / -1; } }
@@ -96,7 +109,7 @@ button { font: inherit; color: inherit; }
 .legend i { display: inline-block; width: 14px; height: 2px; border-radius: 1px; }
 .legend i.box { width: 10px; height: 10px; border-radius: 2px; }
 .legend i.dot { width: 8px; height: 8px; border-radius: 50%; }
-.card-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.legend i.ring { width: 8px; height: 8px; border-radius: 50%; background: none !important; border: 1.5px solid var(--s1); }
 details { margin-top: 10px; border-top: 1px solid var(--grid); padding-top: 8px; }
 summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; }
 .tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
@@ -109,8 +122,10 @@ summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; }
 .heat th:first-child { text-align: left; }
 .heat td { padding: 9px 8px; text-align: right; border-radius: 4px; font-size: 13px; transition: opacity .15s; }
 .heat td:first-child { text-align: left; background: none; color: var(--ink-2); font-weight: 600; }
-.heat tr.sep td { padding: 4px; }
+.heat tr.sep td { padding: 6px 8px 2px; font-size: 11.5px; font-weight: 500; color: var(--muted); }
 .heat tr.dim td { opacity: 0.35; }
+.scale { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); margin-top: 10px; font-variant-numeric: tabular-nums; }
+.scale i { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--seq-lo), var(--seq-hi)); }
 .tip {
   position: fixed; pointer-events: none; z-index: 10; background: var(--surface); color: var(--ink);
   border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
@@ -121,7 +136,8 @@ summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; }
 .tip .r i { width: 12px; height: 2px; border-radius: 1px; flex: none; }
 .tip .r b { font-weight: 650; min-width: 52px; }
 .tip .r span { color: var(--ink-2); }
-.callout { border-left: 3px solid var(--serious); padding: 2px 0 2px 10px; color: var(--ink-2); font-size: 13px; margin: 0 0 12px; }
+.callout { border-left: 3px solid var(--serious); padding: 2px 0 2px 10px; color: var(--ink-2); font-size: 13px; margin: 0 0 16px; }
+.divider { margin: 40px 0 0; padding-top: 16px; border-top: 1px solid var(--grid); color: var(--muted); font-size: 12.5px; }
 footer { color: var(--muted); font-size: 12px; margin-top: 32px; }
 code { font-size: 12px; }
 </style>
@@ -131,7 +147,7 @@ code { font-size: 12px; }
   <header>
     <div>
       <h1>Production Yield Loss &amp; OEE Early Warning</h1>
-      <p class="sub">180 days · 4 lines · 3 shifts of simulated MES data, plus SPC replay on real UCI SECOM lots. Every value is read from the project's validated report artifacts.</p>
+      <p class="sub">Operations views use 180 days of simulated MES data (4 lines × 3 shifts); the early-warning views replay SPC on real UCI SECOM lots. All values come from the project's validated artifacts.</p>
     </div>
     <div class="seg" role="group" aria-label="Color theme">
       <button type="button" data-theme-btn="auto" aria-pressed="true">Auto</button>
@@ -140,28 +156,37 @@ code { font-size: 12px; }
     </div>
   </header>
 
-  <div class="filters">
-    <span>Focus line</span>
-    <div class="seg" role="group" aria-label="Focus line" id="lineFilter"></div>
+  <h2>Operations · simulated MES</h2>
+  <div class="filters" role="region" aria-label="Filters for operations views">
+    <div class="grp">
+      <span>Period</span>
+      <div class="seg" role="group" aria-label="Period presets" id="presets"></div>
+      <label for="fromWeek">from</label><select id="fromWeek"></select>
+      <label for="toWeek">to</label><select id="toWeek"></select>
+    </div>
+    <div class="grp">
+      <span>Line</span>
+      <div class="seg" role="group" aria-label="Line" id="lineFilter"></div>
+    </div>
   </div>
+  <p class="scope" id="scope"></p>
 
-  <h2>Plant performance</h2>
-  <section class="kpis" id="kpis"></section>
+  <section class="kpis" id="kpis" style="margin-top:12px"></section>
   <section class="kpis2" id="kpis2"></section>
 
-  <h2>OEE by line and shift</h2>
+  <h2>OEE trend and decomposition</h2>
   <section class="grid g32">
     <div class="card">
-      <div class="card-head"><h3>Weekly OEE by line</h3></div>
-      <p class="note">Weighted from hourly components (never averaged percentages). Hairline marks the 85% target.</p>
-      <div class="legend" id="weeklyLegend"></div>
-      <div class="chart" id="weekly"></div>
-      <details><summary>View data</summary><div class="scroll" id="weeklyTable"></div></details>
+      <h3>Weekly OEE by line</h3>
+      <p class="note" id="trendNote"></p>
+      <div id="trend"></div>
+      <details><summary>View data</summary><div class="scroll" id="trendTable"></div></details>
     </div>
     <div class="card">
-      <div class="card-head"><h3>A × P × Q decomposition</h3></div>
-      <p class="note">Darker = higher. Performance is the weakest factor almost everywhere; L2 and shift C lag most.</p>
+      <h3>A × P × Q decomposition</h3>
+      <p class="note">One shared colour scale for every cell, so equal gaps look equal. Performance is the weakest factor.</p>
       <div id="heat"></div>
+      <div class="scale" aria-hidden="true"><span id="scaleLo"></span><i></i><span>100%</span></div>
     </div>
   </section>
 
@@ -169,13 +194,13 @@ code { font-size: 12px; }
   <section class="grid g3">
     <div class="card">
       <h3>Hours lost by OEE factor</h3>
-      <p class="note">Of <span id="plannedHours"></span> planned production hours.</p>
+      <p class="note" id="lossNote"></p>
       <div class="chart" id="lossHours"></div>
       <details><summary>View data</summary><div id="lossTable"></div></details>
     </div>
     <div class="card">
       <h3>Downtime Pareto</h3>
-      <p class="note">Hours by reason; right column is cumulative share. Top 3 highlighted.</p>
+      <p class="note">Hours by reason; right column is cumulative share. Top 3 unplanned reasons highlighted.</p>
       <div class="chart" id="paretoDowntime"></div>
       <details><summary>View data</summary><div id="downtimeTable"></div></details>
     </div>
@@ -187,28 +212,31 @@ code { font-size: 12px; }
     </div>
   </section>
 
-  <h2>SPC early warning (SECOM, real data)</h2>
+  <p class="divider">The sections below cover the full study period and are not affected by the filters above.</p>
+
+  <h2>SPC early warning · real SECOM data</h2>
   <p class="callout" id="spcCallout"></p>
+  <section class="kpis2" id="spcTiles" style="margin:0 0 16px"></section>
   <section class="grid g2">
     <div class="card">
       <h3>Daily p-chart: lot failure rate</h3>
-      <p class="note">Step line is the UCL (wider on low-volume days, shown as hollow points).</p>
+      <p class="note" id="pNote"></p>
       <div class="legend" id="pLegend"></div>
       <div class="chart" id="pchart"></div>
-      <details><summary>View data</summary><div class="scroll" id="pTable"></div></details>
+      <details><summary>View data (all days)</summary><div class="scroll" id="pTable"></div></details>
     </div>
     <div class="card">
       <h3>Hotelling T² across 10 monitored sensors</h3>
       <p class="note">Log scale. Shaded band = Phase I (limit estimation); Phase II lots are never used to set limits.</p>
       <div class="legend" id="t2Legend"></div>
       <div class="chart" id="t2"></div>
-      <details><summary>View data</summary><div class="scroll" id="t2Table"></div></details>
+      <details><summary>View data (UCL exceedances)</summary><div class="scroll" id="t2Table"></div></details>
     </div>
   </section>
   <section class="grid g2" style="margin-top:16px">
     <div class="card">
       <h3>Backtest: recall vs precision by method</h3>
-      <p class="note">1,097 Phase II lots. Hairline = 60% precision target (not met by any method).</p>
+      <p class="note">1,097 Phase II lots. No method reaches the 60% precision target.</p>
       <div class="legend" id="methodLegend"></div>
       <div class="chart" id="methods"></div>
       <details><summary>View data</summary><div id="methodTable"></div></details>
@@ -226,7 +254,7 @@ code { font-size: 12px; }
   <section class="grid g2">
     <div class="card">
       <h3>Weekly reporting effort</h3>
-      <p class="note">Documented 14-step manual Excel workflow vs the automated pipeline target.</p>
+      <p class="note" id="reportNote"></p>
       <div class="chart" id="reporting"></div>
     </div>
     <div class="card">
@@ -237,7 +265,7 @@ code { font-size: 12px; }
     </div>
   </section>
 
-  <footer>Generated by <code>python -m src.build_dashboard</code> from <code>reports/</code> and <code>data/processed/mes_production_hourly.csv</code>. MES data is simulated (seed 42); SECOM is real UCI data.</footer>
+  <footer>Generated by <code>python -m src.build_dashboard</code> from <code>reports/</code> and <code>data/processed/</code>. MES data is simulated (seed 42); SECOM is real UCI data. Over the full period and all lines, the filtered views reproduce the validated report totals exactly.</footer>
 </div>
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
@@ -247,8 +275,12 @@ const DATA = /*__DASHBOARD_DATA__*/null;
   "use strict";
   const NS = "http://www.w3.org/2000/svg";
   const LINES = ["L1", "L2", "L3", "L4"];
+  const SHIFTS = ["A", "B", "C"];
   const LINE_VAR = { L1: "--s1", L2: "--s2", L3: "--s3", L4: "--s4" };
-  let focus = "All";
+  const HEAT_LO = 0.65, HEAT_HI = 1.0;
+  const S = DATA.summary, I = DATA.impact, MES = DATA.mes, WEEKS = MES.weeks;
+  const TARGET = S.plant.oee_target;
+  const state = { from: 0, to: WEEKS.length - 1, line: "All" };
 
   // ---------- helpers ----------
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -256,6 +288,7 @@ const DATA = /*__DASHBOARD_DATA__*/null;
   const num = (v, d = 0) => v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
   const money = (v) => v >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : v >= 1e3 ? "$" + (v / 1e3).toFixed(1) + "K" : "$" + num(v);
   const fmtDate = (s) => new Date(s + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const weekEnd = (i) => { const d = new Date(WEEKS[i].week + "T00:00:00"); d.setDate(d.getDate() + WEEKS[i].days - 1); return d.toISOString().slice(0, 10); };
   function el(tag, attrs, parent) {
     const n = document.createElementNS(NS, tag);
     for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
@@ -289,10 +322,10 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     if (w <= 0) return "";
     return `M${x0},${y}H${x0 + w - r}Q${x0 + w},${y} ${x0 + w},${y + r}V${y + hgt - r}Q${x0 + w},${y + hgt} ${x0 + w - r},${y + hgt}H${x0}Z`;
   }
-  function frame(id, height) {
-    const box = document.getElementById(id);
+  function frame(box, height) {
+    if (typeof box === "string") box = document.getElementById(box);
     box.textContent = "";
-    const width = Math.max(260, box.clientWidth);
+    const width = Math.max(220, box.clientWidth);
     const svg = el("svg", { viewBox: `0 0 ${width} ${height}`, height, role: "img" }, box);
     return { box, svg, width, height };
   }
@@ -349,19 +382,19 @@ const DATA = /*__DASHBOARD_DATA__*/null;
   }
 
   // ---------- generic horizontal bar chart ----------
-  // rows: {label, value, valueText, extra?, color, tipRows}
   function hbars(id, rows, opts) {
-    const rowH = 34, barH = 18, top = 4, extraW = opts.extraHeader ? 52 : 0;
-    const height = top + rows.length * rowH + (opts.extraHeader ? 18 : 0);
+    const rowH = 34, barH = 18, top = 4;
+    const extraW = opts.extraHeader ? 52 : 0, y0 = opts.extraHeader ? 18 : 0;
+    const height = y0 + top + Math.max(1, rows.length) * rowH;
     const { svg, width } = frame(id, height);
+    if (!rows.length) { text(svg, width / 2, 30, "No records in this selection", { "text-anchor": "middle", class: "lbl" }); return; }
     const labelW = opts.labelW || 116, valW = 64;
-    const y0 = opts.extraHeader ? 18 : 0;
-    const x = lin(0, opts.max || Math.max(...rows.map((r) => r.value)), labelW, width - valW - extraW);
+    const x = lin(0, opts.max || Math.max(...rows.map((r) => r.value)) || 1, labelW, width - valW - extraW);
     if (opts.extraHeader) text(svg, width, 11, opts.extraHeader, { "text-anchor": "end" });
     el("line", { x1: labelW, x2: labelW, y1: y0, y2: height, class: "axisline" }, svg);
     rows.forEach((r, i) => {
       const y = y0 + top + i * rowH;
-      const g = el("g", { class: "mark" }, svg);
+      const g = el("g", {}, svg);
       text(g, labelW - 8, y + barH / 2 + 4, r.label, { "text-anchor": "end", class: "lbl" });
       const p = el("path", { d: hbarPath(labelW, y, x(r.value) - labelW, barH), fill: r.color }, g);
       text(g, x(r.value) + 6, y + barH / 2 + 4, r.valueText, { class: "val" });
@@ -372,10 +405,9 @@ const DATA = /*__DASHBOARD_DATA__*/null;
   }
 
   // ---------- generic line chart with crosshair ----------
-  // cfg: {xs (numbers), xLabel(i), series:[{key,name,color,values,width?,dash?}], yDomain, yTicks, yFmt, refs:[{y,label}], tipTitle(i), endLabels}
-  function lineChart(id, cfg) {
+  function lineChart(box, cfg) {
     const height = cfg.height || 260;
-    const { svg, width } = frame(id, height);
+    const { svg, width } = frame(box, height);
     const m = { l: 44, r: cfg.endLabels ? 136 : 12, t: 10, b: 26 };
     const xs = cfg.xs;
     const x = lin(xs[0], xs[xs.length - 1], m.l, width - m.r);
@@ -385,9 +417,9 @@ const DATA = /*__DASHBOARD_DATA__*/null;
       text(svg, m.l - 6, y(v) + 4, cfg.yFmt(v), { "text-anchor": "end" });
     });
     el("line", { x1: m.l, x2: width - m.r, y1: height - m.b, y2: height - m.b, class: "axisline" }, svg);
-    const nTicks = Math.max(2, Math.floor((width - m.l - m.r) / 90));
+    const nTicks = Math.max(2, Math.floor((width - m.l - m.r) / 80));
     const stepI = Math.max(1, Math.ceil(xs.length / nTicks));
-    for (let i = 0; i < xs.length; i += stepI) text(svg, x(xs[i]), height - 8, cfg.xLabel(i), { "text-anchor": "middle" });
+    for (let i = 0; i < xs.length; i += stepI) text(svg, x(xs[i]), height - 8, cfg.xLabel(i), { "text-anchor": xs.length === 1 ? "start" : "middle" });
     (cfg.refs || []).forEach((r) => {
       el("line", { x1: m.l, x2: width - m.r, y1: y(r.y), y2: y(r.y), class: "refline" }, svg);
       text(svg, r.left ? m.l + 4 : width - m.r, y(r.y) - 5, r.label, { "text-anchor": r.left ? "start" : "end", class: "ref" });
@@ -395,7 +427,8 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     const paths = {};
     cfg.series.forEach((s) => {
       const d = s.values.map((v, i) => `${i ? "L" : "M"}${x(xs[i]).toFixed(1)},${y(v).toFixed(1)}`).join("");
-      paths[s.key] = el("path", { d, fill: "none", stroke: s.color, "stroke-width": s.width || 2, "stroke-linejoin": "round", "stroke-linecap": "round", class: "mark", opacity: s.opacity === undefined ? 1 : s.opacity }, svg);
+      paths[s.key] = el("path", { d, fill: "none", stroke: s.color, "stroke-width": s.width ?? 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+      if (xs.length < 3 && !s.context) s.values.forEach((v, i) => el("circle", { cx: x(xs[i]), cy: y(v), r: 4, fill: s.color, stroke: "var(--surface)", "stroke-width": 2 }, svg));
     });
     if (cfg.endLabels) {
       const ends = cfg.series.map((s) => ({ s, py: y(s.values[s.values.length - 1]) })).sort((a, b) => a.py - b.py);
@@ -405,16 +438,17 @@ const DATA = /*__DASHBOARD_DATA__*/null;
         if (ok) text(svg, x(xs[xs.length - 1]) + 9, e.py + 4, `${e.s.name} ${cfg.yFmt(e.s.values[e.s.values.length - 1], true)}`, { class: "lbl" });
       });
     }
-    // crosshair
+    const tipSeries = cfg.series.filter((s) => !s.noTip);
     const cross = el("line", { y1: m.t, y2: height - m.b, class: "refline", opacity: 0 }, svg);
-    const dots = cfg.series.map((s) => el("circle", { r: 4, fill: s.color, stroke: "var(--surface)", "stroke-width": 2, opacity: 0 }, svg));
-    const hit = el("rect", { x: m.l, y: m.t, width: width - m.l - m.r, height: height - m.t - m.b, class: "hit", tabindex: 0, "aria-label": cfg.aria || "Line chart; use arrow keys to step through values" }, svg);
+    const dots = tipSeries.map((s) => el("circle", { r: 4, fill: s.color, stroke: "var(--surface)", "stroke-width": 2, opacity: 0 }, svg));
+    const hit = el("rect", { x: m.l - 6, y: m.t, width: width - m.l - m.r + 12, height: height - m.t - m.b, class: "hit", tabindex: 0, "aria-label": cfg.aria || "Line chart; use arrow keys to step through values" }, svg);
     let idx = xs.length - 1;
     const show = (i, evt) => {
       idx = i;
       cross.setAttribute("x1", x(xs[i])); cross.setAttribute("x2", x(xs[i])); cross.setAttribute("opacity", 1);
-      cfg.series.forEach((s, k) => { dots[k].setAttribute("cx", x(xs[i])); dots[k].setAttribute("cy", y(s.values[i])); dots[k].setAttribute("opacity", s.opacity === undefined || s.opacity > 0.5 ? 1 : 0); });
-      const rows = cfg.series.filter((s) => !s.noTip).map((s) => ({ color: s.color, value: cfg.yFmt(s.values[i], true), label: s.name })).sort((a, b) => cfg.sortTip ? parseFloat(b.value) - parseFloat(a.value) : 0);
+      tipSeries.forEach((s, k) => { dots[k].setAttribute("cx", x(xs[i])); dots[k].setAttribute("cy", y(s.values[i])); dots[k].setAttribute("opacity", s.dotless ? 0 : 1); });
+      let rows = tipSeries.map((s) => ({ color: s.dotless ? null : s.color, value: cfg.yFmt(s.values[i], true), label: s.name, v: s.values[i] }));
+      if (cfg.sortTip) rows = rows.sort((a, b) => b.v - a.v);
       showTip(evt, cfg.tipTitle(i), rows);
     };
     const nearest = (px) => { const v = x.inv(px); let best = 0; xs.forEach((xv, i) => { if (Math.abs(xv - v) < Math.abs(xs[best] - v)) best = i; }); return best; };
@@ -425,15 +459,61 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     });
     const off = () => { cross.setAttribute("opacity", 0); dots.forEach((d) => d.setAttribute("opacity", 0)); hideTip(); };
     hit.addEventListener("pointerleave", off); hit.addEventListener("blur", off);
-    return { svg, x, y, m, width, height, paths };
+    return { svg, x, y, m, width, height, paths, hit };
   }
 
-  // ---------- sections ----------
-  const S = DATA.summary, I = DATA.impact;
+  // ---------- MES aggregation (weighted from additive components) ----------
+  const F = MES.prod_fields.reduce((o, k, i) => (o[k] = i, o), {});
+  function emptyTot() { return { planned: 0, run: 0, ideal: 0, total: 0, good: 0, scrapIdeal: 0 }; }
+  function addProd(t, r) {
+    t.planned += r[F.planned_min]; t.run += r[F.run_min]; t.ideal += r[F.ideal_min];
+    t.total += r[F.total]; t.good += r[F.good]; t.scrapIdeal += r[F.scrap_ideal_min];
+  }
+  function apq(t) {
+    const a = t.planned ? t.run / t.planned : 0, p = t.run ? t.ideal / t.run : 0, q = t.total ? t.good / t.total : 0;
+    return { availability: a, performance: p, quality: q, oee: a * p * q };
+  }
+  const inRange = (w) => w >= state.from && w <= state.to;
+  const lineOk = (l) => state.line === "All" || state.line === l;
+  function aggregate() {
+    const tot = emptyTot(), byLine = {}, byShift = {}, weekly = {};
+    LINES.forEach((l) => { byLine[l] = emptyTot(); weekly[l] = {}; });
+    SHIFTS.forEach((s) => { byShift[s] = emptyTot(); });
+    weekly.plant = {};
+    MES.prod.forEach((r) => {
+      const w = r[F.week], l = r[F.line];
+      if (!inRange(w)) return;
+      addProd(byLine[l], r);
+      (weekly[l][w] = weekly[l][w] || emptyTot()) && addProd(weekly[l][w], r);
+      if (!lineOk(l)) return;
+      addProd(tot, r); addProd(byShift[r[F.shift]], r);
+      (weekly.plant[w] = weekly.plant[w] || emptyTot()) && addProd(weekly.plant[w], r);
+    });
+    const dt = {}, sc = {};
+    MES.downtime.forEach(([w, l, reason, min, ev]) => {
+      if (!inRange(w) || !lineOk(l)) return;
+      const d = dt[reason] = dt[reason] || { minutes: 0, events: 0 };
+      d.minutes += min; d.events += ev;
+    });
+    MES.scrap.forEach(([w, l, cause, cost, units]) => {
+      if (!inRange(w) || !lineOk(l)) return;
+      const s = sc[cause] = sc[cause] || { cost: 0, units: 0 };
+      s.cost += cost; s.units += units;
+    });
+    return { tot, byLine, byShift, weekly, dt, sc };
+  }
+  function pareto(map, valueOf) {
+    const rows = Object.entries(map).map(([k, v]) => ({ key: k, v, value: valueOf(v) })).filter((r) => r.value > 0).sort((a, b) => b.value - a.value);
+    const total = rows.reduce((s, r) => s + r.value, 0);
+    let cum = 0;
+    rows.forEach((r) => { r.share = r.value / total; cum += r.value; r.cum = cum / total; });
+    return { rows, total };
+  }
 
+  // ---------- operations sections ----------
   function statusIcon(kind) {
     const s = el("svg", { width: 14, height: 14, viewBox: "0 0 14 14", "aria-hidden": "true" });
-    const color = kind === "good" ? "var(--good)" : "var(--serious)";
+    const color = { good: "var(--good)", serious: "var(--serious)", critical: "var(--critical)" }[kind];
     el("circle", { cx: 7, cy: 7, r: 7, fill: color }, s);
     if (kind === "good") el("path", { d: "M4 7.2l2 2 4-4.4", fill: "none", stroke: "#fff", "stroke-width": 1.8, "stroke-linecap": "round", "stroke-linejoin": "round" }, s);
     else { el("rect", { x: 6.1, y: 3.2, width: 1.8, height: 4.8, rx: 0.9, fill: "#fff" }, s); el("circle", { cx: 7, cy: 10.2, r: 1, fill: "#fff" }, s); }
@@ -445,7 +525,7 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     h("div", { class: "value", text: o.value }, c);
     if (o.meter !== undefined) {
       const mtr = h("div", { class: "meter", role: "img", "aria-label": o.meterLabel }, c);
-      h("i", { style: `width:${o.meter * 100}%` }, mtr);
+      h("i", { style: `width:${Math.min(1, o.meter) * 100}%` }, mtr);
       if (o.target !== undefined) h("b", { style: `left:calc(${o.target * 100}% - 1px)` }, mtr);
     }
     if (o.status) {
@@ -454,34 +534,66 @@ const DATA = /*__DASHBOARD_DATA__*/null;
       st.appendChild(document.createTextNode(o.ctx));
     } else if (o.ctx) h("div", { class: "ctx", text: o.ctx }, c);
   }
-  function renderKpis() {
-    const p = S.plant, k = document.getElementById("kpis"), k2 = document.getElementById("kpis2");
+  function renderScope() {
+    const weeks = state.to - state.from + 1;
+    const days = WEEKS.slice(state.from, state.to + 1).reduce((s, w) => s + w.days, 0);
+    document.getElementById("scope").textContent =
+      `Showing ${fmtDate(WEEKS[state.from].week)} – ${fmtDate(weekEnd(state.to))} 2024 (${weeks} week${weeks > 1 ? "s" : ""}, ${days} days) · ${state.line === "All" ? "all lines" : "line " + state.line}`;
+  }
+  function renderKpis(A) {
+    const k = document.getElementById("kpis"), k2 = document.getElementById("kpis2");
     k.textContent = ""; k2.textContent = "";
-    const gap = (p.oee - p.oee_target) * 100;
-    tile(k, { hero: true, label: "Plant OEE", value: pct(p.oee), meter: p.oee, target: p.oee_target, meterLabel: `OEE ${pct(p.oee)} against ${pct(p.oee_target, 0)} target`, status: "serious", ctx: `Below target · ${gap.toFixed(1)} pts vs ${pct(p.oee_target, 0)}` });
-    tile(k, { label: "Availability", value: pct(p.availability), ctx: `${num(S.unplanned_downtime_hours)} h unplanned downtime` });
-    tile(k, { label: "Performance", value: pct(p.performance), ctx: "Weakest factor · minor stops dominate" });
-    tile(k, { label: "Quality (yield)", value: pct(p.quality), ctx: `${num(p.scrap_units)} scrap of ${num(p.total_units)} units` });
-    tile(k2, { label: "Scrap cost (180 d)", value: money(S.scrap_cost), ctx: `Top 3 causes = ${pct(I.top3_scrap_share)}` });
-    tile(k2, { label: "Median alert lead time", value: I.median_hours_saved.toFixed(1) + " h", ctx: "Earlier than next-day 08:00 manual report" });
-    tile(k2, { label: "Reporting effort", value: `${num(I.manual_minutes)} → ${num(I.automated_minutes)} min/wk`, status: "good", ctx: `−${I.reporting_reduction_pct}% · ${I.dq_checks}/${I.dq_checks} DQ checks pass` });
+    const r = apq(A.tot), gap = (r.oee - TARGET) * 100;
+    const meets = r.oee >= TARGET;
+    tile(k, { hero: true, label: "OEE", value: pct(r.oee), meter: r.oee, target: TARGET, meterLabel: `OEE ${pct(r.oee)} against ${pct(TARGET, 0)} target`, status: meets ? "good" : "serious", ctx: `${meets ? "At or above" : "Below"} target · ${gap >= 0 ? "+" : ""}${gap.toFixed(1)} pts vs ${pct(TARGET, 0)}` });
+    const unplanned = Object.entries(A.dt).filter(([k]) => !MES.reasons[k].planned).reduce((s, [, v]) => s + v.minutes, 0) / 60;
+    const scrapCost = Object.values(A.sc).reduce((s, v) => s + v.cost, 0);
+    const weakest = ["availability", "performance", "quality"].reduce((a, b) => (r[a] < r[b] ? a : b));
+    tile(k, { label: "Availability", value: pct(r.availability), ctx: `${num(A.tot.planned / 60)} h planned production time` + (weakest === "availability" ? " · weakest factor" : "") });
+    tile(k, { label: "Performance", value: pct(r.performance), ctx: weakest === "performance" ? `Weakest factor · ${num((A.tot.run - A.tot.ideal) / 60)} h speed loss` : "Ideal vs actual run rate" });
+    tile(k, { label: "Quality (yield)", value: pct(r.quality), ctx: `${num(A.tot.total - A.tot.good)} scrapped units` + (weakest === "quality" ? " · weakest factor" : "") });
+    const sp = pareto(A.sc, (v) => v.cost);
+    const top3 = sp.rows.slice(0, 3).reduce((s, x) => s + x.value, 0);
+    tile(k2, { label: "Good units", value: num(A.tot.good), ctx: `of ${num(A.tot.total)} produced` });
+    tile(k2, { label: "Scrap cost", value: money(scrapCost), ctx: sp.total ? `Top 3 causes = ${pct(top3 / sp.total)}` : "" });
+    tile(k2, { label: "Unplanned downtime", value: `${num(unplanned)} h`, ctx: `${num(Object.entries(A.dt).filter(([k]) => !MES.reasons[k].planned).reduce((s, [, v]) => s + v.events, 0))} events` });
   }
 
-  function renderWeekly() {
-    const W = DATA.weekly;
-    const xs = W.map((_, i) => i);
-    const all = W.flatMap((w) => LINES.map((l) => w[l]));
-    const lo = Math.floor(Math.min(...all) * 50) / 50, hi = Math.max(0.86, Math.ceil(Math.max(...all) * 50) / 50);
-    const series = LINES.map((l) => ({ key: l, name: l, color: `var(${LINE_VAR[l]})`, values: W.map((w) => w[l]), opacity: focus === "All" || focus === l ? 1 : 0.18, width: focus === l ? 2.5 : 2 }));
-    if (focus !== "All") series.push(series.splice(series.findIndex((s) => s.key === focus), 1)[0]);
-    series.push({ key: "plant", name: "Plant", color: "var(--muted)", values: W.map((w) => w.plant), width: 1, opacity: 0, noTip: false });
-    legend("weeklyLegend", LINES.map((l) => ({ label: l, color: `var(${LINE_VAR[l]})` })).concat([{ label: "85% target", color: "var(--ink-2)" }]));
-    lineChart("weekly", {
-      xs, series, yDomain: [lo, hi], yTicks: niceTicks(lo, hi, 4), yFmt: (v, t) => pct(v, t ? 1 : 0),
-      xLabel: (i) => fmtDate(W[i].week), tipTitle: (i) => `Week of ${fmtDate(W[i].week)}` + (W[i].days < 7 ? ` (${W[i].days} days)` : ""),
-      refs: [{ y: S.plant.oee_target, label: "Target 85%" }], sortTip: true, aria: "Weekly OEE by line; arrow keys step through weeks",
-    });
-    table("weeklyTable", ["Week of", ...LINES, "Plant"], W.map((w) => [w.week, ...LINES.map((l) => pct(w[l])), pct(w.plant)]));
+  function renderTrend(A) {
+    const box = document.getElementById("trend");
+    box.textContent = "";
+    const ws = []; for (let w = state.from; w <= state.to; w++) ws.push(w);
+    const series = {}; LINES.forEach((l) => { series[l] = ws.map((w) => apq(A.weekly[l][w]).oee); });
+    const plant = ws.map((w) => apq(A.weekly.plant[w]).oee);
+    const all = LINES.flatMap((l) => series[l]).concat([TARGET]);
+    const lo = Math.floor(Math.min(...all) * 50) / 50, hi = Math.ceil(Math.max(...all, TARGET + 0.01) * 50) / 50;
+    const yTicks = niceTicks(lo, hi, 3);
+    const xLabel = (i) => fmtDate(WEEKS[ws[i]].week);
+    const tipTitle = (i) => `Week of ${fmtDate(WEEKS[ws[i]].week)}` + (WEEKS[ws[i]].days < 7 ? ` (${WEEKS[ws[i]].days} days)` : "");
+    const panel = (parent, line, height) => {
+      const wrap = h("div", {}, parent);
+      const head = h("div", { class: "sm-head" }, wrap);
+      h("i", { style: `background:var(${LINE_VAR[line]})` }, head);
+      h("b", { text: line }, head);
+      head.appendChild(document.createTextNode(`${pct(apq(A.byLine[line]).oee)} OEE for the period`));
+      const chart = h("div", { class: "chart" }, wrap);
+      const ctx = LINES.filter((l) => l !== line).map((l) => ({ key: l, name: l, color: "var(--context)", values: series[l], width: 1, context: true, noTip: true }));
+      lineChart(chart, {
+        xs: ws.map((_, i) => i), height, yDomain: [lo, hi], yTicks, yFmt: (v, t) => pct(v, t ? 1 : 0), xLabel, tipTitle,
+        series: ctx.concat([{ key: line, name: line, color: `var(${LINE_VAR[line]})`, values: series[line] }],
+          state.line === "All" ? [{ key: "plant", name: "plant", color: "var(--muted)", values: plant, dotless: true, width: 0 }] : []),
+        refs: [{ y: TARGET, label: "85%" }], aria: `Weekly OEE for ${line}; arrow keys step through weeks`,
+      });
+    };
+    document.getElementById("trendNote").textContent = state.line === "All"
+      ? "One panel per line on a shared scale; grey lines are the other three lines for context. Hairline = 85% target."
+      : `Line ${state.line} against the other lines (grey). Hairline = 85% target.`;
+    if (state.line === "All") {
+      const grid = h("div", { class: "sm" }, box);
+      LINES.forEach((l) => panel(grid, l, 150));
+    } else panel(box, state.line, 260);
+    table("trendTable", ["Week of", ...LINES, state.line === "All" ? "Plant" : ""].filter(Boolean),
+      ws.map((w, i) => [WEEKS[w].week, ...LINES.map((l) => pct(series[l][i])), ...(state.line === "All" ? [pct(plant[i])] : [])]));
   }
 
   function mix(a, b, t) {
@@ -489,85 +601,93 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     const A = p(a), B = p(b);
     return A.map((v, i) => Math.round(v + (B[i] - v) * t));
   }
-  function renderHeat() {
+  function renderHeat(A) {
     const box = document.getElementById("heat");
     box.textContent = "";
     const metrics = [["availability", "Avail."], ["performance", "Perf."], ["quality", "Quality"], ["oee", "OEE"]];
-    const rows = Object.entries(S.lines).map(([k, v]) => ({ key: k, name: "Line " + k.slice(1), v })).concat([null]).concat(Object.entries(S.shifts).map(([k, v]) => ({ key: "S" + k, name: "Shift " + k, v })));
-    const ranges = {};
-    metrics.forEach(([m]) => { const vals = rows.filter(Boolean).map((r) => r.v[m]); ranges[m] = [Math.min(...vals), Math.max(...vals)]; });
     const lo = css("--seq-lo"), hi = css("--seq-hi");
+    document.getElementById("scaleLo").textContent = `≤${pct(HEAT_LO, 0)}`;
     const t = h("table", { class: "heat" }, box);
     const hr = h("tr", {}, h("thead", {}, t));
     h("th", { text: "", scope: "col" }, hr);
     metrics.forEach(([, n]) => h("th", { text: n, scope: "col" }, hr));
     const tb = h("tbody", {}, t);
-    rows.forEach((r) => {
-      if (!r) { h("td", { colspan: 5 }, h("tr", { class: "sep" }, tb)); return; }
-      const tr = h("tr", { class: focus !== "All" && LINES.includes(r.key) && r.key !== focus ? "dim" : "" }, tb);
-      h("td", { text: r.name }, tr);
+    const row = (name, v, dim) => {
+      const tr = h("tr", { class: dim ? "dim" : "" }, tb);
+      h("td", { text: name }, tr);
       metrics.forEach(([m, n]) => {
-        const [a, b] = ranges[m];
-        const tt = 0.12 + 0.88 * (r.v[m] - a) / (b - a || 1);
+        const tt = Math.max(0, Math.min(1, (v[m] - HEAT_LO) / (HEAT_HI - HEAT_LO)));
         const rgb = mix(lo, hi, tt);
         const lum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
-        const td = h("td", { text: pct(r.v[m]), style: `background:rgb(${rgb});color:${lum > 0.55 ? "#0b0b0b" : "#ffffff"}` }, tr);
-        bindTip(td, () => `${r.name} · ${n}`, () => [{ value: pct(r.v[m], 2), label: `range ${pct(a)}–${pct(b)}` }]);
+        const td = h("td", { text: pct(v[m]), style: `background:rgb(${rgb});color:${lum > 0.5 ? "#0b0b0b" : "#ffffff"}` }, tr);
+        bindTip(td, () => `${name} · ${n}`, () => [{ value: pct(v[m], 2), label: m === "oee" ? `${((v[m] - TARGET) * 100).toFixed(1)} pts vs target` : "" }]);
       });
-    });
+    };
+    LINES.forEach((l) => row("Line " + l.slice(1), apq(A.byLine[l]), !lineOk(l)));
+    h("td", { colspan: 5, text: state.line === "All" ? "Shifts · all lines" : `Shifts · line ${state.line}` }, h("tr", { class: "sep" }, tb));
+    SHIFTS.forEach((s) => row("Shift " + s, apq(A.byShift[s]), false));
   }
 
-  function renderLosses() {
-    const L = S.loss_hours, total = S.plant.planned_hours;
-    document.getElementById("plannedHours").textContent = num(total);
-    const rows = [["Performance", L.performance], ["Availability", L.availability], ["Quality", L.quality]];
-    hbars("lossHours", rows.map(([n, v]) => ({ label: n, value: v, valueText: num(v) + " h", color: "var(--s1)", tipRows: [{ value: num(v, 1) + " h", label: "lost" }, { value: pct(v / total), label: "of planned time" }] })), { labelW: 92 });
-    table("lossTable", ["Factor", "Hours lost", "% of planned"], rows.map(([n, v]) => [n, num(v, 1), pct(v / total)]));
+  function renderLosses(A) {
+    const t = A.tot, planned = t.planned / 60;
+    document.getElementById("lossNote").textContent = `Of ${num(planned)} planned production hours in this selection.`;
+    const rows = [["Performance", (t.run - t.ideal) / 60], ["Availability", (t.planned - t.run) / 60], ["Quality", t.scrapIdeal / 60]];
+    hbars("lossHours", rows.map(([n, v]) => ({ label: n, value: v, valueText: num(v) + " h", color: "var(--s1)", tipRows: [{ value: num(v, 1) + " h", label: "lost" }, { value: pct(v / planned), label: "of planned time" }] })), { labelW: 92 });
+    table("lossTable", ["Factor", "Hours lost", "% of planned"], rows.map(([n, v]) => [n, num(v, 1), pct(v / planned)]));
   }
 
-  function renderParetos() {
-    const D = DATA.pareto.downtime, C = DATA.pareto.scrap;
-    hbars("paretoDowntime", D.map((r, i) => ({
-      label: r.label, value: r.value, valueText: num(r.value) + " h", extra: pct(r.cum, 0), color: i < 3 && !r.planned ? "var(--s1)" : "var(--dim)",
-      tipRows: [{ value: num(r.value, 1) + " h", label: "downtime" }, { value: pct(r.share), label: "share" }, { value: num(r.events), label: "events" }, { value: r.bucket, label: r.planned ? "planned" : "OEE bucket" }],
+  function renderParetos(A) {
+    const D = pareto(A.dt, (v) => v.minutes / 60);
+    let rank = 0;
+    hbars("paretoDowntime", D.rows.map((r) => {
+      const meta = MES.reasons[r.key], hl = !meta.planned && rank++ < 3;
+      return {
+        label: r.key.replace(/_/g, " "), value: r.value, valueText: num(r.value) + " h", extra: pct(r.cum, 0), color: hl ? "var(--s1)" : "var(--dim)",
+        tipRows: [{ value: num(r.value, 1) + " h", label: "downtime" }, { value: pct(r.share), label: "share" }, { value: num(r.v.events), label: "events" }, { value: meta.bucket, label: meta.planned ? "planned" : "OEE bucket" }],
+      };
+    }), { labelW: 118, extraHeader: "Cum." });
+    table("downtimeTable", ["Reason", "Hours", "Share", "Cum.", "Events", "Bucket"], D.rows.map((r) => [r.key.replace(/_/g, " "), num(r.value, 1), pct(r.share), pct(r.cum), num(r.v.events), MES.reasons[r.key].bucket]));
+    const C = pareto(A.sc, (v) => v.cost);
+    hbars("paretoScrap", C.rows.map((r, i) => ({
+      label: r.key, value: r.value, valueText: money(r.value), extra: pct(r.cum, 0), color: i < 3 ? "var(--s1)" : "var(--dim)",
+      tipRows: [{ value: money(r.value), label: "scrap cost" }, { value: pct(r.share), label: "share" }, { value: num(r.v.units), label: "units scrapped" }],
     })), { labelW: 118, extraHeader: "Cum." });
-    table("downtimeTable", ["Reason", "Hours", "Share", "Cum.", "Events", "Bucket"], D.map((r) => [r.label, num(r.value, 1), pct(r.share), pct(r.cum), num(r.events), r.bucket]));
-    hbars("paretoScrap", C.map((r, i) => ({
-      label: r.label, value: r.value, valueText: money(r.value), extra: pct(r.cum, 0), color: i < 3 ? "var(--s1)" : "var(--dim)",
-      tipRows: [{ value: money(r.value), label: "scrap cost" }, { value: pct(r.share), label: "share" }, { value: num(r.units), label: "units scrapped" }],
-    })), { labelW: 118, extraHeader: "Cum." });
-    table("scrapTable", ["Cause", "Cost", "Share", "Cum.", "Units"], C.map((r) => [r.label, money(r.value), pct(r.share), pct(r.cum), num(r.units)]));
+    table("scrapTable", ["Cause", "Cost", "Share", "Cum.", "Units"], C.rows.map((r) => [r.key, money(r.value), pct(r.share), pct(r.cum), num(r.v.units)]));
   }
 
-  function renderSpcCallout() {
+  // ---------- full-period sections ----------
+  function renderSpcIntro() {
     const we = DATA.spc.methods.find((m) => m.method === "WE");
-    const box = document.getElementById("spcCallout");
-    box.textContent = `Honest result: Western Electric rules catch ${pct(we.recall, 0)} of failures a median ${we.median_hours_saved.toFixed(1)} h before the manual report, but precision is only ${pct(we.precision)} (${num(we.fp)} false alarms vs ${num(we.tp)} true) — far below the 60% target.`;
+    document.getElementById("spcCallout").textContent = `Honest result: Western Electric rules catch ${pct(we.recall, 0)} of failures a median ${we.median_hours_saved.toFixed(1)} h before the next-day manual report, but only ${pct(we.precision)} of alerts are real (${num(we.fp)} false alarms vs ${num(we.tp)} true) — far below the 60% target.`;
+    const box = document.getElementById("spcTiles");
+    box.textContent = "";
+    tile(box, { label: "Failures caught early (recall)", value: pct(we.recall, 0), status: "good", ctx: "Latency target (≥70% faster) met" });
+    tile(box, { label: "Median alert lead time", value: we.median_hours_saved.toFixed(1) + " h", ctx: "Earlier than the 08:00 next-day report" });
+    tile(box, { label: "Alert precision", value: pct(we.precision), status: "critical", ctx: "Precision target (≥60%) not met" });
   }
 
   function renderPchart() {
-    const P = DATA.spc.pchart;
+    const all = DATA.spc.pchart, P = all.filter((r) => !r.low_volume), hidden = all.length - P.length;
+    const minLots = Math.min(...P.map((r) => r.lots));
+    document.getElementById("pNote").textContent = `${P.length} days with ≥${minLots} lots shown. ${hidden} low-volume days are left out because their limits are too wide to signal anything; they are listed in the data table.`;
     const xs = P.map((r) => new Date(r.date + "T00:00:00").getTime());
     legend("pLegend", [{ label: "Daily failure rate", color: "var(--s1)" }, { label: "UCL", color: "var(--muted)" }, { label: "Centerline p̄", color: "var(--ink-2)" }, { label: "Out of control", color: "var(--critical)", shape: "dot" }]);
-    const ucl = P.map((r, i) => r.ucl);
     const c = lineChart("pchart", {
-      xs, yDomain: [0, 1], yTicks: [0, 0.25, 0.5, 0.75, 1], yFmt: (v, t) => pct(v, t ? 1 : 0),
-      series: [{ key: "rate", name: "failure rate", color: "var(--s1)", values: P.map((r) => r.rate) }, { key: "ucl", name: "UCL", color: "var(--muted)", values: ucl, width: 1 }],
+      xs, yDomain: [0, 0.5], yTicks: [0, 0.1, 0.2, 0.3, 0.4, 0.5], yFmt: (v, t) => pct(v, t ? 1 : 0),
+      series: [{ key: "ucl", name: "UCL", color: "var(--muted)", values: P.map((r) => r.ucl), width: 1, noTip: false, dotless: true }, { key: "rate", name: "failure rate", color: "var(--s1)", values: P.map((r) => r.rate) }],
       refs: [{ y: P[0].pbar, label: `p̄ ${pct(P[0].pbar)}`, left: true }], xLabel: (i) => fmtDate(P[i].date),
-      tipTitle: (i) => `${P[i].date} · ${P[i].fails}/${P[i].lots} lots failed` + (P[i].violation ? " · OUT OF CONTROL" : "") + (P[i].lots < 10 ? " · low volume" : ""),
+      tipTitle: (i) => `${P[i].date} · ${P[i].fails}/${P[i].lots} lots failed` + (P[i].violation ? " · OUT OF CONTROL" : ""),
       aria: "Daily p-chart; arrow keys step through days",
     });
-    // step UCL instead of slanted segments
     c.paths.ucl.setAttribute("d", P.map((r, i) => { const x0 = c.x(xs[i]), x1 = i < P.length - 1 ? c.x(xs[i + 1]) : x0; return `${i ? "L" : "M"}${x0.toFixed(1)},${c.y(r.ucl).toFixed(1)}H${x1.toFixed(1)}`; }).join(""));
     const g = el("g", {}, c.svg);
-    c.svg.insertBefore(g, c.svg.querySelector("rect.hit"));
+    c.svg.insertBefore(g, c.hit);
     P.forEach((r, i) => {
-      if (r.violation) {
-        el("circle", { cx: c.x(xs[i]), cy: c.y(r.rate), r: 5, fill: "var(--critical)", stroke: "var(--surface)", "stroke-width": 2 }, g);
-        text(g, c.x(xs[i]) + 8, c.y(r.rate) - 6, `${fmtDate(r.date)}: ${pct(r.rate, 0)}`, { class: "lbl" });
-      } else if (r.lots < 10 && r.lots > 0) el("circle", { cx: c.x(xs[i]), cy: c.y(r.rate), r: 2.5, fill: "var(--surface)", stroke: "var(--s1)", "stroke-width": 1.2 }, g);
+      if (!r.violation) return;
+      el("circle", { cx: c.x(xs[i]), cy: c.y(r.rate), r: 5, fill: "var(--critical)", stroke: "var(--surface)", "stroke-width": 2 }, g);
+      text(g, c.x(xs[i]) + 8, c.y(r.rate) - 6, `${fmtDate(r.date)}: ${pct(r.rate, 0)}`, { class: "lbl" });
     });
-    table("pTable", ["Date", "Lots", "Failed", "Rate", "UCL", "Signal"], P.map((r) => [r.date, r.lots, r.fails, pct(r.rate), pct(r.ucl), r.violation ? "Out of control" : ""]));
+    table("pTable", ["Date", "Lots", "Failed", "Rate", "UCL", "Note"], all.map((r) => [r.date, r.lots, r.fails, pct(r.rate), pct(r.ucl), r.violation ? "Out of control" : r.low_volume ? "Low volume (not plotted)" : ""]));
   }
 
   function renderT2() {
@@ -616,8 +736,7 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     hit.addEventListener("keydown", (e) => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); show(Math.min(T.length - 1, Math.max(0, idx + (e.key === "ArrowRight" ? 1 : -1))), { target: hit, type: "focus" }); } });
     const off = () => { ring.setAttribute("opacity", 0); hideTip(); };
     hit.addEventListener("pointerleave", off); hit.addEventListener("blur", off);
-    const v = T.filter((r) => r.violation);
-    table("t2Table", ["Timestamp", "Phase", "T²", "× UCL"], v.map((r) => [r.ts, r.phase, r.t2.toFixed(2), (r.t2 / ucl).toFixed(2)]));
+    table("t2Table", ["Timestamp", "Phase", "T²", "× UCL"], T.filter((r) => r.violation).map((r) => [r.ts, r.phase, r.t2.toFixed(2), (r.t2 / ucl).toFixed(2)]));
   }
 
   function renderMethods() {
@@ -658,52 +777,72 @@ const DATA = /*__DASHBOARD_DATA__*/null;
     lineChart("whatif", {
       xs, series: keys.map(([k, n, v]) => ({ key: k, name: n, color: `var(${v})`, values: Wf.series[k].map((p) => p.oee) })),
       yDomain: [0.72, 0.86], yTicks: [0.72, 0.76, 0.80, 0.84], yFmt: (v, t) => pct(v, t ? 1 : 0), xLabel: (i) => pct(xs[i], 0),
-      refs: [{ y: S.plant.oee_target, label: "Target 85%" }], tipTitle: (i) => `${pct(xs[i], 0)} loss reduction`, endLabels: true, sortTip: true,
+      refs: [{ y: TARGET, label: "Target 85%" }], tipTitle: (i) => `${pct(xs[i], 0)} loss reduction`, endLabels: true, sortTip: true,
       aria: "What-if OEE projections; arrow keys step through reduction rates",
     });
     table("whatifTable", ["Reduction", ...keys.map((k) => k[1])], xs.map((r, i) => [pct(r, 0), ...keys.map(([k]) => pct(Wf.series[k][i].oee, 2))]));
   }
 
   function renderReporting() {
+    document.getElementById("reportNote").textContent = `Documented 14-step manual Excel workflow vs the automated pipeline target (−${I.reporting_reduction_pct}%; ${I.dq_checks}/${I.dq_checks} data-quality checks pass).`;
     hbars("reporting", [
       { label: "Manual Excel", value: I.manual_minutes, valueText: `${num(I.manual_minutes)} min`, color: "var(--dim)", tipRows: [{ value: `${(I.manual_minutes / 60).toFixed(1)} h`, label: "per week, 14 steps" }] },
       { label: "Automated", value: I.automated_minutes, valueText: `${num(I.automated_minutes)} min`, color: "var(--s1)", tipRows: [{ value: `−${I.reporting_reduction_pct}%`, label: "reporting time (target)" }] },
     ], { labelW: 104 });
     const ph = Object.entries(I.manual_phases).map(([k, v]) => [k.replace(/^\d+\.\s*/, ""), v]);
-    hbars("phases", ph.map(([n, v]) => ({ label: n.replace(" & ", " & "), value: v, valueText: `${v} min`, color: "var(--s1)", tipRows: [{ value: `${v} min`, label: "per week" }, { value: pct(v / I.manual_minutes), label: "of manual effort" }] })), { labelW: 190 });
+    hbars("phases", ph.map(([n, v]) => ({ label: n, value: v, valueText: `${v} min`, color: "var(--s1)", tipRows: [{ value: `${v} min`, label: "per week" }, { value: pct(v / I.manual_minutes), label: "of manual effort" }] })), { labelW: 190 });
     table("phaseTable", ["Phase", "Minutes / week", "Share"], ph.map(([n, v]) => [n, v, pct(v / I.manual_minutes)]));
   }
 
   // ---------- controls ----------
-  function renderFilter() {
-    const box = document.getElementById("lineFilter");
-    box.textContent = "";
+  const N = WEEKS.length;
+  const PRESETS = [["All 26 wks", 0, N - 1], ["First 13 wks", 0, 12], ["Last 13 wks", N - 13, N - 1], ["Last 4 wks", N - 4, N - 1]];
+  const fromSel = document.getElementById("fromWeek"), toSel = document.getElementById("toWeek");
+  WEEKS.forEach((w, i) => {
+    h("option", { value: i, text: fmtDate(w.week) }, fromSel);
+    h("option", { value: i, text: fmtDate(weekEnd(i)) }, toSel);
+  });
+  function renderControls() {
+    const pb = document.getElementById("presets");
+    pb.textContent = "";
+    PRESETS.forEach(([label, a, b]) => {
+      const btn = h("button", { type: "button", "aria-pressed": String(state.from === a && state.to === b), text: label }, pb);
+      btn.addEventListener("click", () => { state.from = a; state.to = b; update(); });
+    });
+    fromSel.value = state.from; toSel.value = state.to;
+    const lf = document.getElementById("lineFilter");
+    lf.textContent = "";
     ["All", ...LINES].forEach((l) => {
-      const b = h("button", { type: "button", "aria-pressed": String(focus === l), text: l }, box);
-      b.addEventListener("click", () => { focus = l; renderFilter(); renderWeekly(); renderHeat(); });
+      const btn = h("button", { type: "button", "aria-pressed": String(state.line === l), text: l }, lf);
+      btn.addEventListener("click", () => { state.line = l; update(); });
     });
   }
+  fromSel.addEventListener("change", () => { state.from = +fromSel.value; if (state.to < state.from) state.to = state.from; update(); });
+  toSel.addEventListener("change", () => { state.to = +toSel.value; if (state.from > state.to) state.from = state.to; update(); });
+
   function setTheme(mode) {
     const root = document.documentElement;
     if (mode === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", mode);
     document.querySelectorAll("[data-theme-btn]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeBtn === mode)));
     try { localStorage.setItem("oee-dash-theme", mode); } catch (e) { /* storage unavailable */ }
-    renderHeat();
   }
-  document.querySelectorAll("[data-theme-btn]").forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.themeBtn)));
+  document.querySelectorAll("[data-theme-btn]").forEach((b) => b.addEventListener("click", () => { setTheme(b.dataset.themeBtn); renderOps(); }));
   let saved = "auto";
   try { saved = localStorage.getItem("oee-dash-theme") || "auto"; } catch (e) { /* storage unavailable */ }
 
-  function renderAll() {
-    renderKpis(); renderWeekly(); renderHeat(); renderLosses(); renderParetos(); renderSpcCallout();
-    renderPchart(); renderT2(); renderMethods(); renderWhatif(); renderReporting();
+  function renderOps() {
+    const A = aggregate();
+    renderScope(); renderKpis(A); renderTrend(A); renderHeat(A); renderLosses(A); renderParetos(A);
   }
-  renderFilter();
+  function update() { renderControls(); renderOps(); }
+  function renderStatic() { renderSpcIntro(); renderPchart(); renderT2(); renderMethods(); renderWhatif(); renderReporting(); }
+
   setTheme(saved);
-  renderAll();
+  update();
+  renderStatic();
   let lastW = window.innerWidth, rt;
-  window.addEventListener("resize", () => { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rt); rt = setTimeout(renderAll, 120); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderHeat);
+  window.addEventListener("resize", () => { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rt); rt = setTimeout(() => { renderOps(); renderStatic(); }, 120); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderOps);
 })();
 </script>
 </body>

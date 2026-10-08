@@ -42,12 +42,48 @@ def test_line_oee_matches_impact_metrics(payload):
         )
 
 
-def test_weekly_trend_covers_horizon_and_brackets_plant_oee(payload):
-    weekly = payload["weekly"]
-    assert sum(w["days"] for w in weekly) == 180
-    plant = payload["summary"]["plant"]["oee"]
-    values = [w["plant"] for w in weekly]
-    assert min(values) < plant < max(values)
+def _cube_totals(mes: dict) -> dict:
+    f = {k: i for i, k in enumerate(mes["prod_fields"])}
+    keys = ["planned_min", "run_min", "ideal_min", "total", "good", "scrap_ideal_min"]
+    return {k: sum(r[f[k]] for r in mes["prod"]) for k in keys}
+
+
+def test_filter_cube_covers_full_horizon(payload):
+    mes = payload["mes"]
+    assert sum(w["days"] for w in mes["weeks"]) == 180
+    assert len(mes["weeks"]) == 26
+
+
+def test_filter_cube_reproduces_validated_oee_and_losses(payload):
+    t = _cube_totals(payload["mes"])
+    a, p, q = (
+        t["run_min"] / t["planned_min"],
+        t["ideal_min"] / t["run_min"],
+        t["good"] / t["total"],
+    )
+    plant = payload["summary"]["plant"]
+    assert abs(a * p * q - plant["oee"]) < 1e-4
+    assert t["total"] == plant["total_units"] and t["good"] == plant["good_units"]
+    loss = payload["summary"]["loss_hours"]
+    assert abs((t["planned_min"] - t["run_min"]) / 60 - loss["availability"]) < 0.1
+    assert abs((t["run_min"] - t["ideal_min"]) / 60 - loss["performance"]) < 0.1
+    assert abs(t["scrap_ideal_min"] / 60 - loss["quality"]) < 0.1
+
+
+def test_filter_cube_reproduces_paretos(payload):
+    mes = payload["mes"]
+    downtime: dict[str, float] = {}
+    for _, _, reason, minutes, _ in mes["downtime"]:
+        downtime[reason] = downtime.get(reason, 0) + minutes / 60
+    for row in payload["pareto"]["downtime"]:
+        assert abs(downtime[row["label"].replace(" ", "_")] - row["value"]) < 0.1
+    unplanned = sum(v for k, v in downtime.items() if not mes["reasons"][k]["planned"])
+    assert abs(unplanned - payload["summary"]["unplanned_downtime_hours"]) < 0.1
+    scrap: dict[str, float] = {}
+    for _, _, cause, cost, _ in mes["scrap"]:
+        scrap[cause] = scrap.get(cause, 0) + cost
+    for row in payload["pareto"]["scrap"]:
+        assert abs(scrap[row["label"]] - row["value"]) < 1
 
 
 def test_spc_methods_keep_precision_visible(payload):
@@ -77,4 +113,4 @@ def test_built_page_is_self_contained(tmp_path):
     data = json.loads(
         re.search(r"const DATA = (\{.*?\});\n", html).group(1).replace("<\\/", "</")
     )
-    assert set(data) == {"summary", "weekly", "pareto", "spc", "whatif", "impact"}
+    assert set(data) == {"summary", "mes", "pareto", "spc", "whatif", "impact"}
