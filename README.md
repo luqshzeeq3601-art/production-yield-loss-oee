@@ -15,6 +15,8 @@ Finds yield drops and line bottlenecks from sensor and MES data before the next-
 | Reporting | 6 h/week → <10 min/week target (−97.2%) |
 | Validation | 275 tests · 65 DQ checks · 75 reconciliation checks |
 
+**Interactive dashboard:** [`docs/dashboard.html`](docs/dashboard.html) — self-contained page with period and line filters (OEE trend, A×P×Q heatmap, Paretos, p-chart, Hotelling T², SPC backtest, what-if). Rebuild with `py -3.11 -m src.build_dashboard`.
+
 ![OEE by line](docs/assets/oee_by_line.png) ![SPC recall vs precision](docs/assets/spc_method_performance.png)
 
 ## Contents
